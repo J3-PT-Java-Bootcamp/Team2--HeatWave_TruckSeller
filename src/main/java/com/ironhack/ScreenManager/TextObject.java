@@ -1,6 +1,11 @@
 package com.ironhack.ScreenManager;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.ScreenManager.ColorFactory.*;
 
 /**
@@ -18,43 +23,59 @@ public class TextObject {
 
     public enum Scroll {NO, BLOCK, LINE, TYPEWRITER}
 
-    private final com.ironhack.ScreenManager.TextObject.Scroll scroll;
-    protected final java.util.ArrayList<String> text;
+    private final Scroll scroll;
+    protected final ArrayList<String> text;
     protected final int MAX_WIDTH, MAX_HEIGHT;
     private int printSpeed;
     private int totalWidth, totalHeight;
 
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
-    public TextObject(com.ironhack.ScreenManager.TextObject.Scroll scroll, int maxWidth, int maxHeight) {
+
+    public TextObject(){
+        this.scroll = Scroll.BLOCK;
+        MAX_WIDTH = LIMIT_X;
+        MAX_HEIGHT = LIMIT_Y;
+        this.text = new ArrayList<>();
+
+    }
+    public TextObject(String text){
+        this.scroll = Scroll.BLOCK;
+        MAX_WIDTH = LIMIT_X;
+        MAX_HEIGHT = LIMIT_Y;
+        this.text = new ArrayList<>();
+        addText(text);
+
+    };
+    public TextObject(Scroll scroll, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
         MAX_HEIGHT = maxHeight;
-        this.text = new java.util.ArrayList<>();
+        this.text = new ArrayList<>();
     }
 
-    public TextObject(String text, com.ironhack.ScreenManager.TextObject.Scroll scroll, int maxWidth, int maxHeight) {
+    public TextObject(String text, Scroll scroll, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
         MAX_HEIGHT = maxHeight;
-        this.text = new java.util.ArrayList<>();
+        this.text = new ArrayList<>();
         this.totalWidth = 0;
         this.setTotalHeight();
         addText(text);
     }
 
-    public TextObject(com.ironhack.ScreenManager.TextObject.Scroll scroll, String[] textLines, int maxWidth, int maxHeight) {
+    public TextObject(Scroll scroll, String[] textLines, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
         MAX_HEIGHT = maxHeight;
-        this.text = new java.util.ArrayList<>(java.util.List.of(textLines));
+        this.text = new ArrayList<>(List.of(textLines));
         this.printSpeed = 2;
     }
 
-    public TextObject(com.ironhack.ScreenManager.TextObject txtObject, com.ironhack.ScreenManager.TextObject.Scroll scroll, int maxWidth, int maxHeight) {
+    public TextObject(TextObject txtObject, Scroll scroll, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
         MAX_HEIGHT = maxHeight;
-        this.text = new java.util.ArrayList<>();
+        this.text = new ArrayList<>();
         addText(txtObject);
     }
     //---------------------------------------------------------------------------------------------------Getters&Setters
@@ -66,16 +87,16 @@ public class TextObject {
         return printSpeed;
     }
 
-    public com.ironhack.ScreenManager.TextObject setPrintSpeed(int printSpeed) {
+    public TextObject setPrintSpeed(int printSpeed) {
         this.printSpeed = printSpeed;
         return this;
     }
 
-    public com.ironhack.ScreenManager.TextObject.Scroll getScroll() {
+    public Scroll getScroll() {
         return scroll;
     }
 
-    public java.util.ArrayList<String> getText() {
+    public ArrayList<String> getText() {
         return text;
     }
 
@@ -117,7 +138,7 @@ public class TextObject {
      *
      * @return this TextObject itself to allow chained calls
      */
-    public com.ironhack.ScreenManager.TextObject addText(String text) {
+    public TextObject addText(String text) {
         return addText(splitTextInLines(text));
     }
 
@@ -128,7 +149,7 @@ public class TextObject {
      *
      * @return this TextObject itself to allow chained calls
      */
-    com.ironhack.ScreenManager.TextObject addText(String[] lines) {
+    TextObject addText(String[] lines) {
         for (String line : lines) {
             addSimpleLine(line);
         }
@@ -142,7 +163,7 @@ public class TextObject {
      *
      * @return this TextObject itself to allow chained calls
      */
-    public com.ironhack.ScreenManager.TextObject addText(com.ironhack.ScreenManager.TextObject txtObject) {
+    public TextObject addText(TextObject txtObject) {
         for (int i = 0; i < txtObject.getTotalHeight(); i++) {
             try {
                 addSimpleLine(txtObject.get(i));
@@ -162,10 +183,10 @@ public class TextObject {
      *
      * @return this textObject to allow chain calls.
      */
-    public com.ironhack.ScreenManager.TextObject addGroupAligned(int numberOfColumns, int totalSize, com.ironhack.ScreenManager.TextObject[] columnsContent) {
+    public TextObject addGroupAligned(int numberOfColumns, int totalSize, TextObject[] columnsContent) {
         int charLimit = (numberOfColumns > 1 ? (totalSize / numberOfColumns) : totalSize);
         int totalLines = 0;
-        for (com.ironhack.ScreenManager.TextObject textColumn : columnsContent) {
+        for (TextObject textColumn : columnsContent) {
             textColumn.alignTextMiddle();
             totalLines = Math.max(totalLines, textColumn.getTotalHeight());
         }
@@ -263,10 +284,8 @@ public class TextObject {
         var wordList = line.replace(BLANK_SPACE + BLANK_SPACE, "€€").split(BLANK_SPACE);
         StringBuilder line1 = new StringBuilder();
         StringBuilder line2 = new StringBuilder();
-//        int spaceCounter = 0;   OLD APROX TO TRIM A LINE IF IT EXCEEDS A LITTLE AND HAVE A LOT OF WHITESPACE
         int charCounter = 0;
         for (String word : wordList) {
-//            if (java.util.Objects.equals(word, "__")) spaceCounter++;
             charCounter += countValidCharacters(word) + (java.util.Objects.equals(word, "€€") ? 0 : 1);
             if (charCounter <= limit) line1.append(" ").append(word.replace("€€", "  "));
             else line2.append(" ").append(word.replace("€€", "  "));
@@ -412,8 +431,8 @@ public class TextObject {
      * @return new TextObject
      *
      */
-    public com.ironhack.ScreenManager.TextObject getResizedText(int newWidth, int newHeight) {
-        return new com.ironhack.ScreenManager.TextObject(this, scroll, newWidth, newHeight);
+    public TextObject getResizedText(int newWidth, int newHeight) {
+        return new TextObject(this, scroll, newWidth, newHeight);
     }
 
     /**
@@ -422,7 +441,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    public com.ironhack.ScreenManager.TextObject alignTextMiddle() {
+    public TextObject alignTextMiddle() {
         int remainingLines = MAX_HEIGHT - getTotalHeight();
         int num;
         if (remainingLines > 1) {
@@ -441,7 +460,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    public com.ironhack.ScreenManager.TextObject alignTextTop() {
+    public TextObject alignTextTop() {
         if (getTotalHeight() < MAX_HEIGHT) {
             int missingLines = MAX_HEIGHT - getTotalHeight();
             for (int i = 0; i < missingLines; i++) {
@@ -457,7 +476,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    public com.ironhack.ScreenManager.TextObject alignTextRight() {
+    public TextObject alignTextRight() {
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, lineToRight(text.get(i)));
         }
@@ -470,7 +489,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    public com.ironhack.ScreenManager.TextObject alignTextCenter() {
+    public TextObject alignTextCenter() {
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, centerLine(text.get(i)));
         }
@@ -490,7 +509,7 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public com.ironhack.ScreenManager.TextObject colorizeAllText(CColors... colors) {
+    public TextObject colorizeAllText(CColors... colors) {
         switch (colors.length) {
             case 0 -> {
                 for (int i = 0; i < totalHeight; i++) {
@@ -524,7 +543,7 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public com.ironhack.ScreenManager.TextObject stylizeAllText(TextStyle style) {
+    public TextObject stylizeAllText(TextStyle style) {
         int lastIndex = text.size() - 1;
         text.set(0, style + text.get(0));
         text.set(lastIndex, text.get(lastIndex) + TextStyle.RESET);
@@ -541,7 +560,7 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public com.ironhack.ScreenManager.TextObject setAllTextBackground(BgColors bg) {
+    public TextObject setAllTextBackground(BgColors bg) {
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, setLineBackground(text.get(i), bg));
         }
@@ -560,7 +579,7 @@ public class TextObject {
         return sb.toString();
     }
 
-    public com.ironhack.ScreenManager.TextObject fillAllLines() {
+    public TextObject fillAllLines() {
         for (String line : text) {
             fillLine(line);
         }
