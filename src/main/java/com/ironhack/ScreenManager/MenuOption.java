@@ -1,4 +1,4 @@
-package com.ironhack.MenuUtilities;
+package com.ironhack.ScreenManager;
 
 public class MenuOption<T> {
     private String display;

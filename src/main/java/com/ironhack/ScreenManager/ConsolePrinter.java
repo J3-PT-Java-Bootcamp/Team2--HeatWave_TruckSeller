@@ -4,14 +4,14 @@ package com.ironhack.ScreenManager;
 import com.ironhack.CRMManager.CRMManager;
 
 import static com.ironhack.Constants.Constants.*;
-import static com.ironhack.ScreenManager.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.*;
 
 /**
  *
  */
 public class ConsolePrinter {
 
-    private final java.util.ArrayList<TextObject> printQueue;
+    private final java.util.ArrayList<com.ironhack.ScreenManager.Text.TextObject> printQueue;
     private final CRMManager crm;
 
     //---------------------------------------------------------------------------   CONSTRUCTOR
@@ -42,7 +42,7 @@ public class ConsolePrinter {
      * waits until user confirm
      */
     public void calibrateScreen() throws Exception {
-        sendToQueue(new WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1).setBgColor(BgColors.CYAN)
+        sendToQueue(new com.ironhack.ScreenManager.Text.WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1).setBgColor(BgColors.CYAN)
                 .setFrameColor(BgColors.BRIGHT_BLACK).setTxtColor(CColors.BRIGHT_WHITE)
                 .addText(TextStyle.BOLD + "Adjust your console size to fit this box.")
                 .addText(TextStyle.BOLD + "Press Enter when done").alignTextCenter().alignTextMiddle()
@@ -75,7 +75,7 @@ public class ConsolePrinter {
             var txtObj = pollNext();
             switch (txtObj.getScroll()) {
                 case NO -> {
-                    if (queueContainsScroll( TextObject.Scroll.NO)) sb.append(txtObj.print()).append(NEW_LINE);
+                    if (queueContainsScroll( com.ironhack.ScreenManager.Text.TextObject.Scroll.NO)) sb.append(txtObj.print()).append(NEW_LINE);
                     else System.out.print(sb.append(txtObj.print()));
                 }
                 case BLOCK -> {
@@ -122,7 +122,7 @@ public class ConsolePrinter {
         }
     }
 
-    public void sendToQueue( TextObject txtObj) {
+    public void sendToQueue( com.ironhack.ScreenManager.Text.TextObject txtObj) {
         this.printQueue.add(txtObj);
     }
 
@@ -144,15 +144,15 @@ public class ConsolePrinter {
      * Sends new lines to fill screen and clear last output
      */
     private void clearScreen() {
-        sendToQueue(new  TextObject(BLANK_SPACE,  TextObject.Scroll.NO, LIMIT_X, LIMIT_Y * 2).alignTextTop());
+        sendToQueue(new com.ironhack.ScreenManager.Text.TextObject(BLANK_SPACE,  com.ironhack.ScreenManager.Text.TextObject.Scroll.NO, LIMIT_X, LIMIT_Y * 2).alignTextTop());
     }
 
-    private  TextObject pollNext() {
+    private com.ironhack.ScreenManager.Text.TextObject pollNext() {
         return printQueue.remove(0);
     }
 
-    private boolean queueContainsScroll( TextObject.Scroll scroll) {
-        for ( TextObject txtObj : printQueue) {
+    private boolean queueContainsScroll( com.ironhack.ScreenManager.Text.TextObject.Scroll scroll) {
+        for ( com.ironhack.ScreenManager.Text.TextObject txtObj : printQueue) {
             if (txtObj.getScroll().equals(scroll)) return true;
         }
         return false;

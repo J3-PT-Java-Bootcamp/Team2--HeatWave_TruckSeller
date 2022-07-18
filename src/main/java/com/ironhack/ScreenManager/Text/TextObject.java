@@ -1,12 +1,14 @@
-package com.ironhack.ScreenManager;
+package com.ironhack.ScreenManager.Text;
 
+
+import com.ironhack.Constants.ColorFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
-import static com.ironhack.ScreenManager.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.*;
 
 /**
  * TextObject class:

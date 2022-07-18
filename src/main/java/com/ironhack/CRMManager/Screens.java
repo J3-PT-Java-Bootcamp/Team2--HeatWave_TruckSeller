@@ -2,8 +2,8 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
-import com.ironhack.MenuUtilities.Menu;
-import com.ironhack.MenuUtilities.MenuOption;
+import com.ironhack.ScreenManager.Menu;
+import com.ironhack.ScreenManager.MenuOption;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -33,7 +33,7 @@ public class Screens {
         for (Map.Entry<String, Opportunity> e : user.getOpportunityList().entrySet())
             System.out.println(e.getValue());
     }
-    public static void seeUserstats(User user){
+    public static void seeUserStats(User user){
         System.out.println("Pending leads: " + user.getLeadlistSize());
         System.out.println("Open opportunities: " + user.getOpportunityListSize());
     }
@@ -44,28 +44,28 @@ public class Screens {
       switch (selected){
           case 1: checkLeads(user); break;
           case 2: checkOpportunities(user); break;
-          case 3: seeUserstats(user); break;
+          case 3: seeUserStats(user); break;
           case 4: seeFastCommands(); break;
           case 5: seeUsersManual(); break;
           case 6: logOut(); break;
       }
     }
 
-    public static void logIn (){
-        boolean advance = false;
-        do {
-            Scanner user = new java.util.Scanner(System.in);
-            System.out.println("User");
-            String userName = user.nextLine();
-            System.out.println("Password");
-            String password = user.nextLine();
-            if (CRMManager.checkCredentials(userName, password)){
-                mainMenu(CRMManager.getUserList().get(userName));
-                advance = true;
-            } else System.out.println("Invalid credentials please try again");
-        } while (advance = false);
-
-
-    }
+//    public static void logIn (){
+//        boolean advance = false;
+//        do {
+//            Scanner user = new java.util.Scanner(System.in);
+//            System.out.println("User");
+//            String userName = user.nextLine();
+//            System.out.println("Password");
+//            String password = user.nextLine();
+//            if (CRMManager.checkCredentials(userName, password)){
+//                mainMenu(CRMManager.getUserList().get(userName));
+//                advance = true;
+//            } else System.out.println("Invalid credentials please try again");
+//        } while (advance = false);
+//
+//
+//    }
 
 }

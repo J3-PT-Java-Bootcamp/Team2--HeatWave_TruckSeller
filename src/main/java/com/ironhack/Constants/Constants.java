@@ -1,6 +1,6 @@
 package com.ironhack.Constants;
 
-import static com.ironhack.ScreenManager.ColorFactory.BLANK_SPACE;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 public class Constants {
     public static final int LIMIT_X = 120;
