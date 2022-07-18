@@ -1,7 +1,4 @@
 package com.ironhack.ScreenManager;
-
-
-
 import static com.ironhack.ScreenManager.ColorFactory.*;
 
 public class WindowObject extends TextObject{
