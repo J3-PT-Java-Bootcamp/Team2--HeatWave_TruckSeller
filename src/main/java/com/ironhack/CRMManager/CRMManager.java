@@ -7,38 +7,50 @@ import java.util.HashMap;
 
 public class CRMManager {
 
-    private String idGenerator;
-    private String temporaryIdGenerator;
-    private static HashMap<String, Lead> leadList;
-    private static HashMap<String, Opportunity> opportunityList;
-    private static HashMap<String, User> userList;
+    private int leadCounter,opportunityCounter;
+    private HashMap<String, Lead> leadList;
+    private HashMap<String, Opportunity> opportunityList;
+    private HashMap<String, User> userList;
 
-    public static void mainMenu (User user){
-        Screens.mainMenu(user);
 
+
+
+    public CRMManager(){
+        try{
+            loadData();
+        }catch (Exception e){
+            leadCounter=0;
+            opportunityCounter=0;
+            leadList=new HashMap<>();
+            opportunityList=new HashMap<>();
+            userList=new HashMap<>();
+        }
     }
 
-    public static void addToUserList (User newUser){
+    private void loadData() throws Exception {
+        //TODO
+        throw new IllegalAccessException();
+    }
+    private void saveData() throws Exception{
+        //TODO
+        throw new IllegalAccessException();
+    }
+
+    public  void mainMenu (User user){
+        Screens.mainMenu(user);
+    }
+
+    public void addToUserList(User newUser){
         userList.put(newUser.getName(), newUser);
     }
 
 
-    public  static boolean checkCredentials (String userName, String password){
-        if (userList.containsKey(userName)&& userList.get(userName).getPassword() == password) {
-
-            return true;
-        }
-        else {
-
-            return false;
-        }
+    public  boolean checkCredentials (String userName, String password){
+        return userList.containsKey(userName) && java.util.Objects.equals(userList.get(userName).getPassword(), password);
     }
 
-    public static HashMap<String, User> getUserList() {
+    public  HashMap<String, User> getUserList() {
         return userList;
     }
 
-    public static void setUserList(HashMap<String, User> userList) {
-        CRMManager.userList = userList;
-    }
 }

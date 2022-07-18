@@ -1,10 +1,10 @@
-package com.ironhack.MenuUtilities;
+package com.ironhack.ScreenManager;
 
 
 import java.util.Scanner;
-import java.util.Objects;
 
-
+@Deprecated
+//FIXME moving to inputReader
 public class Menu<T> {
 
         // Menu options
@@ -19,7 +19,7 @@ public class Menu<T> {
             this.title = title;
             this.question = question;
         }
-
+        @Deprecated
         public T display() {
 
             // If there are no options null is returned
@@ -31,24 +31,26 @@ public class Menu<T> {
             do {
                 final var scanner = new Scanner(System.in);
                 try {
+                    //TODO: QUIT ALL PRINT RELATED CODE
                     System.out.println("\n---[ " + title + " ]---");
                     for (int i = 0; i < options.length; i++) options[i].display(i);
                     System.out.print("\n" + question + ": ");
                     int selectedIndex = scanner.nextInt();
                     System.out.println();
+                    //TODO: AVOID ALL INDEX/INT INPUT COUNT AS IT SHOULD BE BY STRING/KEYWORDS
                     if(selectedIndex <= 0 || selectedIndex > options.length) {
-                        Errors.logError("Please, provide a valid number between 1 and " + options.length + ".");
+//                        Errors.logError("Please, provide a valid number between 1 and " + options.length + ".");
                         continue;
                     }
 
                     selected = options[selectedIndex - 1];
 
                     if(!selected.isAvailable()) {
-                        Errors.logError("This option is not available, please, select another one.");
+//                        Errors.logError("This option is not available, please, select another one.");
                         selected = null;
                     }
                 } catch (Exception ignored) {
-                    Errors.logError("Please, provide a valid number.");
+//                    Errors.logError("Please, provide a valid number.");
                 }
             } while(selected == null);
 

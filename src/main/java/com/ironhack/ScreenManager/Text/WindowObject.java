@@ -1,7 +1,7 @@
-package com.ironhack.ScreenManager;
-import static com.ironhack.ScreenManager.ColorFactory.*;
+package com.ironhack.ScreenManager.Text;
+import static com.ironhack.Constants.ColorFactory.*;
 
-public class WindowObject extends TextObject{
+public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
     final java.awt.Point borderSize;
     final java.awt.Point margin;
     String[] pattern;
@@ -90,25 +90,25 @@ public class WindowObject extends TextObject{
         }
     }
 
-    public com.ironhack.ScreenManager.WindowObject setTitle(String title) {
+    public com.ironhack.ScreenManager.Text.WindowObject setTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public com.ironhack.ScreenManager.WindowObject setBgColor(BgColors bgColor) {
+    public com.ironhack.ScreenManager.Text.WindowObject setBgColor(BgColors bgColor) {
         this.bgColor = bgColor;
         return this;
     }
-    public com.ironhack.ScreenManager.WindowObject setTxtColor(CColors color){
+    public com.ironhack.ScreenManager.Text.WindowObject setTxtColor(CColors color){
         this.txtColor=color;
         return this;
     }
-    public com.ironhack.ScreenManager.WindowObject setTitleColor(CColors color){
+    public com.ironhack.ScreenManager.Text.WindowObject setTitleColor(CColors color){
         this.titleColor=color;
         return this;
     }
 
-    public com.ironhack.ScreenManager.WindowObject setFrameColor(BgColors frameColor) {
+    public com.ironhack.ScreenManager.Text.WindowObject setFrameColor(BgColors frameColor) {
         this.frameColor = frameColor;
         return this;
     }

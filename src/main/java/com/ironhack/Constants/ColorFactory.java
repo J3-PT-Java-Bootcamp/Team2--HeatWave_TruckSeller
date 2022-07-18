@@ -1,4 +1,4 @@
-package com.ironhack.ScreenManager;
+package com.ironhack.Constants;
 
 public class ColorFactory {
 
@@ -102,18 +102,18 @@ public class ColorFactory {
         }
     }
 
-    public static com.ironhack.ScreenManager.ColorFactory.CColors getRandomColor(){
+    public static com.ironhack.Constants.ColorFactory.CColors getRandomColor(){
         int num;
-            num = new java.util.Random().nextInt(4, com.ironhack.ScreenManager.ColorFactory.CColors.values().length);
-        return com.ironhack.ScreenManager.ColorFactory.CColors.values()[num];
+            num = new java.util.Random().nextInt(4, com.ironhack.Constants.ColorFactory.CColors.values().length);
+        return com.ironhack.Constants.ColorFactory.CColors.values()[num];
     }
-    public static com.ironhack.ScreenManager.ColorFactory.CColors getNextRainbowColor(com.ironhack.ScreenManager.ColorFactory.CColors currentColor){
+    public static com.ironhack.Constants.ColorFactory.CColors getNextRainbowColor(com.ironhack.Constants.ColorFactory.CColors currentColor){
         int num= currentColor.ordinal()+1;
-        if(num>= com.ironhack.ScreenManager.ColorFactory.CColors.values().length||num<4)num=4;
-        return com.ironhack.ScreenManager.ColorFactory.CColors.values()[num];
+        if(num>= com.ironhack.Constants.ColorFactory.CColors.values().length||num<4)num=4;
+        return com.ironhack.Constants.ColorFactory.CColors.values()[num];
     }
 
-    public static String changeColors(String text, com.ironhack.ScreenManager.ColorFactory.CColors...newColors){
+    public static String changeColors(String text, com.ironhack.Constants.ColorFactory.CColors...newColors){
         var charList= text.toCharArray();
         boolean isRandom = true;
         for (int i = 0; i < charList.length; i++) {
@@ -129,7 +129,7 @@ public class ColorFactory {
 
     }
     public static String rainbowCharacters(String line,int startVal){
-        var color= com.ironhack.ScreenManager.ColorFactory.CColors.values()[startVal];
+        var color= com.ironhack.Constants.ColorFactory.CColors.values()[startVal];
         var charList=line.toCharArray();
         var sb= new StringBuilder();
         for (int i = 0; i < charList.length; i++) {
@@ -143,7 +143,7 @@ public class ColorFactory {
             }
             sb.append(ch);
         }
-        return sb.append(com.ironhack.ScreenManager.ColorFactory.TextStyle.RESET).toString();
+        return sb.append(com.ironhack.Constants.ColorFactory.TextStyle.RESET).toString();
     }
 
     public static boolean isASpecialCharacter(char ch){

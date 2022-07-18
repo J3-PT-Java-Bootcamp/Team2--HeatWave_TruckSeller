@@ -1,10 +1,10 @@
-package com.ironhack.ScreenManager;
+package com.ironhack.ScreenManager.Text;
 
 
 
-import static com.ironhack.ScreenManager.ColorFactory.DELETE_CURRENT_LINE;
+import static com.ironhack.Constants.ColorFactory.DELETE_CURRENT_LINE;
 
-public class DynamicLine extends TextObject {
+public class DynamicLine extends com.ironhack.ScreenManager.Text.TextObject {
 
     int delay;//milliseconds
     int currentFrame;

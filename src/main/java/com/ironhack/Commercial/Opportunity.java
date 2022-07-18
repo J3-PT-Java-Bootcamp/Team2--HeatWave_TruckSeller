@@ -1,8 +1,12 @@
 package com.ironhack.Commercial;
 
 import com.ironhack.CRMManager.User;
+import com.ironhack.Constants.ColorFactory.BgColors;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
+import com.ironhack.ScreenManager.Text.TextObject;
+
+import static com.ironhack.Constants.ColorFactory.*;
 
 public class Opportunity {
     private String id;
@@ -80,5 +84,15 @@ public class Opportunity {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void close(Boolean won){
+        //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
+    }
+    public TextObject toTextObject(){
+        TextObject opportunityLine = new TextObject();
+        //TODO opportunityLine.addText(value) for each value to be printed in console when opportunities list is shown
+        opportunityLine.setAllTextBackground(getStatus()==OpportunityStatus.OPEN? BgColors.BRIGHT_BLUE: BgColors.RED);
+        return opportunityLine;
     }
 }
