@@ -21,9 +21,6 @@ public enum InputReader {
     COMMAND;
     private MenuOption<String>[] options;
 
-    InputReader(MenuOption<String>[] options) {
-        this.options = options;
-    }
 
     InputReader() {
 

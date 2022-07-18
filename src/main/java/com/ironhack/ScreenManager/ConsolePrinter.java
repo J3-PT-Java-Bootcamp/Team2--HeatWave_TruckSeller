@@ -22,8 +22,9 @@ public class ConsolePrinter {
 
     //---------------------------------------------------------------------------   PUBLIC METHODS
 
-    /**
+   /**
      * Shows the Team Logo after calibrating console size
+    * @deprecated
      */
     public void splashScreen() {
         try {
