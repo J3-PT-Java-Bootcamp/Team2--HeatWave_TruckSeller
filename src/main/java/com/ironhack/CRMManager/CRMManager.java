@@ -1,17 +1,12 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Account;
-import com.ironhack.Commercial.Contact;
-import com.ironhack.Commercial.Lead;
-import com.ironhack.Commercial.Opportunity;
-
-import java.util.HashMap;
-
-import static com.ironhack.Constants.Constants.MAX_ID;
+import com.ironhack.ScreenManager.Screens.InputScreen;
 
 public class CRMManager {
+    private boolean exit;
     CRMData crmData;
     public CRMManager(){
+        this.exit=false;
         try{
             this.crmData=loadData();
         }catch (Exception e){
@@ -20,11 +15,20 @@ public class CRMManager {
         }
     }
 
-    private void runFirstConfig() {
-        //TODO METHOD THAT CREATES A ADMIN USER AND ASK FOR OTHER USERS DATA
+    public void appStart(){
+        var currentScreen= new InputScreen("LOGIN");
+        while (!exit){//if in any moment we enter EXIT it must turn this.exit to true so while will end
+            //TODO printScreen(currentScreen);
+            // currentScreen= currentScreen.processNextScreen() returns a screen from inputReader result
+
+        }
+        //TODO confirmationNeeded();
+        //TODO beforeClose();
+        System.exit(0);
+
     }
 
-
+//-------------------------------------------------------------------------------------------------------PRIVATE METHODS
     private CRMData loadData() throws Exception {
         //TODO LOAD FULL CRMData object from json
         throw new IllegalAccessException();
@@ -33,6 +37,12 @@ public class CRMManager {
         //TODO Save crmData object to .json file in ./data
         throw new IllegalAccessException();
     }
+
+
+    private void runFirstConfig() {
+        //TODO METHOD THAT CREATES A ADMIN USER AND ASK FOR OTHER USERS DATA
+    }
+
 
 //    public  void mainMenu (User user){
 //        Screens.mainMenu(user);
