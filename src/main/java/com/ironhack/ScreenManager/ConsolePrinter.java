@@ -2,6 +2,7 @@ package com.ironhack.ScreenManager;
 
 
 import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.ScreenManager.Screens.CRMScreen;
 
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.Constants.ColorFactory.*;
@@ -10,14 +11,24 @@ import static com.ironhack.Constants.ColorFactory.*;
  *
  */
 public class ConsolePrinter {
-
+    private java.util.HashMap<String, CRMScreen> screenMap;
     private final java.util.ArrayList<com.ironhack.ScreenManager.Text.TextObject> printQueue;
     private final CRMManager crm;
 
     //---------------------------------------------------------------------------   CONSTRUCTOR
     public ConsolePrinter(CRMManager crm) {
+        this.screenMap=createScreens();
         this.crm = crm;
         this.printQueue = new java.util.ArrayList<>();
+    }
+
+    private java.util.HashMap<String, CRMScreen> createScreens() {
+        var map =  new java.util.HashMap<String,CRMScreen>();
+        map.put("LOGIN",new com.ironhack.ScreenManager.Screens.InputScreen("LOGIN"));
+        //TODO CONSTRUCT AAALL SCREENS AND SAVE TO A MAP... THERE IS NOT CLEVER SOLUTION?
+//        map.put("USERMENU",new com.ironhack.ScreenManager.Screens.MenuScreen("USER MENU"))
+
+        return map;
     }
 
     //---------------------------------------------------------------------------   PUBLIC METHODS

@@ -2,7 +2,7 @@ package com.ironhack.ScreenManager;
 
 public class MenuOption<T> {
     private String display;
-    private T value;
+    private T value;//TODO allow multiple values like "Opportunity" "opportunities" "Opp"
     private boolean available = true;
 
     public MenuOption(String display, T value) {
