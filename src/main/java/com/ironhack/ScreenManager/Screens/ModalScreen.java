@@ -5,6 +5,10 @@ import com.ironhack.ScreenManager.Text.*;
 public class ModalScreen extends CRMScreen{
 
 
+    public ModalScreen(String name) {
+        super(name);
+    }
+
     @Override
     public TextObject constructScreen() {
         return null;

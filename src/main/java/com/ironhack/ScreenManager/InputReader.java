@@ -3,6 +3,7 @@ package com.ironhack.ScreenManager;
 import com.ironhack.Constants.ColorFactory.CColors;
 import com.ironhack.Constants.ColorFactory.TextStyle;
 import com.ironhack.Exceptions.ErrorType;
+import com.ironhack.ScreenManager.Text.DynamicLine;
 
 import java.util.regex.Pattern;
 
@@ -12,18 +13,17 @@ import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Exceptions.ErrorType.*;
 
 public enum InputReader {
-    MAIL,
-    PHONE,
-    INTEGER,
-    OPEN,
-    BOOLEAN,
-    OPTIONS,
-    COMMAND;
-    private MenuOption<String>[] options;
+    MAIL("Expects a mail format ex: user@domain.com"),
+    PHONE("Expects phone number format, only numbers and +() signs"),
+    INTEGER("Expects an integer value"),
+    OPEN("Expects a String value, special characters not allowed"),
+    OPTIONS("Expects to enter one of the options marked above"),
+    COMMAND("Check the commands box to see available actions");
+    private String hint;
 
 
-    InputReader() {
-
+    InputReader(String hint) {
+        this.hint=hint;
     }
 
 
@@ -106,7 +106,7 @@ public enum InputReader {
 
     //---------------------------------------------------------------------------------------------------------------PRIVATE
     private void showErrorLine(ErrorType errorType) {
-        var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 1, 1);
+        var line = new DynamicLine(LIMIT_X, 1, 1);
         line.addText(CColors.BRIGHT_RED + errorType.toString() + TextStyle.RESET);
         line.addText(CColors.BRIGHT_GREEN + " TRY AGAIN or enter \"/HELP\" " + TextStyle.RESET).alignTextCenter();
         line.addText(CENTER_CARET);
@@ -142,8 +142,31 @@ public enum InputReader {
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }
-        input = input.replace("\n", "").trim();
+        input = input.replace("\n", "").trim().toUpperCase();
+        if(input=="HELP")showHintLine();
+
         return input;
+    }
+
+    private void showHintLine() {
+        var line = new DynamicLine(LIMIT_X, 1, 1);
+        line.addText(CColors.BRIGHT_GREEN + printHint() + TextStyle.RESET).alignTextCenter();
+        line.addText(CENTER_CARET);
+        //TODO new printer link
+//        sendToQueue(line);
+//        startPrint();
+    }
+
+    private String printHint() {
+        return switch (this){
+            case OPTIONS ->
+//                todo: method to print all options in a string to be shown as  a HELP
+                this.hint;
+            case COMMAND ->
+                //todo: method to print all available commands in one line
+                this.hint;
+            default -> this.hint;
+        };
     }
 
 //---------------------------------------------------------------------------------------------------------OUTER METHODS

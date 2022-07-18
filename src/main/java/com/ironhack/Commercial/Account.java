@@ -32,7 +32,7 @@ public class Account {
         this.industryType = industryType;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
