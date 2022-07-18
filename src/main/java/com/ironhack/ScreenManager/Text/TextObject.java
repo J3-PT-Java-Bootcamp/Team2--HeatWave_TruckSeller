@@ -207,6 +207,47 @@ public class TextObject {
         }
         return this;
     }
+
+    public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles){
+        int charLimit = (columnTitles.length > 1 ? (totalSize / columnTitles.length) : totalSize);
+
+        var sb=new StringBuilder();
+        for(String title: columnTitles){
+            sb.append(TextStyle.BOLD)
+                    .append(createTableCell(charLimit,title))
+                    .append(TextStyle.RESET);
+            if (this instanceof WindowObject)
+                sb.append(((WindowObject) this).bgColor)
+                        .append(((WindowObject) this).txtColor);
+        }
+        addText("_".repeat(MAX_WIDTH));
+        addText(sb.toString());
+        addText("_".repeat(MAX_WIDTH));
+        for (TextObject entryLine : tableEntries) {
+            sb=new StringBuilder();
+            entryLine.alignTextMiddle();
+
+            for (int i = 0; i < entryLine.totalHeight; i++) {
+                var currentField = entryLine.poll();
+                if(countValidCharacters(currentField)>=charLimit-1)throw new RuntimeException("TODO HANDLE TABLE WRAP");//todo
+                sb.append(createTableCell(charLimit,currentField));
+                if (i == entryLine.totalHeight - 1) sb.append("|");
+            }
+            addText(sb.toString());
+
+            addText("_".repeat(MAX_WIDTH));
+        }
+        return this;
+    }
+
+    private String createTableCell(int charLimit, String currentField) {
+        int availableSpace= (charLimit /2)-(countValidCharacters(currentField)/2);
+        return ("|"+BLANK_SPACE.repeat(availableSpace-1))
+        +(currentField)
+        +(BLANK_SPACE.repeat(availableSpace+(charLimit %2==0?0:1)
+                +(countValidCharacters(currentField)%2==0?0:1)-1));
+    }
+
     //-----------------------------------------------------------------------------------------------------INNER_METHODS
 
     //===================   LINE_MANIPULATION   ===================\\
