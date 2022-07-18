@@ -27,7 +27,7 @@ public class Contact {
         this.name = name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

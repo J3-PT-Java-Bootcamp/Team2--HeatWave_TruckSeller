@@ -8,7 +8,8 @@ public class MenuScreen extends CRMScreen{
     private final MenuOption<String> options;
 
 
-    public MenuScreen(MenuOption<String> options) {
+    public MenuScreen(String name,MenuOption<String> options) {
+        super(name);
         this.options = options;
     }
     @Override
