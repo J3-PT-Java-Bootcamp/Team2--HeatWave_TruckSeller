@@ -8,8 +8,10 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
     String title;
     final int windowWidth;
     final int windowHeight;
-    private BgColors frameColor,bgColor;
-    private CColors txtColor,titleColor;
+    private BgColors frameColor;
+    BgColors bgColor;
+    CColors txtColor;
+    private CColors titleColor;
 
     WindowObject(int maxWidth, int maxHeight, java.awt.Point padding, java.awt.Point borderSize, java.awt.Point margin, String ... pattern){
         super(Scroll.BLOCK, maxWidth-((padding.x+borderSize.x+margin.x)*2),
@@ -118,11 +120,12 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
         sb.append(generateBorder(false,true));
         while (hasText()) {
             sb.append(generateBorder(true,true))
-                    .append(fillLine(poll())).append(generateBorder(true,false));
+                    .append(fillLine(poll()+bgColor)).append(generateBorder(true,false));
         }
         sb.append(generateBorder(false,false));
         sb.append(BLANK_SPACE.repeat(windowWidth / 2));
         return sb.toString();
     }
+
 
 }
