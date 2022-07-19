@@ -187,6 +187,8 @@ public class TextObject {
      * @return this textObject to allow chain calls.
      */
     public TextObject addGroupAligned(int numberOfColumns, int totalSize, TextObject[] columnsContent) {
+
+        //fixme not working as expected
         int charLimit = (numberOfColumns > 1 ? (totalSize / numberOfColumns) : totalSize);
         int totalLines = 0;
         for (TextObject textColumn : columnsContent) {
@@ -210,7 +212,8 @@ public class TextObject {
     }
 
     public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles){
-        int charLimit = (columnTitles.length > 1 ? (totalSize / columnTitles.length) : totalSize);
+        //fixme not working as expected
+        int charLimit = (columnTitles.length > 1 ? (totalSize / columnTitles.length) : totalSize/2);
 
         var sb=new StringBuilder();
         for(String title: columnTitles){
@@ -221,12 +224,12 @@ public class TextObject {
                 sb.append(((WindowObject) this).bgColor)
                         .append(((WindowObject) this).txtColor);
         }
-        addText("_".repeat(MAX_WIDTH));
+        addText("_".repeat(charLimit*columnTitles.length));
         addText(sb.toString());
-        addText("_".repeat(MAX_WIDTH));
+        addText("_".repeat(charLimit*columnTitles.length));
         for (TextObject entryLine : tableEntries) {
             sb=new StringBuilder();
-            entryLine.alignTextMiddle();
+//            entryLine.alignTextMiddle();
 
             for (int i = 0; i < entryLine.totalHeight; i++) {
                 var currentField = entryLine.poll();
@@ -236,7 +239,7 @@ public class TextObject {
             }
             addText(sb.toString());
 
-            addText("_".repeat(MAX_WIDTH));
+            addText("_".repeat(totalSize));
         }
         return this;
     }
