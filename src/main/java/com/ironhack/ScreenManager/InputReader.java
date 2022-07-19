@@ -196,4 +196,9 @@ public enum InputReader {
             else throw e;
         }
     }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }

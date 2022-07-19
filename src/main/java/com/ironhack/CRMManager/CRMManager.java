@@ -29,7 +29,19 @@ public class CRMManager {
     public void appStart(){
 //        var currentScreen= new InputScreen("LOGIN");
         while (!exit){//if in any moment we enter EXIT it must turn this.exit to true so while will end
-            login_screen();
+            switch (menu_screen(currentUser==null?login_screen():currentUser)){
+                case OPP -> {
+                    //TODO
+                }
+                case LEAD -> {
+                    //TODO
+                }
+                case ACCOUNT -> {
+                    //todo
+                }
+
+                default -> throw new IllegalStateException("Unexpected value: " + menu_screen(currentUser));
+            };
             //TODO printScreen(currentScreen);
             // currentScreen= currentScreen.processNextScreen() returns a screen from inputReader result
 
@@ -39,6 +51,16 @@ public class CRMManager {
         System.exit(0);
 
     }
+
+    private Commands menu_screen(com.ironhack.CRMManager.User currentUser) {
+        return Commands.valueOf(new com.ironhack.ScreenManager.Screens.MenuScreen(this,
+                printer,
+                "Main Menu",
+                LEAD,
+                ACCOUNT,
+                OPP).print().toUpperCase());
+    }
+
     //-----------------------------------------------------------------------------------------------------------SCREENS
     private void newUser_screen(boolean isAdmin) throws CRMException {
         var newUserScreen= new InputScreen(this,printer, "New User",
@@ -62,7 +84,7 @@ public class CRMManager {
         }
     }
 
-    private void login_screen() {
+    private User login_screen() {
         var loginScreen= new InputScreen(this,printer, "Login",
                 new TextObject("Enter your User Name and Password:"),
                 new String[]{"User Name","Password"},
@@ -81,6 +103,7 @@ public class CRMManager {
             printer.showErrorLine(WRONG_PASSWORD);
             login_screen();
         }
+        return this.currentUser;
     }
 
     private void handleCRMExceptions(com.ironhack.Exceptions.CRMException e) {

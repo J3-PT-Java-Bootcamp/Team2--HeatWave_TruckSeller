@@ -10,7 +10,7 @@ import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
 
 public abstract class CRMScreen {
-    private WindowObject textObject;
+    WindowObject textObject;
     ConsolePrinter printer;
     java.util.ArrayList<Commands> commands;
     private String name;
