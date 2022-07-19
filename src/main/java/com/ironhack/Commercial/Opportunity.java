@@ -30,6 +30,10 @@ public class Opportunity {
         setAccount(account);
     }
 
+    public Opportunity() {
+
+    }
+
     public String getId() {
         return id;
     }

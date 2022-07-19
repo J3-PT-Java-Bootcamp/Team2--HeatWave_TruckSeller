@@ -27,7 +27,8 @@ public class TextObject {
 
     private final Scroll scroll;
     protected final ArrayList<String> text;
-    protected final int MAX_WIDTH, MAX_HEIGHT;
+    public final int MAX_WIDTH;
+    protected final int MAX_HEIGHT;
     private int printSpeed;
     private int totalWidth, totalHeight;
 

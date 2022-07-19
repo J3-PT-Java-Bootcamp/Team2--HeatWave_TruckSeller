@@ -8,13 +8,13 @@ import java.util.Scanner;
 public class Menu<T> {
 
         // Menu options
-        private final MenuOption<T>[] options;
+        private final com.ironhack.ScreenManager.Screens.MenuOption<T>[] options;
         // Display title
         private final String title;
         // Question before user input
         private final String question;
 
-        public Menu(MenuOption<T>[] options, String title, String question) {
+        public Menu(com.ironhack.ScreenManager.Screens.MenuOption<T>[] options, String title, String question) {
             this.options = options;
             this.title = title;
             this.question = question;
@@ -26,14 +26,14 @@ public class Menu<T> {
             if(options.length == 0) return null;
 
             // One based index (starts at 1 for user-friendly reasons)
-            MenuOption<T> selected = null;
+            com.ironhack.ScreenManager.Screens.MenuOption<T> selected = null;
 
             do {
                 final var scanner = new Scanner(System.in);
                 try {
                     //TODO: QUIT ALL PRINT RELATED CODE
                     System.out.println("\n---[ " + title + " ]---");
-                    for (int i = 0; i < options.length; i++) options[i].display(i);
+                    for (int i = 0; i < options.length; i++) options[i].display();
                     System.out.print("\n" + question + ": ");
                     int selectedIndex = scanner.nextInt();
                     System.out.println();

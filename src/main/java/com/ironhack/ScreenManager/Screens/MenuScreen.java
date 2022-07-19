@@ -1,24 +1,26 @@
 package com.ironhack.ScreenManager.Screens;
 
-import com.ironhack.ScreenManager.MenuOption;
+import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.*;
 
 public class MenuScreen extends CRMScreen{
 
-    private final MenuOption<String> options;
+    private final Commands[] options;
 
 
-    public MenuScreen(String name,MenuOption<String> options) {
-        super(name);
+    public MenuScreen(com.ironhack.CRMManager.CRMManager manager,
+                      ConsolePrinter printer,
+                      String name, Commands... options) {
+        super(manager,printer,name);
         this.options = options;
     }
     @Override
-    public TextObject constructScreen() {
+    public TextObject print() {
         return null;
     }
 
     @Override
-    public void getInput() {
+    public void checkCommandInput() {
 
     }
 }

@@ -4,14 +4,14 @@ import com.ironhack.Constants.IndustryType;
 
 public class Account {
     private com.ironhack.Constants.IndustryType industryType;
-    private int id;
+    private String id;
     private int employeeCount;
     private String city;
     private String country;
     private Contact contact;
     private Opportunity opportunity;
 
-    public Account(IndustryType industryType, int id, int employeeCount, String city, String country) {
+    public Account(IndustryType industryType, String id, int employeeCount, String city, String country) {
         setIndustryType(industryType);
         setId(id);
         setEmployeeCount(employeeCount);
@@ -36,7 +36,7 @@ public class Account {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

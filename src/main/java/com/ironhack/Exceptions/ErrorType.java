@@ -6,6 +6,9 @@ public enum ErrorType {
     INTEGER_NOK,
     ID_NOK,
     LENGTH_NOK,
-    FATAL_ERR, MAIL_NOK, PHONE_NOK;
+    FATAL_ERR,
+    MAIL_NOK,
+    PHONE_NOK,
+    COMMAND_NOK, EXIT, PASSWORD_NOK;
 
 }

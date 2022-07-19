@@ -70,7 +70,7 @@ public class CRMData {
      HashMap<String, Lead> getLeadMap() {
         return leadMap;
     }
-     Lead getLead(String id) {
+     public Lead getLead(String id) {
         return leadMap.get(id);
     }
     //----------------------------------------OPPORTUNITY
@@ -84,10 +84,10 @@ public class CRMData {
      HashMap<String, Opportunity> getOpportunityMap() {
     return opportunityMap;
 }
-     Opportunity getOpportunity(String id) {
+     public Opportunity getOpportunity(String id) {
         return opportunityMap.get(id);
     }
-     CRMData addOpportunity(Opportunity opp) {
+     public CRMData addOpportunity(Opportunity opp) {
         this.opportunityMap.put(opp.getId(),opp);
         return this;
     }
