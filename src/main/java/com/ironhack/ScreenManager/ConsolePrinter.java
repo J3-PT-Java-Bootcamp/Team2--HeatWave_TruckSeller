@@ -196,6 +196,15 @@ public class ConsolePrinter {
         return false;
     }
 
+    public void showErrorLine(com.ironhack.Exceptions.ErrorType errorType) {
+        var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 1, 1);
+        line.addText(CColors.BRIGHT_RED + errorType.toString() + TextStyle.RESET);
+        line.addText(CColors.BRIGHT_GREEN + " TRY AGAIN or enter \"HELP\" " + TextStyle.RESET).alignTextCenter();
+        line.addText(CENTER_CARET);
+        sendToQueue(line);
+        startPrint();
+    }
+
     //-----------------------------------------------------------------------------------------------------INPUT_METHODS
 
 }

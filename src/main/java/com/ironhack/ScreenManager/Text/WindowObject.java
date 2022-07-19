@@ -61,7 +61,7 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
             for (int i = 0; i < borderSize.y; i++) {
                 sb.append(BLANK_SPACE.repeat(margin.x));
                 if(frameColor!=null)sb.append(frameColor);
-                if (title!=null&&(title.length() > 0) && (borderSize.y > 1) && starts && (i == 0)){
+                if (title!=null&&(title.length() > 0) && starts && (i == 0)){
                     int fillLeft= windowWidth-(margin.x*2)-title.length();
                     int fillRight= ((fillLeft % 2) == 0) ? (fillLeft / 2) : ((fillLeft / 2) + 1);
                     fillLeft/=2;
@@ -91,7 +91,9 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
             }
         }
     }
-
+    public String getTextModifications(){
+        return bgColor+txtColor.toString();
+    }
     public com.ironhack.ScreenManager.Text.WindowObject setTitle(String title) {
         this.title = title;
         return this;

@@ -23,14 +23,14 @@ public enum Commands {
     Commands(String... commands){
         this.commands=commands;
     }
-    public boolean check(String input, com.ironhack.ScreenManager.Screens.CRMScreen screen) throws CRMException {
+    public boolean check(String input, CRMScreen screen) throws CRMException {
         input=input.trim().toLowerCase();
         for(String command:commands){
             if(input.contains(command)) {
                 return act(input, screen);
             }
         }
-        throw new WrongInputException(ErrorType.COMMAND_NOK);
+        return false;
     }
 
     private Boolean act(String input, CRMScreen screen) throws CRMException{
@@ -69,8 +69,8 @@ public enum Commands {
                 var oppID= commandList[2];
                 var opp= CRMManager.crmData.getOpportunity(oppID);
                 if (opp==null)throw new WrongInputException(ErrorType.ID_NOK);
-                if (commandList[1].equalsIgnoreCase("lost"))opp.close(false);
-                else if (commandList[1].equalsIgnoreCase("won")) opp.close(true);
+                if (closeType.equalsIgnoreCase("lost"))opp.close(false);
+                else if (closeType.equalsIgnoreCase("won")) opp.close(true);
                 return true;
             }
             case YES ->{

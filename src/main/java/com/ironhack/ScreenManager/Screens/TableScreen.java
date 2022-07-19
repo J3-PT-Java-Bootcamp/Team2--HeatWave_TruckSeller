@@ -2,7 +2,6 @@ package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.ScreenManager.ConsolePrinter;
-import com.ironhack.ScreenManager.Text.*;
 
 public class TableScreen extends CRMScreen{
     public TableScreen(CRMManager manager,
@@ -12,7 +11,7 @@ public class TableScreen extends CRMScreen{
     }
 
     @Override
-    public TextObject print() {
+    public String print() {
         return null;
     }
 
