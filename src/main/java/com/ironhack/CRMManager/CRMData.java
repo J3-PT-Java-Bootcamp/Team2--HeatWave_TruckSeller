@@ -52,8 +52,9 @@ public class CRMData {
       HashMap<String, User> getUserList() {
         return userList;
     } 
-     void addToUserList(User newUser){
-        userList.put(newUser.getName(), newUser);
+     boolean addToUserList(User newUser){
+        return userList.putIfAbsent(newUser.getName(), newUser)==null;
+
     }
     //----------------------------------------LEAD
      int getLeadCounter() {

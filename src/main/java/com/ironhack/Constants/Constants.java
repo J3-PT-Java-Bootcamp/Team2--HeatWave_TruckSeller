@@ -9,4 +9,5 @@ public class Constants {
     public static final String CENTER_CARET=  BLANK_SPACE.repeat(LIMIT_X / 2);
 
     public static final String MAX_ID= "FFF";
+    public static final String APP_NAME= "TruckSeller v0.1";
 }

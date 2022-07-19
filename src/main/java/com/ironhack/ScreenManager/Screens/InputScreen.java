@@ -8,6 +8,7 @@ import com.ironhack.ScreenManager.Text.DynamicLine;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.ScreenManager.InputReader.*;
 
 public class InputScreen extends CRMScreen{
     InputReader[] inputTypes;
@@ -31,7 +32,7 @@ public class InputScreen extends CRMScreen{
     }
 
     @Override
-    public TextObject print() throws com.ironhack.Exceptions.CRMException {
+    public String print() throws com.ironhack.Exceptions.CRMException {
         int i=0;
         String input="";
         do  {
@@ -41,23 +42,20 @@ public class InputScreen extends CRMScreen{
             printer.sendToQueue(new DynamicLine(LIMIT_X/2,1,0).addText(inputNames[i]+": ").alignTextCenter());
             printer.startPrint();
             try {
-               input =inputTypes[i].getInput(this,printer);
-            }catch (CRMException crmException){
-                handleBackExceptions(crmException);
-                break;
-            }catch (Exception e){
-                throw new RuntimeException(e);
+                input = inputTypes[i].getInput(this, printer);
+            }catch (CRMException e){
+                if(this.crmManager.showModal("Confirmation Needed",
+                        "You have changes without save, are you sure you want to exit and lose them?"))throw e;
             }
             this.outValues.add(input);
             addText(content);
             for (int j = 0; j < outValues.size(); j++) {
-                addText(inputNames[j]+ ":  "+ outValues.get(j));
+                addText(inputNames[j]+ ":  "+ (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*".repeat(outValues.get(j).length()):outValues.get(j)));
             }
             input="";
             i++;
         }while(i < inputTypes.length);
         printer.clearScreen();
-        addText("Thanx!");
         getTextObject().alignTextCenter();
         printer.sendToQueue(this.getTextObject());
         printer.startPrint();

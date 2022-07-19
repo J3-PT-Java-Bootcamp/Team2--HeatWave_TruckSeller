@@ -5,42 +5,50 @@ import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.*;
 
 import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
 
 public abstract class CRMScreen {
     private WindowObject textObject;
     ConsolePrinter printer;
-    private java.util.ArrayList<Commands> commands;
+    java.util.ArrayList<Commands> commands;
     private String name;
-    private CRMManager crmManager;
+    CRMManager crmManager;
 
     public CRMScreen(com.ironhack.CRMManager.CRMManager manager, com.ironhack.ScreenManager.ConsolePrinter printer, String name){
         this.printer=printer;
         this.crmManager=manager;
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK);
-        this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,1,0)
-                .setBgColor(BgColors.WHITE)
+        this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
+                .setBgColor(BgColors.CYAN)
                 .setFrameColor(BgColors.WHITE)
-                .setTxtColor(com.ironhack.Constants.ColorFactory.CColors.BLACK)
-                .setTitle(name)
-                .setTitleColor(CColors.BRIGHT_BLACK);
+                .setTxtColor(CColors.BLACK)
+                .setTitleColor(CColors.BRIGHT_WHITE);
+        this.addText(BOLD+UNDERLINE.toString()+name+RESET).alignTextCenter().addText(BLANK_SPACE);
     }
     TextObject addText(String str){
+        if(str.contains(RESET.toString())){
+            return this.textObject.addText(str+this.textObject.getTextModifications());
+        }
         return this.textObject.addText(str);
+    }
+    private WindowObject generateTitle(){
+        return this.textObject.setTitle(APP_NAME+BLANK_SPACE.repeat(LIMIT_X/2)
+                +"User: "+(crmManager.currentUser==null?"not logged":crmManager.currentUser.getName()));
     }
     TextObject addText(TextObject txtObj){
         return this.textObject.addText(txtObj);
     }
     WindowObject getTextObject(){
-        this.textObject.alignTextMiddle();
+        this.generateTitle().alignTextMiddle().alignTextCenter();
         return this.textObject;
     }
     public String getName() {
         return this.name;
     }
-    public abstract TextObject print() throws com.ironhack.Exceptions.CRMException;
+    public abstract String print() throws com.ironhack.Exceptions.CRMException;
     abstract void checkCommandInput();
     public CRMScreen addCommand(Commands command){
         this.commands.add(command);
@@ -48,11 +56,6 @@ public abstract class CRMScreen {
     }
     public int getMaxWidth(){
         return this.textObject.MAX_WIDTH;
-    }
-    void handleBackExceptions(com.ironhack.Exceptions.CRMException crmException) throws com.ironhack.Exceptions.CRMException {
-        this.crmManager.exit=true;
-        throw crmException;
-        //TODO filter by exception type and go back, logout etc... show confirmation if needed
     }
     public com.ironhack.ScreenManager.ConsolePrinter getPrinter() {
         return printer;

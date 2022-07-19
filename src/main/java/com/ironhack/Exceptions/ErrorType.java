@@ -9,6 +9,6 @@ public enum ErrorType {
     FATAL_ERR,
     MAIL_NOK,
     PHONE_NOK,
-    COMMAND_NOK, EXIT, PASSWORD_NOK;
+    COMMAND_NOK, EXIT, PASSWORD_NOK, WRONG_PASSWORD;
 
 }

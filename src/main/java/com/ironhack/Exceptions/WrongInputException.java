@@ -4,7 +4,6 @@ public class WrongInputException extends CRMException{
     /* Exception for mismatching an input. Handle by repeating user input.
         It has a ErrorType value assigned to standardize error log.
      */
-    private ErrorType errorType;
 
 
     public WrongInputException(ErrorType errorType) {

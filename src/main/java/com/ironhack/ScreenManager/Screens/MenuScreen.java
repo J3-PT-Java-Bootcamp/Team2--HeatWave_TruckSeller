@@ -1,7 +1,6 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.ScreenManager.ConsolePrinter;
-import com.ironhack.ScreenManager.Text.*;
 
 public class MenuScreen extends CRMScreen{
 
@@ -15,7 +14,7 @@ public class MenuScreen extends CRMScreen{
         this.options = options;
     }
     @Override
-    public TextObject print() {
+    public String print() {
         return null;
     }
 
