@@ -1,19 +1,23 @@
 package com.ironhack.ScreenManager.Screens;
 
+import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.*;
 
 public class TableScreen extends CRMScreen{
-    public TableScreen(String name) {
-        super(name);
+    public TableScreen(CRMManager manager,
+                       ConsolePrinter printer,
+                       String name) {
+        super(manager,printer,name);
     }
 
     @Override
-    public TextObject constructScreen() {
+    public TextObject print() {
         return null;
     }
 
     @Override
-    public void getInput() {
+    public void checkCommandInput() {
 
     }
 }

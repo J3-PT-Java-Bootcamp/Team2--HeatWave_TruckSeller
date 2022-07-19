@@ -3,20 +3,19 @@ package com.ironhack.CRMManager;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class User {
     private String name;
     private String password;
     private HashMap<String, Opportunity> opportunityList;
     private HashMap<String, Lead> leadList;
+    private final boolean isAdmin;
 
 
-
-    public User(String name, String password) {
+    public User(String name, String password, boolean isAdmin) {
         this.name = name;
+        this.isAdmin=isAdmin;
         this.password = password;
     }
 

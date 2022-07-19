@@ -1,8 +1,15 @@
-package com.ironhack.ScreenManager;
+package com.ironhack.ScreenManager.Screens;
+import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 
 public class MenuOption<T> {
+
+    //TODO reconfigure menuOption the idea is that each MenuOption is related to one Screen  destination(value=screen.name?)
+    // it must have also a list of "commands" that will trigger this option
+
     private String display;
-    private T value;//TODO allow multiple values like "Opportunity" "opportunities" "Opp"
+    private T value;
+
     private boolean available = true;
 
     public MenuOption(String display, T value) {
@@ -39,8 +46,9 @@ public class MenuOption<T> {
         this.available = available;
     }
 
-    public void display(int index) {
-        System.out.println("(" + (index + 1) + ") " + getDisplay() + (isAvailable() ? "" : " [DISABLED]"));
+    public String display() {
+       return (isAvailable()? CColors.BLUE+ BOLD.toString()+ UNDERLINE : CColors.BRIGHT_BLACK.toString())
+               +getDisplay()+ RESET;
     }
 
     public static <T> MenuOption<T> create(String display, T value) {

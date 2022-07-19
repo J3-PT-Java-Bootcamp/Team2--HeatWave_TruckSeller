@@ -1,6 +1,6 @@
 package com.ironhack.Exceptions;
 
-public class WrongInputException extends Exception{
+public class WrongInputException extends CRMException{
     /* Exception for mismatching an input. Handle by repeating user input.
         It has a ErrorType value assigned to standardize error log.
      */

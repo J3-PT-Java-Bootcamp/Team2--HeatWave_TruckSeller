@@ -2,10 +2,11 @@ package com.ironhack.Exceptions;
 
 import com.ironhack.ScreenManager.Screens.CRMScreen;
 
-public class ConfirmExitWithoutSaveException {
+public class ConfirmExitWithoutSaveException extends CRMException{
     CRMScreen originScreen,destinyScreen;
 
     ConfirmExitWithoutSaveException(CRMScreen originScreen, CRMScreen destinyScreen){
+        super(com.ironhack.Exceptions.ErrorType.OK);
         this.destinyScreen=destinyScreen;
         this.originScreen=originScreen;
     }

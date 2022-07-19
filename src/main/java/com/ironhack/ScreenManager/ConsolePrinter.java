@@ -3,6 +3,10 @@ package com.ironhack.ScreenManager;
 
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.ScreenManager.Screens.CRMScreen;
+import com.ironhack.ScreenManager.Text.TextObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.Constants.ColorFactory.*;
@@ -11,24 +15,46 @@ import static com.ironhack.Constants.ColorFactory.*;
  *
  */
 public class ConsolePrinter {
-    private java.util.HashMap<String, CRMScreen> screenMap;
-    private final java.util.ArrayList<com.ironhack.ScreenManager.Text.TextObject> printQueue;
+    private final ArrayList<TextObject> printQueue;
     private final CRMManager crm;
 
     //---------------------------------------------------------------------------   CONSTRUCTOR
     public ConsolePrinter(CRMManager crm) {
-        this.screenMap=createScreens();
         this.crm = crm;
         this.printQueue = new java.util.ArrayList<>();
     }
 
-    private java.util.HashMap<String, CRMScreen> createScreens() {
-        var map =  new java.util.HashMap<String,CRMScreen>();
-        map.put("LOGIN",new com.ironhack.ScreenManager.Screens.InputScreen("LOGIN"));
-        //TODO CONSTRUCT AAALL SCREENS AND SAVE TO A MAP... THERE IS NOT CLEVER SOLUTION?
-//        map.put("USERMENU",new com.ironhack.ScreenManager.Screens.MenuScreen("USER MENU"))
 
-        return map;
+    private com.ironhack.ScreenManager.Screens.CRMScreen createNewAccountScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createNewContactScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createNewOppScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createAccountScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createOppScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createLeadScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createMenuScreen() {
+        return null;
+    }
+
+    private com.ironhack.ScreenManager.Screens.CRMScreen createLoginScreen() {
+        return null;
     }
 
     //---------------------------------------------------------------------------   PUBLIC METHODS
@@ -87,7 +113,7 @@ public class ConsolePrinter {
             var txtObj = pollNext();
             switch (txtObj.getScroll()) {
                 case NO -> {
-                    if (queueContainsScroll( com.ironhack.ScreenManager.Text.TextObject.Scroll.NO)) sb.append(txtObj.print()).append(NEW_LINE);
+                    if (queueContainsScroll( TextObject.Scroll.NO)) sb.append(txtObj.print()).append(NEW_LINE);
                     else System.out.print(sb.append(txtObj.print()));
                 }
                 case BLOCK -> {
@@ -134,7 +160,7 @@ public class ConsolePrinter {
         }
     }
 
-    public void sendToQueue( com.ironhack.ScreenManager.Text.TextObject txtObj) {
+    public void sendToQueue( TextObject txtObj) {
         this.printQueue.add(txtObj);
     }
 
@@ -155,16 +181,16 @@ public class ConsolePrinter {
     /**
      * Sends new lines to fill screen and clear last output
      */
-    private void clearScreen() {
-        sendToQueue(new com.ironhack.ScreenManager.Text.TextObject(BLANK_SPACE,  com.ironhack.ScreenManager.Text.TextObject.Scroll.NO, LIMIT_X, LIMIT_Y * 2).alignTextTop());
+    public void clearScreen() {
+        sendToQueue(new TextObject(BLANK_SPACE,  TextObject.Scroll.NO, LIMIT_X, LIMIT_Y * 2).alignTextTop());
     }
 
-    private com.ironhack.ScreenManager.Text.TextObject pollNext() {
+    private TextObject pollNext() {
         return printQueue.remove(0);
     }
 
-    private boolean queueContainsScroll( com.ironhack.ScreenManager.Text.TextObject.Scroll scroll) {
-        for ( com.ironhack.ScreenManager.Text.TextObject txtObj : printQueue) {
+    private boolean queueContainsScroll( TextObject.Scroll scroll) {
+        for ( TextObject txtObj : printQueue) {
             if (txtObj.getScroll().equals(scroll)) return true;
         }
         return false;

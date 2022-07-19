@@ -55,4 +55,8 @@ public class Lead {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+    public Opportunity convertToOpp() {
+        return new Opportunity();
+    }
 }

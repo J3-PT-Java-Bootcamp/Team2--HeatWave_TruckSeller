@@ -3,10 +3,9 @@ package com.ironhack.CRMManager;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
 import com.ironhack.ScreenManager.Menu;
-import com.ironhack.ScreenManager.MenuOption;
+import com.ironhack.ScreenManager.Screens.MenuOption;
 
 import java.util.Map;
-import java.util.Scanner;
 
 public class Screens {
     public static void mainMenu(User user){

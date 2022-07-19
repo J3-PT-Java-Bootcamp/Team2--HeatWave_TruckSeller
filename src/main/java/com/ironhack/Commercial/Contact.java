@@ -2,12 +2,12 @@ package com.ironhack.Commercial;
 
 public class Contact {
     private String  name;
-    private int id;
+    private String id;
     private String phoneNumber;
     private String eMail;
     private Account company;
 
-    public Contact(String name, int id, String phoneNumber, String eMail) {
+    public Contact(String name, String id, String phoneNumber, String eMail) {
         setName(name);
         setId(id);
         setPhoneNumber(phoneNumber);
@@ -31,7 +31,7 @@ public class Contact {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
