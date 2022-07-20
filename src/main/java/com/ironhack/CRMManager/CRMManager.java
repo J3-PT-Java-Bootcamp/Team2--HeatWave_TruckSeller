@@ -18,7 +18,7 @@ public class CRMManager {
     private final ConsolePrinter printer;
     public static CRMData crmData;
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
-    public CRMManager(){
+    public CRMManager(boolean startApp){
         this.exit=false;
         this.printer=new ConsolePrinter(this);
         try{
@@ -27,7 +27,7 @@ public class CRMManager {
             crmData=new CRMData();
             runFirstConfig();
         }
-        appStart();
+        if(startApp)appStart();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
 

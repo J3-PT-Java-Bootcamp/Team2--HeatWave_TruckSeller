@@ -6,6 +6,7 @@ class CRMScreenTest extends com.ironhack.ScreenManager.Text.TextObject {
 
     @org.junit.jupiter.api.Test
     void getName_testOK() {
+
     }
 
     @org.junit.jupiter.api.Test

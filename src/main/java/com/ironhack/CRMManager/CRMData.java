@@ -32,7 +32,7 @@ public class CRMData {
 
 
     //---------------------------------------------------------------------------------------------------GETTERSnSETTERS
-     String getNextID(Class objClass){
+    public  String getNextID(Class objClass){
         var sb= new StringBuilder();
         if (Opportunity.class.equals(objClass)) {
             opportunityCounter++;
@@ -48,6 +48,8 @@ public class CRMData {
             sb.append("C").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - contactCounter));
         }
         return sb.toString();
+
+
     }
       HashMap<String, User> getUserList() {
         return userList;
