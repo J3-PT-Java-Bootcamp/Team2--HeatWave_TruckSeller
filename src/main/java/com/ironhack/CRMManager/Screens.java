@@ -6,7 +6,7 @@ import com.ironhack.ScreenManager.Menu;
 import com.ironhack.ScreenManager.Screens.MenuOption;
 
 import java.util.Map;
-
+@Deprecated
 public class Screens {
     public static void mainMenu(User user){
         int selected;

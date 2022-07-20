@@ -35,23 +35,35 @@ public class InputScreen extends CRMScreen{
     public String print() throws com.ironhack.Exceptions.CRMException {
         int i=0;
         String input="";
+
         do  {
             printer.clearScreen();
-            getTextObject().alignTextCenter();
             printer.sendToQueue(this.getTextObject());
             printer.sendToQueue(new DynamicLine(LIMIT_X/2,1,0).addText(inputNames[i]+": ").alignTextCenter());
             printer.startPrint();
             try {
                 input = inputTypes[i].getInput(this, printer);
-            }catch (CRMException e){
+            }catch(com.ironhack.Exceptions.BackScreenInput back){
+                inputTypes[i].password=null;
+                i--;
+
+                outValues.remove(outValues.size()-1);
+                constructContent();
+                input="";
+                continue;
+            } catch (CRMException e){
                 if(this.crmManager.showModal("Confirmation Needed",
-                        "You have changes without save, are you sure you want to exit and lose them?"))throw e;
+                        "You have changes without save, are you sure you want to exit and lose them?")){
+                    inputTypes[i].password=null;
+                    throw e;
+                }
+                constructContent();
+                input="";
+                continue;
             }
             this.outValues.add(input);
-            addText(content);
-            for (int j = 0; j < outValues.size(); j++) {
-                addText(inputNames[j]+ ":  "+ (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*".repeat(outValues.get(j).length()):outValues.get(j)));
-            }
+
+            constructContent();
             input="";
             i++;
         }while(i < inputTypes.length);
@@ -62,6 +74,12 @@ public class InputScreen extends CRMScreen{
         return null;
     }
 
+    private void constructContent() {
+        addText(content);
+        for (int j = 0; j < outValues.size(); j++) {
+            addText(inputNames[j]+ ":  "+ (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*".repeat(outValues.get(j).length()):outValues.get(j)));
+        }
+    }
 
 
     @Override

@@ -118,7 +118,7 @@ public class ConsolePrinter {
                 }
                 case BLOCK -> {
                     System.out.print(txtObj.print());
-                    waitFor(1000 / txtObj.getPrintSpeed());
+//                    admin(1000 / txtObj.getPrintSpeed());
                 }
                 case LINE -> {
                     int counter = 0;
