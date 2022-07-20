@@ -9,8 +9,6 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
     final int windowWidth;
     final int windowHeight;
     private BgColors frameColor;
-    BgColors bgColor;
-    CColors txtColor;
     private CColors titleColor;
 
     WindowObject(int maxWidth, int maxHeight, java.awt.Point padding, java.awt.Point borderSize, java.awt.Point margin, String ... pattern){
@@ -47,7 +45,7 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
                     sb.append(pattern[starts?i:borderSize.x-i-1]);
                 }
                 sb.append(TextStyle.RESET);
-                if(starts && bgColor!=null)sb.append(bgColor);
+                if(starts && this.bgColor!=null)sb.append(bgColor);
                 if(starts&&txtColor!=null)sb.append(txtColor);
             }
             if(!starts&&margin.x>0)sb.append(BLANK_SPACE.repeat(margin.x));
