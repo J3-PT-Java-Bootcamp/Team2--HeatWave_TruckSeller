@@ -2,6 +2,7 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
+import com.ironhack.Exceptions.LogoutException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Screens.ConfirmationScreen;
@@ -65,9 +66,9 @@ public class CRMManager {
                     default -> {
                     }
                 }
-            }catch (com.ironhack.Exceptions.LogoutException logout){
+            }catch (LogoutException logout){
                 currentUser = null;
-            }catch (com.ironhack.Exceptions.CRMException exit){
+            }catch (CRMException exit){
                 this.exit=true;
             }
             //TODO printScreen(currentScreen);
@@ -162,7 +163,7 @@ public class CRMManager {
      *
      * @return Command selected by user
      */
-    private Commands menu_screen(User currentUser) throws com.ironhack.Exceptions.CRMException {
+    private Commands menu_screen(User currentUser) throws CRMException {
         //todo
         try {
             return Commands.valueOf(new MenuScreen(this,
