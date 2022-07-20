@@ -17,7 +17,7 @@ public abstract class CRMScreen {
     private String name;
     CRMManager crmManager;
 
-    public CRMScreen(com.ironhack.CRMManager.CRMManager manager, com.ironhack.ScreenManager.ConsolePrinter printer, String name){
+    public CRMScreen(CRMManager manager, ConsolePrinter printer, String name){
         this.printer=printer;
         this.crmManager=manager;
         this.commands=new java.util.ArrayList<>();
@@ -84,7 +84,7 @@ public abstract class CRMScreen {
     public int getMaxWidth(){
         return this.textObject.MAX_WIDTH;
     }
-    public com.ironhack.ScreenManager.ConsolePrinter getPrinter() {
+    public ConsolePrinter getPrinter() {
         return printer;
     }
 

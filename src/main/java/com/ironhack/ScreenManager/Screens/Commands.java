@@ -46,7 +46,7 @@ public enum Commands {
                 throw new BackToMenuScreen();
             }
             case LOGOUT -> {
-                throw new ExitException(true);
+                throw new LogoutException(com.ironhack.Exceptions.ErrorType.OK);
             }
             case OPP -> {
                 return true;

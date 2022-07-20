@@ -1,10 +1,12 @@
 package com.ironhack.CRMManager;
 
 import com.ironhack.Exceptions.CRMException;
+import com.ironhack.Exceptions.ExitException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Screens.ConfirmationScreen;
 import com.ironhack.ScreenManager.Screens.InputScreen;
+import com.ironhack.ScreenManager.Screens.MenuScreen;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
@@ -47,19 +49,26 @@ public class CRMManager {
      * Main app Screens loop
      */
     public void appStart(){
+        START:
         while (!exit){//if in any moment we enter EXIT it must turn this.exit to true so while will end
-            switch (menu_screen(currentUser==null?login_screen():currentUser)){
-                case OPP -> {
-                    //TODO
+            try {
+                switch (menu_screen(currentUser == null ? login_screen() : currentUser)) {
+                    case OPP -> {
+                        //TODO
+                    }
+                    case LEAD -> {
+                        //TODO
+                    }
+                    case ACCOUNT -> {
+                        //todo
+                    }
+                    default -> {
+                    }
                 }
-                case LEAD -> {
-                    //TODO
-                }
-                case ACCOUNT -> {
-                    //todo
-                }
-
-                default -> throw new IllegalStateException("Unexpected value: " + menu_screen(currentUser));
+            }catch (com.ironhack.Exceptions.LogoutException logout){
+                currentUser = null;
+            }catch (com.ironhack.Exceptions.CRMException exit){
+                this.exit=true;
             }
             //TODO printScreen(currentScreen);
             // currentScreen= currentScreen.processNextScreen() returns a screen from inputReader result
@@ -84,7 +93,7 @@ public class CRMManager {
                 OPEN, NEW_PASSWORD, NEW_PASSWORD);
         var strRes=newUserScreen.start();
         var userVal=newUserScreen.getValues();
-        if(crmData.addToUserList(new User(userVal.get(0),userVal.get(1),isAdmin))){
+        if(userVal.size()==3&&crmData.addToUserList(new User(userVal.get(0),userVal.get(1),isAdmin))){
             showConfirmingScreen("User "+ userVal.get(0)+" was properly saved.",strRes,true);
         }
     }
@@ -138,6 +147,7 @@ public class CRMManager {
             handleCRMExceptions(e);
         }
         var userVal=loginScreen.getValues();
+        if(userVal==null||userVal.size()<2)return null;
         if (checkCredentials(userVal.get(0),userVal.get(1))){
             this.currentUser= crmData.getUserList().get(userVal.get(0));
             showConfirmingScreen("Welcome "+userVal.get(0)+"!",strResult,false);
@@ -152,14 +162,20 @@ public class CRMManager {
      *
      * @return Command selected by user
      */
-    private Commands menu_screen(User currentUser) {
+    private Commands menu_screen(User currentUser) throws com.ironhack.Exceptions.CRMException {
         //todo
-        return Commands.valueOf(new com.ironhack.ScreenManager.Screens.MenuScreen(this,
-                printer,
-                "Main Menu",
-                LEAD,
-                ACCOUNT,
-                OPP).start().toUpperCase());
+        try {
+            return Commands.valueOf(new MenuScreen(this,
+                    printer,
+                    "Main Menu",
+                    LEAD,
+                    ACCOUNT,
+                    OPP).start().toUpperCase());
+        }catch (Exception e){
+            if(e instanceof CRMException)throw e;
+            printer.showErrorLine(COMMAND_NOK);
+            return menu_screen(currentUser);
+        }
     }
     //-------------------------------------------------------------------------------------------------------PRIVATE METHODS
     private CRMData loadData() throws Exception {
@@ -171,7 +187,8 @@ public class CRMManager {
         throw new IllegalAccessException();
     }
     private void handleCRMExceptions(CRMException e) {
-        appStart();
+        if(e.getClass().equals(ExitException.class))this.exit=true;
+//        appStart();
         //TODO MANAGE OUR EXCEPTIONS NOT MANAGED IN SCREEN OR INPUT
     }
     /**Checks user and password
