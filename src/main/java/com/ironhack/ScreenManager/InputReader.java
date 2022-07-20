@@ -168,7 +168,7 @@ public enum InputReader {
 //    }
 //
 //    private String printHint() {
-//        if (this.equals(COMMAND)) {//todo: method to print all available commands in one line
+//        if (this.equals(COMMAND)) {//todo: method to start all available commands in one line
 //            return this.hint;
 //        }
 //         return this.hint;

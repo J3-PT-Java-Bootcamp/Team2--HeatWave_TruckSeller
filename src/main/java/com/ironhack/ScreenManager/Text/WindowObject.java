@@ -1,11 +1,14 @@
 package com.ironhack.ScreenManager.Text;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static com.ironhack.Constants.ColorFactory.*;
 
 public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
     final java.awt.Point borderSize;
     final java.awt.Point margin;
     String[] pattern;
-    String title;
+    String title,lastLine;
     final int windowWidth;
     final int windowHeight;
     private BgColors frameColor;
@@ -66,7 +69,12 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
                     sb.append(pattern[i].repeat(fillLeft)).append(titleColor!=null?titleColor:"").append(TextStyle.BOLD).append(title).append(TextStyle.RESET)
                             .append(frameColor!=null?frameColor:"").append(pattern[i].repeat(fillRight));
                 }else {
-                    sb.append(pattern[starts ? i : borderSize.y - i-1].repeat(windowWidth-(margin.x*2)));
+                    sb.append(pattern[starts ? i : borderSize.y - i-1]
+                            .repeat(!starts&&i==borderSize.y-1?windowWidth-(margin.x*2)- borderSize.y-5:windowWidth-(margin.x*2)));
+                    if(!starts&&i==borderSize.y-1){
+                        sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                        sb.append(BLANK_SPACE.repeat(borderSize.y));
+                    }
                 }
                 sb.append(TextStyle.RESET).append(BLANK_SPACE.repeat(margin.x)).append(NEW_LINE);
             }

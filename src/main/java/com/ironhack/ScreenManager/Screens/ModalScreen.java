@@ -25,7 +25,7 @@ public class ModalScreen extends CRMScreen{
     }
 
     @Override
-    public String print()  {
+    public String start()  {
         String input="";
         printer.clearScreen();
         getTextObject().alignTextCenter();

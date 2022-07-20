@@ -48,7 +48,7 @@ public abstract class CRMScreen {
     public String getName() {
         return this.name;
     }
-    public abstract String print() throws com.ironhack.Exceptions.CRMException;
+    public abstract String start() throws com.ironhack.Exceptions.CRMException;
     abstract void checkCommandInput();
     public CRMScreen addCommand(Commands command){
         this.commands.add(command);

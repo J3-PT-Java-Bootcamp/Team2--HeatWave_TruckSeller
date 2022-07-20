@@ -11,7 +11,7 @@ public class TableScreen extends CRMScreen{
     }
 
     @Override
-    public String print() {
+    public String start() {
         return null;
     }
 
