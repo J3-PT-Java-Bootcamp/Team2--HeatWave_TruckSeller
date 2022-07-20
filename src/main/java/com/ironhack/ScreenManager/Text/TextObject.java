@@ -217,8 +217,6 @@ public class TextObject {
      * @return this textObject to allow chain calls.
      */
     public TextObject addGroupInColumns(int numberOfColumns, int totalSize, TextObject[] columnsContent) {
-
-        //fixme not working as expected
         int charLimit = (numberOfColumns > 1 ? (totalSize / numberOfColumns) : totalSize);
         int rest= totalSize%numberOfColumns;
         int totalLines = 0;
@@ -244,19 +242,18 @@ public class TextObject {
 
     public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles,BgColors... colors){
         //fixme not working as expected
-        int charLimit = (columnTitles.length > 1 ? (totalSize / columnTitles.length) : totalSize/2);
+        int charLimit = (columnTitles.length > 1 ? (totalSize / tableEntries[0].getTotalHeight()) : totalSize);
         var sb=new StringBuilder();
-        for(String title: columnTitles){
-            sb.append(TextStyle.BOLD)
-                    .append(createTableCell(charLimit,title))
+        for (int i = 0; i < columnTitles.length; i++) {
+            String title = columnTitles[i];
+            sb.append(createTableCell(charLimit, title,i==columnTitles.length-1))
                     .append(TextStyle.RESET);
-            if (this instanceof WindowObject)
-                sb.append(((WindowObject) this).bgColor)
-                        .append(((WindowObject) this).txtColor);
+//            if (this instanceof WindowObject)
+//                sb.append(((WindowObject) this).bgColor)
+//                        .append(((WindowObject) this).txtColor);
         }
-        addText("_".repeat(charLimit*columnTitles.length));
         addText(sb.toString());
-        addText("_".repeat(charLimit*columnTitles.length));
+        addText(TextStyle.BOLD+"_".repeat(charLimit*columnTitles.length)+TextStyle.RESET);
         for (TextObject entryLine : tableEntries) {
             sb=new StringBuilder();
 //            entryLine.alignTextMiddle();
@@ -264,8 +261,7 @@ public class TextObject {
             for (int i = 0; i < entryLine.totalHeight; i++) {
                 var currentField = entryLine.poll();
                 if(countValidCharacters(currentField)>=charLimit-1)throw new RuntimeException("TODO HANDLE TABLE WRAP");//todo
-                sb.append(createTableCell(charLimit,currentField));
-                if (i == entryLine.totalHeight - 1) sb.append("|");
+                sb.append(createTableCell(charLimit,currentField,i == entryLine.totalHeight - 1));
             }
             addText(sb.toString());
 
@@ -274,12 +270,11 @@ public class TextObject {
         return this;
     }
 
-    private String createTableCell(int charLimit, String currentField) {
-        int availableSpace= (charLimit /2)-(countValidCharacters(currentField)/2);
-        return ("|"+BLANK_SPACE.repeat(availableSpace-1))
-        +(currentField)
-        +(BLANK_SPACE.repeat(availableSpace+(charLimit %2==0?0:1)
-                +(countValidCharacters(currentField)%2==0?0:1)-1));
+    private String createTableCell(int charLimit, String currentField,boolean isLast) {
+        int availableSpace= charLimit -1;
+        return (TextStyle.BOLD+"|"+TextStyle.RESET
+                +centerLine(currentField,availableSpace)
+                +(isLast?TextStyle.BOLD+"|"+TextStyle.RESET:TextStyle.RESET));
     }
 
     //-----------------------------------------------------------------------------------------------------INNER_METHODS

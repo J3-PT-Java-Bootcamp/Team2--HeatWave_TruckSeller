@@ -6,6 +6,7 @@ import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Screens.InputScreen;
 import com.ironhack.ScreenManager.Text.TextObject;
 
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
@@ -64,7 +65,7 @@ public class CRMManager {
     //-----------------------------------------------------------------------------------------------------------SCREENS
     private void newUser_screen(boolean isAdmin) throws CRMException {
         var newUserScreen= new InputScreen(this,printer, "New User",
-                new TextObject("Enter a Name and Password to create a New User:"),
+                new TextObject("Enter a Name and Password to create a New User:").addText(BLANK_SPACE).addText(BLANK_SPACE),
                 new String[]{"User Name","Password","Repeat Password"},
                 OPEN, NEW_PASSWORD, NEW_PASSWORD);
         newUserScreen.print();
@@ -144,8 +145,9 @@ public class CRMManager {
     public boolean showModal(String name,String message) {
         var modal=new com.ironhack.ScreenManager.Screens.ModalScreen(this,printer,name,message);
         try {
-            if (Commands.valueOf(modal.print().toUpperCase()).equals(YES)) return true;
-            if (Commands.valueOf(modal.print().toUpperCase()).equals(NO)) return false;
+            var val= Commands.valueOf(modal.print().toUpperCase());
+            if (val.equals(YES)) return true;
+            if (val.equals(NO)) return false;
         }catch (IllegalArgumentException e){
             printer.showErrorLine(FORMAT_NOK);
             return showModal(name,message);

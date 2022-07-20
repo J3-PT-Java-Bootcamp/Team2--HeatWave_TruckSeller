@@ -30,6 +30,7 @@ public class MenuScreen extends CRMScreen{
     }
     @Override
     public String print() {
+        printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
         String input="";

@@ -12,9 +12,10 @@ public class ConfirmationScreen extends CRMScreen{
 
     @Override
     public String print() throws com.ironhack.Exceptions.CRMException {
+        printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
-        printer.waitFor(800);
+        printer.waitFor(1000);
         return null;
     }
 

@@ -26,7 +26,7 @@ public enum InputReader {
 
     private String hint;
     private ConsolePrinter printer;
-    private String password;
+    public String password;
     InputReader(String hint) {
         this.hint=hint;
     }
