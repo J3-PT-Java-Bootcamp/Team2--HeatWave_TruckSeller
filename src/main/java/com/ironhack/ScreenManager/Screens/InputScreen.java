@@ -59,12 +59,21 @@ public class InputScreen extends CRMScreen{
                 constructContent();
                 input="";
                 continue;
+            }catch (LogoutException logout){
+                if(this.crmManager.showModalScreen("Confirmation Needed",
+                        "You have changes without save, are you sure you want to exit and lose them?")) {
+                    inputTypes[i].password = null;
+                    crmManager.currentUser = null;
+                    break;
+                }
             } catch (CRMException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModalScreen("Confirmation Needed",
                         "You have changes without save, are you sure you want to exit and lose them?")){
                     inputTypes[i].password=null;
-                    throw e;
+                    crmManager.currentUser=null;
+                    crmManager.exit=true;
+                    return null;
                 }
                 constructContent();
                 input="";
