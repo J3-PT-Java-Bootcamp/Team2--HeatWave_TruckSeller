@@ -2,6 +2,7 @@ package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
+import com.ironhack.ScreenManager.InputReader;
 
 
 public enum Commands {
@@ -17,23 +18,25 @@ public enum Commands {
     NO("no","cancel"),
     BACK("back"),
     NEXT("next"),
-    PREVIOUS("prev","previous");
+    PREVIOUS("prev","previous"),
+    HELP("help");
 
     final String[] commands;
+
     Commands(String... commands){
         this.commands=commands;
     }
-    public boolean check(String input, CRMScreen screen) throws CRMException {
+    public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
         input=input.trim().toLowerCase();
         for(String command:commands){
             if(input.contains(command)) {
-                return act(input, screen);
+                return act(input, screen,inputReader);
             }
         }
         return false;
     }
 
-    private Boolean act(String input, CRMScreen screen) throws CRMException{
+    private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){
 
             case EXIT -> {
@@ -89,7 +92,12 @@ public enum Commands {
             case PREVIOUS -> {
                 return true;
             }
-            default -> throw new IllegalStateException("Unexpected value: " + this);
+            case HELP -> {
+                throw new HelpException(ErrorType.HELP,
+                        inputReader.getHint(),
+                        screen.commands.toArray(new Commands[0]));
+            }
         }
+        return false;
     }
 }

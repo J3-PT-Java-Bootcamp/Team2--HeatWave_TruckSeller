@@ -102,7 +102,7 @@ public enum InputReader {
             return validateCommand(commands,screen);
         }
         for(Commands comm:commands){
-            if (comm.check(input, screen)) return comm.name();
+            if (comm.check(input, screen,this)) return comm.name();
         }
         return input;
     }
@@ -153,27 +153,27 @@ public enum InputReader {
             throw new RuntimeException(e);
         }
         input = input.replace("\n", "").trim().toUpperCase();
-        if(input=="HELP")showHintLine();
+//        if(input=="HELP")showHintLine();
 
         return input;
     }
 
-    private void showHintLine() {
-        var line = new DynamicLine(LIMIT_X, 1, 1);
-        line.addText(CColors.BRIGHT_GREEN + printHint() + TextStyle.RESET).alignTextCenter();
-        line.addText(CENTER_CARET);
-        //TODO new printer link
-//        sendToQueue(line);
-//        startPrint();
-    }
-
-    private String printHint() {
-        if (this.equals(COMMAND)) {//todo: method to print all available commands in one line
-            return this.hint;
-        }
-         return this.hint;
-
-    }
+//    private void showHintLine() {
+//        var line = new DynamicLine(LIMIT_X, 1, 1);
+//        line.addText(CColors.BRIGHT_GREEN + printHint() + TextStyle.RESET).alignTextCenter();
+//        line.addText(CENTER_CARET);
+//        //TODO new printer link
+////        sendToQueue(line);
+////        startPrint();
+//    }
+//
+//    private String printHint() {
+//        if (this.equals(COMMAND)) {//todo: method to print all available commands in one line
+//            return this.hint;
+//        }
+//         return this.hint;
+//
+//    }
 
 //---------------------------------------------------------------------------------------------------------OUTER METHODS
 
@@ -200,5 +200,9 @@ public enum InputReader {
     @Override
     public String toString() {
         return this.name();
+    }
+
+    public String getHint() {
+        return this.hint;
     }
 }
