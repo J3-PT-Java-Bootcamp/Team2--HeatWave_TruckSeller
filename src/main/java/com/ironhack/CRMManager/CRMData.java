@@ -47,7 +47,7 @@ public class CRMData {
             contactCounter++;
             sb.append("C").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - contactCounter));
         }
-        return sb.toString();
+        return sb.toString().toUpperCase();
 
 
     }
