@@ -1,6 +1,7 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.Exceptions.CRMException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import static com.ironhack.Constants.ColorFactory.*;
 
@@ -22,16 +23,11 @@ public class ConfirmationScreen extends CRMScreen{
     }
 
     @Override
-    public String start() throws com.ironhack.Exceptions.CRMException {
+    public String start() throws CRMException {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
         printer.waitFor(DURATION);
         return null;
-    }
-
-    @Override
-    void checkCommandInput() {
-
     }
 }

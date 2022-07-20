@@ -93,9 +93,7 @@ public enum Commands {
                 return true;
             }
             case HELP -> {
-                throw new HelpException(ErrorType.HELP,
-                        inputReader.getHint(),
-                        screen.commands.toArray(new Commands[0]));
+                throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
             }
         }
         return false;

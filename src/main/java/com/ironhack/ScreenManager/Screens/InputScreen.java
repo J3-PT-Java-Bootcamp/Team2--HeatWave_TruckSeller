@@ -101,10 +101,6 @@ public class InputScreen extends CRMScreen{
     }
 
 
-    @Override
-    public void checkCommandInput() {
-    }
-
     public java.util.ArrayList<String> getValues() {
         return this.outValues;
     }
