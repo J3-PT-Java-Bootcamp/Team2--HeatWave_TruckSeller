@@ -96,7 +96,7 @@ public class ConsolePrinter {
 //        printQueue.add(new  WindowObject(LIMIT_X, LIMIT_Y, 3, 3)
 //                .setBgColor(BgColors.BLACK).setFrameColor(BgColors.WHITE).setTxtColor(CColors.BRIGHT_WHITE)
 //                .setTitleColor(CColors.BLACK).setTitle("Confirmation Needed")
-//                .addText(message).addGroupAligned(2, LIMIT_X / 2,
+//                .addText(message).addGroupInColumns(2, LIMIT_X / 2,
 //                        new  TextObject[]{
 //                                new  TextObject(Modal.CANCEL.ordinal() + "- " + Modal.CANCEL,
 //                                         TextObject.Scroll.BLOCK, LIMIT_X / 4, 1),
