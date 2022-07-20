@@ -40,9 +40,4 @@ public class MenuScreen extends CRMScreen{
           return start();
         }
     }
-
-    @Override
-    public void checkCommandInput() {
-
-    }
 }

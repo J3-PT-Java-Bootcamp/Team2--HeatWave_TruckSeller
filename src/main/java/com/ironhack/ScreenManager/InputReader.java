@@ -15,6 +15,10 @@ import static com.ironhack.Constants.Constants.CENTER_CARET;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Exceptions.ErrorType.*;
 
+/**
+ * Enum with different configurations to read input from user,
+ * it validates that user input matches the excepcted format
+ */
 public enum InputReader {
     MAIL("Expects a mail format ex: user@domain.com"),
     PHONE("Expects phone number format, only numbers and +() signs"),

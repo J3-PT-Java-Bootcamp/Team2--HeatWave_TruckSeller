@@ -15,8 +15,4 @@ public class TableScreen extends CRMScreen{
         return null;
     }
 
-    @Override
-    public void checkCommandInput() {
-
-    }
 }
