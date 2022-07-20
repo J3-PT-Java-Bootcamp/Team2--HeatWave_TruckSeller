@@ -22,37 +22,22 @@ public class ConsolePrinter {
         this.crm = crm;
         this.printQueue = new java.util.ArrayList<>();
     }
-
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createNewAccountScreen() {
         return null;
     }
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createNewContactScreen() {
         return null;
     }
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createNewOppScreen() {
         return null;
     }
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createAccountScreen() {
         return null;
     }
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createOppScreen() {
         return null;
     }
-
     private com.ironhack.ScreenManager.Screens.CRMScreen createLeadScreen() {
-        return null;
-    }
-
-    private com.ironhack.ScreenManager.Screens.CRMScreen createMenuScreen() {
-        return null;
-    }
-
-    private com.ironhack.ScreenManager.Screens.CRMScreen createLoginScreen() {
         return null;
     }
 
@@ -85,26 +70,7 @@ public class ConsolePrinter {
                 .addText(TextStyle.BOLD + "Press Enter when done").alignTextCenter().alignTextMiddle()
                 .addText(CENTER_CARET));
         startPrint();
-
     }
-
-
-//    @Deprecated
-//    public boolean confirmationNeeded(String message) {
-//        clearScreen();
-//        printQueue.add(new  WindowObject(LIMIT_X, LIMIT_Y, 3, 3)
-//                .setBgColor(BgColors.BLACK).setFrameColor(BgColors.WHITE).setTxtColor(CColors.BRIGHT_WHITE)
-//                .setTitleColor(CColors.BLACK).setTitle("Confirmation Needed")
-//                .addText(message).addGroupInColumns(2, LIMIT_X / 2,
-//                        new  TextObject[]{
-//                                new  TextObject(Modal.CANCEL.ordinal() + "- " + Modal.CANCEL,
-//                                         TextObject.Scroll.BLOCK, LIMIT_X / 4, 1),
-//                                new  TextObject(Modal.OK.ordinal() + "- " + Modal.OK,
-//                                         TextObject.Scroll.BLOCK, LIMIT_X / 4, 1)})
-//                .alignTextCenter().alignTextMiddle());
-//        startPrint();
-//        return Modal.values()[getIntFromInput(Modal.values())] == Modal.OK;
-//    }
     //---------------------------------------------------------------------------   CONSOLE MANAGER
     public void startPrint() {
         var sb = new StringBuilder();

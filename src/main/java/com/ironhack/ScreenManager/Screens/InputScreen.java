@@ -1,22 +1,24 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Exceptions.BackScreenInput;
-import com.ironhack.Exceptions.CRMException;
-import com.ironhack.Exceptions.HelpException;
-import com.ironhack.ScreenManager.ConsolePrinter;
-import com.ironhack.ScreenManager.InputReader;
-import com.ironhack.ScreenManager.Text.DynamicLine;
-import com.ironhack.ScreenManager.Text.TextObject;
+import com.ironhack.Exceptions.*;
+import com.ironhack.ScreenManager.*;
+import com.ironhack.ScreenManager.Text.*;
 
-import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 
+/**
+ * InputScreen is a CRMScreen that prompts 1..* inputs provided by inputTypes/inputNames
+ * results are stored in "outValues"
+ */
 public class InputScreen extends CRMScreen{
-    InputReader[] inputTypes;
-    String[] inputNames;
-    java.util.ArrayList<String>outValues;
-    TextObject content;
+    InputReader[] inputTypes;//Type of data that will prompt to user, ordered
+    String[] inputNames;//Names of data that will prompt to user, ordered
+    java.util.ArrayList<String>outValues;//User answers 
+    TextObject content;//Text Content
+    
+    //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public InputScreen(CRMManager manager,
                        ConsolePrinter printer,
                        String name,
@@ -34,7 +36,7 @@ public class InputScreen extends CRMScreen{
     }
 
     @Override
-    public String print() throws com.ironhack.Exceptions.CRMException {
+    public String start() throws com.ironhack.Exceptions.CRMException {
         int i=0;
         String input="";
         do  {
@@ -59,7 +61,7 @@ public class InputScreen extends CRMScreen{
                 continue;
             } catch (CRMException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
-                if(this.crmManager.showModal("Confirmation Needed",
+                if(this.crmManager.showModalScreen("Confirmation Needed",
                         "You have changes without save, are you sure you want to exit and lose them?")){
                     inputTypes[i].password=null;
                     throw e;
@@ -69,22 +71,32 @@ public class InputScreen extends CRMScreen{
                 continue;
             }
             this.outValues.add(input);
-
             constructContent();
             input="";
             i++;
         }while(i < inputTypes.length);
-        printer.clearScreen();
-        getTextObject().alignTextCenter();
-        printer.sendToQueue(this.getTextObject());
-        printer.startPrint();
-        return null;
+        return printOutValues();
+    }
+
+    private String printOutValues() {
+        var sb= new StringBuilder();
+        for (int j = 0; j < outValues.size(); j++) {
+            sb.append(inputNames[j]);
+            sb.append( ":  ");
+            sb.append( (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*"
+                    .repeat(outValues.get(j).length()):outValues.get(j)));
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 
     private void constructContent() {
         addText(content);
         for (int j = 0; j < outValues.size(); j++) {
-            addText(inputNames[j]+ ":  "+ (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*".repeat(outValues.get(j).length()):outValues.get(j)));
+            addText(inputNames[j]+ ":  "
+                    + (inputTypes[j].equals(NEW_PASSWORD)||
+                    inputTypes[j].equals(PASSWORD)?"*"
+                    .repeat(outValues.get(j).length()):outValues.get(j)));
         }
     }
 

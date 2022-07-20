@@ -29,7 +29,7 @@ public class MenuScreen extends CRMScreen{
         for(Commands opt:options)this.addCommand(opt);
     }
     @Override
-    public String print() {
+    public String start() {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
@@ -37,7 +37,7 @@ public class MenuScreen extends CRMScreen{
         try {
             return COMMAND.getInput(this, printer);
         }catch (com.ironhack.Exceptions.CRMException e){
-          return print();
+          return start();
         }
     }
 
