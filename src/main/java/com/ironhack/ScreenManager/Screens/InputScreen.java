@@ -1,7 +1,9 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.Exceptions.BackScreenInput;
 import com.ironhack.Exceptions.CRMException;
+import com.ironhack.Exceptions.HelpException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.InputReader;
 import com.ironhack.ScreenManager.Text.DynamicLine;
@@ -42,11 +44,16 @@ public class InputScreen extends CRMScreen{
             printer.startPrint();
             try {
                 input = inputTypes[i].getInput(this, printer);
-            }catch(com.ironhack.Exceptions.BackScreenInput back){
+            }catch(BackScreenInput back) {
                 //allow to go back to correct last input
-                inputTypes[i].password=null;
+                inputTypes[i].password = null;
                 i--;
-                outValues.remove(outValues.size()-1);
+                outValues.remove(outValues.size() - 1);
+                constructContent();
+                input = "";
+                continue;
+            }catch (HelpException help){
+                printer.showHintLine(help.hint,help.commands);
                 constructContent();
                 input="";
                 continue;

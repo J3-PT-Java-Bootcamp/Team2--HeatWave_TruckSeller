@@ -34,7 +34,7 @@ public class TextObject {
     protected final ArrayList<String> text;
     public final int MAX_WIDTH;
     public final int MAX_HEIGHT;
-    private int printSpeed;
+    private float printSpeed;
     private int totalWidth, totalHeight;
 
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
@@ -122,13 +122,13 @@ public class TextObject {
         this.txtStyle = txtStyle;
         return this;
     }
-    public int getPrintSpeed() {
+    public float getPrintSpeed() {
         if (printSpeed > 0) return printSpeed;
         setPrintSpeed(1);
         return printSpeed;
     }
 
-    public TextObject setPrintSpeed(int printSpeed) {
+    public TextObject setPrintSpeed(float printSpeed) {
         this.printSpeed = printSpeed;
         return this;
     }

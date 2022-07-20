@@ -20,7 +20,7 @@ public abstract class CRMScreen {
         this.printer=printer;
         this.crmManager=manager;
         this.commands=new java.util.ArrayList<>();
-        this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK);
+        this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
         this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
                 .setBgColor(BgColors.CYAN)
                 .setFrameColor(BgColors.WHITE)

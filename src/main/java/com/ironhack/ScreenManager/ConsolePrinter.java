@@ -2,11 +2,10 @@ package com.ironhack.ScreenManager;
 
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.ScreenManager.Screens.CRMScreen;
+import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.Constants.ColorFactory.*;
@@ -124,7 +123,7 @@ public class ConsolePrinter {
                     int counter = 0;
                     while (txtObj.hasText()) {
                         System.out.print(txtObj.poll());
-                        waitFor(1000 / txtObj.getPrintSpeed());
+                        waitFor((int)(1000 / txtObj.getPrintSpeed()));
                         counter++;
                     }
                 }
@@ -150,7 +149,7 @@ public class ConsolePrinter {
                                 } else {
                                     System.out.print(currentChar);
                                 }
-                                waitFor(1000 / txtObj.getPrintSpeed());
+                                waitFor((int)(1000 / txtObj.getPrintSpeed()));
                             }
                             System.out.print(NEW_LINE);
                         } while (txtObj.hasText());
@@ -159,12 +158,9 @@ public class ConsolePrinter {
             }
         }
     }
-
     public void sendToQueue( TextObject txtObj) {
         this.printQueue.add(txtObj);
     }
-
-
     /**
      * Shorthand for Thread.sleep(miliseconds)
      *
@@ -184,18 +180,15 @@ public class ConsolePrinter {
     public void clearScreen() {
         sendToQueue(new TextObject(BLANK_SPACE,  TextObject.Scroll.NO, LIMIT_X, LIMIT_Y * 2).alignTextTop());
     }
-
     private TextObject pollNext() {
         return printQueue.remove(0);
     }
-
     private boolean queueContainsScroll( TextObject.Scroll scroll) {
         for ( TextObject txtObj : printQueue) {
             if (txtObj.getScroll().equals(scroll)) return true;
         }
         return false;
     }
-
     public void showErrorLine(com.ironhack.Exceptions.ErrorType errorType) {
         var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 1, 1);
         line.addText(CColors.BRIGHT_RED + errorType.toString() + TextStyle.RESET);
@@ -204,7 +197,17 @@ public class ConsolePrinter {
         sendToQueue(line);
         startPrint();
     }
-
+    public void showHintLine(String message, Commands[] commands) {
+        var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 5, 1);
+        line.setPrintSpeed(0.5f);
+        line.addText(CColors.BRIGHT_GREEN + message + TextStyle.RESET).alignTextCenter();
+        var sb= new StringBuilder("Available Commands: ");
+        for(Commands comm:commands)sb.append("["+comm.toString()+"] ");
+        line.addText(CColors.BRIGHT_GREEN + sb.toString() + TextStyle.RESET).alignTextCenter();
+        line.addText(CENTER_CARET);
+        sendToQueue(line);
+        startPrint();
+    }
     //-----------------------------------------------------------------------------------------------------INPUT_METHODS
 
 }
