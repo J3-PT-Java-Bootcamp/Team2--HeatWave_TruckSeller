@@ -1,12 +1,12 @@
 package com.ironhack.Commercial;
 
+import com.ironhack.CRMManager.CRMData;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory.BgColors;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
 import com.ironhack.ScreenManager.Text.TextObject;
 
-import static com.ironhack.Constants.ColorFactory.*;
 
 public class Opportunity {
     private String id;
@@ -17,8 +17,8 @@ public class Opportunity {
     private Account account;
     private User owner;
 
-    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner) {
-        setId(id);
+    public Opportunity(CRMData data, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner) {
+        setId(data.getNextID(this.getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMaker(decisionMaker);
