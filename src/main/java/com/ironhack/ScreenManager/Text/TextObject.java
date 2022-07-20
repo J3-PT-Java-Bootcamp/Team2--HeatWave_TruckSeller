@@ -24,16 +24,16 @@ import static com.ironhack.Constants.ColorFactory.*;
 public class TextObject {
 
     public enum Scroll {NO, BLOCK, LINE, TYPEWRITER}
-    private BgColors bgcolor;
-    private CColors txtColor;
-    private TextStyle txtStyle;
+    BgColors bgColor;
+    CColors txtColor;
+    TextStyle txtStyle;
 
 
 
     private final Scroll scroll;
     protected final ArrayList<String> text;
     public final int MAX_WIDTH;
-    protected final int MAX_HEIGHT;
+    public final int MAX_HEIGHT;
     private int printSpeed;
     private int totalWidth, totalHeight;
 
@@ -60,7 +60,15 @@ public class TextObject {
         MAX_HEIGHT = maxHeight;
         this.text = new ArrayList<>();
     }
-
+    public TextObject(String text, int maxWidth, int maxHeight) {
+        this.scroll = Scroll.NO;
+        MAX_WIDTH = maxWidth;
+        MAX_HEIGHT = maxHeight;
+        this.text = new ArrayList<>();
+        this.totalWidth = 0;
+        this.setTotalHeight();
+        addText(text);
+    }
     public TextObject(String text, Scroll scroll, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
@@ -88,12 +96,12 @@ public class TextObject {
     }
     //---------------------------------------------------------------------------------------------------Getters&Setters
 
-    BgColors getBgcolor() {
-        return bgcolor;
+    BgColors getBgColor() {
+        return bgColor;
     }
 
-    TextObject setBgcolor(BgColors bgcolor) {
-        this.bgcolor = bgcolor;
+    TextObject setBgcolor(BgColors bgColor) {
+        this.bgColor = bgColor;
         return this;
     }
 
@@ -233,9 +241,11 @@ public class TextObject {
                 } catch (Exception e) {
                     currentVal = BLANK_SPACE.repeat(charLimit);
                 }
-                strBuilder.append(applyTextColorsToLine(centerLine(currentVal,charLimit)));
+                strBuilder.append(centerLine(currentVal,charLimit));
             }
-            addText(strBuilder.toString());
+            if (rest>0) strBuilder.append(BLANK_SPACE.repeat(rest));
+            var val=strBuilder.toString();
+            addText(applyTextColorsToLine(val));
         }
         return this;
     }
@@ -634,7 +644,7 @@ public class TextObject {
      * @see ColorFactory
      */
     public TextObject setAllTextBackground(BgColors bg) {
-        this.bgcolor=bg;
+        this.bgColor =bg;
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, setLineBackground(text.get(i), bg));
         }
@@ -657,7 +667,7 @@ public class TextObject {
     public TextObject applyAllTextColors(Boolean mustFill){
         for (int i = 0; i <getTotalHeight(); i++) {
             text.set(i,
-                    (bgcolor!=null?bgcolor.toString():"")
+                    (bgColor !=null? bgColor.toString():"")
                             +(txtColor!=null?txtColor.toString():"")
                             +(txtStyle!=null?txtStyle.toString():"")
                             +text.get(i)
@@ -667,7 +677,7 @@ public class TextObject {
         return this;
     }
     public String applyTextColorsToLine(String line){
-            return (bgcolor!=null?bgcolor.toString():"")
+            return (bgColor !=null? bgColor.toString():"")
                     +(txtColor!=null?txtColor.toString():"")
                     +(txtStyle!=null?txtStyle.toString():"")
                     +line

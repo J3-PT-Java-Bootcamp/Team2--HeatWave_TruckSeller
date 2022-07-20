@@ -35,7 +35,6 @@ public class InputScreen extends CRMScreen{
     public String print() throws com.ironhack.Exceptions.CRMException {
         int i=0;
         String input="";
-
         do  {
             printer.clearScreen();
             printer.sendToQueue(this.getTextObject());
@@ -44,14 +43,15 @@ public class InputScreen extends CRMScreen{
             try {
                 input = inputTypes[i].getInput(this, printer);
             }catch(com.ironhack.Exceptions.BackScreenInput back){
+                //allow to go back to correct last input
                 inputTypes[i].password=null;
                 i--;
-
                 outValues.remove(outValues.size()-1);
                 constructContent();
                 input="";
                 continue;
             } catch (CRMException e){
+                //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModal("Confirmation Needed",
                         "You have changes without save, are you sure you want to exit and lose them?")){
                     inputTypes[i].password=null;
