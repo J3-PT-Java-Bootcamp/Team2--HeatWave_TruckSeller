@@ -24,7 +24,7 @@ public class MenuScreen extends CRMScreen{
 //        var names= new java.util.ArrayList<TextObject>();
         for(Commands opt:options)optionsNames.addText(opt.toString());
         for(Commands comm:this.commands)globalCommands.addText(comm.toString());
-        this.textObject.addGroupAligned(2,this.getMaxWidth(),new TextObject[]{optionsNames.alignTextCenter(),globalCommands.alignTextCenter()});
+        this.textObject.addGroupInColumns(2,this.getMaxWidth(),new TextObject[]{optionsNames.alignTextCenter(),globalCommands.alignTextCenter()});
 
         for(Commands opt:options)this.addCommand(opt);
     }

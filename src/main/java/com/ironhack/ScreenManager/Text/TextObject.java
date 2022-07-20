@@ -24,6 +24,11 @@ import static com.ironhack.Constants.ColorFactory.*;
 public class TextObject {
 
     public enum Scroll {NO, BLOCK, LINE, TYPEWRITER}
+    private BgColors bgcolor;
+    private CColors txtColor;
+    private TextStyle txtStyle;
+
+
 
     private final Scroll scroll;
     protected final ArrayList<String> text;
@@ -83,7 +88,32 @@ public class TextObject {
     }
     //---------------------------------------------------------------------------------------------------Getters&Setters
 
+    BgColors getBgcolor() {
+        return bgcolor;
+    }
 
+    TextObject setBgcolor(BgColors bgcolor) {
+        this.bgcolor = bgcolor;
+        return this;
+    }
+
+    CColors getTxtColor() {
+        return txtColor;
+    }
+
+    TextObject setTxtColor(CColors txtColor) {
+        this.txtColor = txtColor;
+        return this;
+    }
+
+    TextStyle getTxtStyle() {
+        return txtStyle;
+    }
+
+    TextObject setTxtStyle(TextStyle txtStyle) {
+        this.txtStyle = txtStyle;
+        return this;
+    }
     public int getPrintSpeed() {
         if (printSpeed > 0) return printSpeed;
         setPrintSpeed(1);
@@ -186,13 +216,14 @@ public class TextObject {
      *
      * @return this textObject to allow chain calls.
      */
-    public TextObject addGroupAligned(int numberOfColumns, int totalSize, TextObject[] columnsContent) {
+    public TextObject addGroupInColumns(int numberOfColumns, int totalSize, TextObject[] columnsContent) {
 
         //fixme not working as expected
         int charLimit = (numberOfColumns > 1 ? (totalSize / numberOfColumns) : totalSize);
+        int rest= totalSize%numberOfColumns;
         int totalLines = 0;
         for (TextObject textColumn : columnsContent) {
-            textColumn.alignTextMiddle();
+            trimAllText();
             totalLines = Math.max(totalLines, textColumn.getTotalHeight());
         }
         for (int j = 0; j < totalLines; j++) {
@@ -202,19 +233,18 @@ public class TextObject {
                 try {
                     currentVal = columnsContent[i].get(j);
                 } catch (Exception e) {
-                    currentVal = BLANK_SPACE.repeat(charLimit-1);
+                    currentVal = BLANK_SPACE.repeat(charLimit);
                 }
-                strBuilder.append(BLANK_SPACE).append(currentVal);
+                strBuilder.append(applyTextColorsToLine(centerLine(currentVal,charLimit)));
             }
             addText(strBuilder.toString());
         }
         return this;
     }
 
-    public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles){
+    public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles,BgColors... colors){
         //fixme not working as expected
         int charLimit = (columnTitles.length > 1 ? (totalSize / columnTitles.length) : totalSize/2);
-
         var sb=new StringBuilder();
         for(String title: columnTitles){
             sb.append(TextStyle.BOLD)
@@ -560,7 +590,7 @@ public class TextObject {
         switch (colors.length) {
             case 0 -> {
                 for (int i = 0; i < totalHeight; i++) {
-                    text.set(i, colorizeLine(text.get(i), ColorFactory.getRandomColor()));
+                    text.set(i, colorizeLine(text.get(i), getRandomColor()));
                 }
             }
             case 1 -> {
@@ -591,9 +621,10 @@ public class TextObject {
      * @see ColorFactory
      */
     public TextObject stylizeAllText(TextStyle style) {
-        int lastIndex = text.size() - 1;
-        text.set(0, style + text.get(0));
-        text.set(lastIndex, text.get(lastIndex) + TextStyle.RESET);
+        this.txtStyle=style;
+        for (int i = 0; i <getTotalHeight(); i++) {
+            this.text.set(i,style+text.get(i)+TextStyle.RESET);
+        }
         return this;
     }
 
@@ -608,13 +639,46 @@ public class TextObject {
      * @see ColorFactory
      */
     public TextObject setAllTextBackground(BgColors bg) {
+        this.bgcolor=bg;
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, setLineBackground(text.get(i), bg));
         }
         return this;
     }
-    //TODO Function to add a frame around text object
-    //TODO Function to add bg box
+    public TextObject setAllTextColor(CColors color) {
+        this.txtColor=color;
+        for (int i = 0; i < totalHeight; i++) {
+            text.set(i, color+text.get(i)+TextStyle.RESET);
+        }
+        return this;
+    }
+
+    public TextObject trimAllText(){
+        for (int i = 0; i <getTotalHeight(); i++) {
+            text.set(i,removeStyleAndColorLine(text.get(i)).trim());
+        }
+        return this;
+    }
+    public TextObject applyAllTextColors(Boolean mustFill){
+        for (int i = 0; i <getTotalHeight(); i++) {
+            text.set(i,
+                    (bgcolor!=null?bgcolor.toString():"")
+                            +(txtColor!=null?txtColor.toString():"")
+                            +(txtStyle!=null?txtStyle.toString():"")
+                            +text.get(i)
+                            +(mustFill?BLANK_SPACE.repeat(MAX_WIDTH-countValidCharacters(text.get(i))):"")
+                            +TextStyle.RESET);
+        }
+        return this;
+    }
+    public String applyTextColorsToLine(String line){
+            return (bgcolor!=null?bgcolor.toString():"")
+                    +(txtColor!=null?txtColor.toString():"")
+                    +(txtStyle!=null?txtStyle.toString():"")
+                    +line
+                    +TextStyle.RESET;
+
+    }
 
     @Override
     public String toString() {
