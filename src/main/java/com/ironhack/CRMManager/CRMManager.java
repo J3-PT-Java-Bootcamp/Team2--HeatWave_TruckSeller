@@ -1,5 +1,6 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.Commercial.Lead;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
 import com.ironhack.Exceptions.LogoutException;
@@ -8,6 +9,7 @@ import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Screens.ConfirmationScreen;
 import com.ironhack.ScreenManager.Screens.InputScreen;
 import com.ironhack.ScreenManager.Screens.MenuScreen;
+import com.ironhack.ScreenManager.Screens.TableScreen;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
@@ -24,6 +26,7 @@ public class CRMManager {
     public CRMManager(){
         this.exit=false;
         this.printer=new ConsolePrinter(this);
+
         try{
             crmData=loadData();
         }catch (Exception e){
@@ -53,12 +56,13 @@ public class CRMManager {
         START:
         while (!exit){//if in any moment we enter EXIT it must turn this.exit to true so while will end
             try {
+
                 switch (menu_screen(currentUser == null ? login_screen() : currentUser)) {
                     case OPP -> {
                         //TODO
                     }
                     case LEAD -> {
-                        //TODO
+                        lead_screen();
                     }
                     case ACCOUNT -> {
                         //todo
@@ -77,6 +81,11 @@ public class CRMManager {
         //TODO confirmationNeeded();
         //TODO beforeClose();
         System.exit(0);
+    }
+
+    private void lead_screen() throws com.ironhack.Exceptions.CRMException {
+        var leadScreen= new TableScreen<Lead>(this,printer,"Leads",null).start();
+
     }
 
     //-----------------------------------------------------------------------------------------------------------SCREENS

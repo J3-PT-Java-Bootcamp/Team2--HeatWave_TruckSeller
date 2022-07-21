@@ -250,35 +250,6 @@ public class TextObject {
         return this;
     }
 
-    public TextObject addGroupAsTable(int totalSize,TextObject[] tableEntries,String[] columnTitles,BgColors... colors){
-        //fixme not working as expected
-        int charLimit = (columnTitles.length > 1 ? (totalSize / tableEntries[0].getTotalHeight()) : totalSize);
-        var sb=new StringBuilder();
-        for (int i = 0; i < columnTitles.length; i++) {
-            String title = columnTitles[i];
-            sb.append(createTableCell(charLimit, title,i==columnTitles.length-1))
-                    .append(TextStyle.RESET);
-//            if (this instanceof WindowObject)
-//                sb.append(((WindowObject) this).bgColor)
-//                        .append(((WindowObject) this).txtColor);
-        }
-        addText(sb.toString());
-        addText(TextStyle.BOLD+"_".repeat(charLimit*columnTitles.length)+TextStyle.RESET);
-        for (TextObject entryLine : tableEntries) {
-            sb=new StringBuilder();
-//            entryLine.alignTextMiddle();
-
-            for (int i = 0; i < entryLine.totalHeight; i++) {
-                var currentField = entryLine.poll();
-                if(countValidCharacters(currentField)>=charLimit-1)throw new RuntimeException("TODO HANDLE TABLE WRAP");//todo
-                sb.append(createTableCell(charLimit,currentField,i == entryLine.totalHeight - 1));
-            }
-            addText(sb.toString());
-
-            addText("_".repeat(totalSize));
-        }
-        return this;
-    }
 
     private String createTableCell(int charLimit, String currentField,boolean isLast) {
         int availableSpace= charLimit -1;
@@ -425,7 +396,7 @@ public class TextObject {
      *
      * @return resulting String
      */
-    private String centerLine(String line, int width) {
+    public String centerLine(String line, int width) {
         int leftSpace, rightSpace, remainSpace;
         remainSpace = width - countValidCharacters(line);
         leftSpace = remainSpace / 2;
@@ -433,7 +404,7 @@ public class TextObject {
         return (BLANK_SPACE.repeat(leftSpace)) + line + (BLANK_SPACE.repeat(rightSpace));
     }
 
-    private String centerLine(String line) {
+    public String centerLine(String line) {
         return centerLine(line, MAX_WIDTH);
     }
 
