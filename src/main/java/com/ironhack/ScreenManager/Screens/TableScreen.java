@@ -1,9 +1,13 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.Commercial.Account;
+import com.ironhack.Commercial.Lead;
+import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.ColorFactory.BgColors;
 import com.ironhack.Exceptions.ErrorType;
+import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.TextObject;
 
@@ -12,20 +16,36 @@ import java.util.List;
 
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
+import static com.ironhack.ScreenManager.Screens.Commands.*;
+import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
+import static com.ironhack.ScreenManager.Screens.Commands.LOGOUT;
 import static com.ironhack.ScreenManager.Text.TextObject.*;
 
 public class TableScreen<T> extends CRMScreen{
     int pages,currentPage;
-    ArrayList<List<TextObject>> masterArr;
+    Class<T> type;
+    ArrayList<List<TextObject>> masterArr; //TODO change TextObject for T
 
     public TableScreen(CRMManager manager, ConsolePrinter printer, String name, java.util.ArrayList<T> data) {
         super(manager, printer, name);
-        var fakeData = new java.util.ArrayList<TextObject>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
+        var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
         masterArr = getLists(fakeData);
-        addCommand(Commands.NEXT).addCommand(Commands.PREVIOUS);
+        addCommand(NEXT).addCommand(PREVIOUS);
+        if(data!=null&&!data.isEmpty()) {
+            var tClass= data.get(0).getClass();
+            if (Opportunity.class.equals(tClass)) {
+                addCommand(CLOSE).addCommand(VIEW);
+            } else if (Lead.class.equals(tClass)) {
+                addCommand(CONVERT).addCommand(DISCARD).addCommand(DELAY);
+            } else if (Account.class.equals(tClass)) {
+                addCommand(VIEW).addCommand(DISCARD);
+            } else {
+                throw new IllegalStateException("Unexpected value: " + data.get(0).getClass());
+            }
+        }
         constructScreen();
     }
-
+//----------------------------------------------------------------------------------------------------------CONSTRUCTION
     private void constructScreen() {
         try {
             constructTable(getMaxWidth(), masterArr.get(currentPage).toArray(new TextObject[0])
@@ -118,31 +138,52 @@ public class TableScreen<T> extends CRMScreen{
 
     }
 
-
+    //----------------------------------------------------------------------------------------------------PUBLIC METHODS
     @Override
-    public String start()throws com.ironhack.Exceptions.CRMException {
+    public String start() {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
-        String input = "";
-        var comm= COMMAND.getInput(this, printer,commands.toArray(new Commands[0]));
-        Commands command;
+        String comm = "";
         try {
-            if (Commands.valueOf(comm) == Commands.NEXT) {
+            comm = COMMAND.getInput(this, printer, commands.toArray(new Commands[0]));
+            Commands command;
+            if (Commands.valueOf(comm) == NEXT) {
                 if (currentPage < pages) currentPage++;
-                constructScreen();
-                return start();
-            } else if (Commands.valueOf(comm) == Commands.PREVIOUS) {
+
+            } else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
-                constructScreen();
-                return start();
             }
-        }catch (IllegalArgumentException e){
-            printer.showErrorLine(com.ironhack.Exceptions.ErrorType.COMMAND_NOK);
-            constructScreen();
-            return start();
+
+        } catch (IllegalArgumentException e) {
+            printer.showErrorLine(ErrorType.COMMAND_NOK);
+        } catch (HelpException help) {
+            //TODO SHOW ALL POSIBLE COMMANDS DEPENDING ON T TYPE
+            printer.showHintLine("Available commands : ",commands.toArray(new Commands[0]));
+        } catch (LogoutException logout) {
+            if (this.crmManager.showModalScreen("Confirmation Needed",
+                    "Do you want to logout?")) {
+                crmManager.currentUser = null;
+                return LOGOUT.name();
+            }
+        } catch (ExitException exit) {
+            //If enter EXIT it prompts user for confirmation as entered data will be lost
+            if (this.crmManager.showModalScreen("Confirmation Needed",
+                    "Do you want to close app?")) {
+                crmManager.currentUser = null;
+                crmManager.exit = true;
+                return EXIT.name();
+            }
+        } catch (GoBackException back) {
+            //If enter EXIT it prompts user for confirmation as entered data will be lost
+            return BACK.name();
+        } catch (GoToMenuException back) {
+            //If enter EXIT it prompts user for confirmation as entered data will be lost
+            return MENU.name();
+        } catch (CRMException ignored) {
         }
-        return comm;
+        constructScreen();
+        return start();
     }
 
 }

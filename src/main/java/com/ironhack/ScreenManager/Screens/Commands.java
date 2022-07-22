@@ -4,6 +4,7 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.InputReader;
 
+import static com.ironhack.Exceptions.ErrorType.OK;
 
 public enum Commands {
     EXIT("exit"),
@@ -19,10 +20,14 @@ public enum Commands {
     BACK("back"),
     NEXT("next"),
     PREVIOUS("prev","previous"),
-    HELP("help");
+    HELP("help"),
+    VIEW("view","check","see"),
+    DISCARD("discard","delete","remove"),
+    DELAY("delay","aplace","snooze","skip");
 
     final String[] commands;
 
+    String[] caughtInput;
     Commands(String... commands){
         this.commands=commands;
     }
@@ -35,38 +40,39 @@ public enum Commands {
         }
         return false;
     }
-
+    public String[] getCaughtInput(){
+        var inp= caughtInput.clone();
+        caughtInput=null;
+        return inp;
+    }
     private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){
-
             case EXIT -> {
                     throw new ExitException(false);
             }
             case MENU -> {
-                throw new BackToMenuScreen();
+                if(screen.crmManager.currentUser!=null) throw new GoToMenuException();
+                throw new GoBackException(screen);
             }
             case LOGOUT -> {
-                throw new LogoutException(com.ironhack.Exceptions.ErrorType.OK);
+                throw new LogoutException(OK);
             }
-            case OPP -> {
-                return true;
-            }
-            case LEAD -> {
-                return true;
-            }
-            case ACCOUNT -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD -> {
                 return true;
             }
             case CONVERT -> {
-                var leadID=input.split(" ")[1];
+                caughtInput =input.split(" ");
+                var leadID=caughtInput[1];
                 var lead= CRMManager.crmData.getLead(leadID);
                 if (lead == null)throw new WrongInputException(ErrorType.ID_NOK);
                 var opp=lead.convertToOpp();
                 //FIXME how to send the new opportunity to keep enterin data?
+                //TODO move to opp screen
                 return true;
             }
             case CLOSE -> {
-                var commandList= input.split(" ");
+                caughtInput =input.split(" ");
+                var commandList= caughtInput;
                 if(commandList.length!=3)throw new WrongInputException(ErrorType.COMMAND_NOK);
                 var closeType=commandList[1];
                 var oppID= commandList[2];
@@ -76,21 +82,26 @@ public enum Commands {
                 else if (closeType.equalsIgnoreCase("won")) opp.close(true);
                 return true;
             }
-            case YES ->{
+            case VIEW -> {
+                caughtInput =input.split(" ");
+                if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
+                return true;
+
+            }
+            case DISCARD -> {
+                caughtInput = input.split(" ");
+                if (caughtInput.length != 2) throw new WrongInputException(ErrorType.COMMAND_NOK);
+                return true;
+            }
+            case DELAY -> {
+                caughtInput =input.split(" ");
+                if (caughtInput.length != 2) throw new WrongInputException(ErrorType.COMMAND_NOK);
                 return true;
             }
 
-            case NO -> {
-                return true;
-            }
+
             case BACK -> {
-                throw new BackScreenInput(screen);
-            }
-            case NEXT -> {
-                return true;
-            }
-            case PREVIOUS -> {
-                return true;
+                throw new GoBackException(screen);
             }
             case HELP -> {
                 throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));

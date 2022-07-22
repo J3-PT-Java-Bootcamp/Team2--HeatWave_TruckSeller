@@ -19,6 +19,7 @@ public abstract class CRMScreen {
 
     public CRMScreen(CRMManager manager, ConsolePrinter printer, String name){
         this.printer=printer;
+        this.name=name;
         this.crmManager=manager;
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
@@ -27,7 +28,11 @@ public abstract class CRMScreen {
                 .setFrameColor(BgColors.WHITE)
                 .setTxtColor(CColors.BLACK)
                 .setTitleColor(CColors.BRIGHT_WHITE);
-        this.addText(BOLD+UNDERLINE.toString()+name+RESET).alignTextCenter().addText(BLANK_SPACE);
+        constructTitle(name);
+    }
+
+    void constructTitle(String name) {
+        this.addText(BOLD+UNDERLINE.toString()+ name +RESET).alignTextCenter().addText(BLANK_SPACE);
     }
 
     /**Adds new text to main TextObject

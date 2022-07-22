@@ -1,9 +1,10 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.Commercial.Account;
 import com.ironhack.Commercial.Lead;
+import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
-import com.ironhack.Exceptions.LogoutException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.Commands;
 import com.ironhack.ScreenManager.Screens.ConfirmationScreen;
@@ -55,36 +56,43 @@ public class CRMManager {
     public void appStart(){
         START:
         while (!exit){//if in any moment we enter EXIT it must turn this.exit to true so while will end
-            try {
-
-                switch (menu_screen(currentUser == null ? login_screen() : currentUser)) {
+//            try {
+                var comm= menu_screen(currentUser == null ? login_screen() : currentUser);
+                switch (comm) {
                     case OPP -> {
+                        opp_screen();
                         //TODO
                     }
                     case LEAD -> {
-                        lead_screen();
+                       lead_screen();
+                       //convert--> inputScreen--> account screen
+                        //discard--> same lead screen
                     }
                     case ACCOUNT -> {
+                        account_screen();
                         //todo
                     }
+                    case CLOSE -> closeOpportunity(comm.getCaughtInput());
+                    case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
+                    case VIEW -> viewObject(comm.getCaughtInput());
                     default -> {
+
                     }
                 }
-            }catch (LogoutException logout){
-                currentUser = null;
-            }catch (CRMException exit){
-                this.exit=true;
-            }
-            //TODO printScreen(currentScreen);
-            // currentScreen= currentScreen.processNextScreen() returns a screen from inputReader result
         }
-        //TODO confirmationNeeded();
         //TODO beforeClose();
         System.exit(0);
     }
 
-    private void lead_screen() throws com.ironhack.Exceptions.CRMException {
-        var leadScreen= new TableScreen<Lead>(this,printer,"Leads",null).start();
+    //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
+    public void closeOpportunity(String[] caughtInput) {
+    }
+
+    public void convertLeadToOpp(String[] caughtInput) {
+
+    }
+
+    public void viewObject(String[] caughtInput) {
 
     }
 
@@ -134,13 +142,11 @@ public class CRMManager {
         var modal=new com.ironhack.ScreenManager.Screens.ModalScreen(this,printer,name,message);
         try {
             var val= Commands.valueOf(modal.start().toUpperCase());
-            if (val.equals(YES)) return true;
-            if (val.equals(NO)) return false;
+            return val.equals(YES);
         }catch (IllegalArgumentException e){
             printer.showErrorLine(FORMAT_NOK);
             return showModalScreen(name,message);
         }
-        return showModalScreen(name,message);
     }
     /**Shows login screen
      * @return the user logged
@@ -172,7 +178,7 @@ public class CRMManager {
      *
      * @return Command selected by user
      */
-    private Commands menu_screen(User currentUser) throws CRMException {
+    private Commands menu_screen(User currentUser) {
         //todo
         try {
             return Commands.valueOf(new MenuScreen(this,
@@ -182,11 +188,25 @@ public class CRMManager {
                     ACCOUNT,
                     OPP).start().toUpperCase());
         }catch (Exception e){
-            if(e instanceof CRMException)throw e;
             printer.showErrorLine(COMMAND_NOK);
             return menu_screen(currentUser);
         }
     }
+
+    private void opp_screen() {
+        var oppScreen= new TableScreen<Opportunity>(this,printer,"Opportunities",null).start();
+    }
+
+    private void account_screen() {
+        var account_screen= new TableScreen<Account>(this,printer,"Accounts",null).start();
+    }
+
+    private void lead_screen()  {
+        var leadScreen= new TableScreen<Lead>(this,printer,"Leads",null).start();
+
+    }
+
+
     //-------------------------------------------------------------------------------------------------------PRIVATE METHODS
     private CRMData loadData() throws Exception {
         //TODO LOAD FULL CRMData object from json and asign it to crmData field

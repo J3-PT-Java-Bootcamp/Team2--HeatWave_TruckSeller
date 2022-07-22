@@ -18,4 +18,10 @@ class OpportunityTest extends com.ironhack.ScreenManager.Text.TextObject {
         System.out.println(opp.getId());
         assertEquals("OPFFE",opp.getId());
     }
+    @org.junit.jupiter.api.Test
+    void dummy() {
+        var str="patata";
+        System.out.println(str.contains(""));
+    }
+
 }
