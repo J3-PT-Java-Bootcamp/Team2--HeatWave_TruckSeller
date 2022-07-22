@@ -13,10 +13,10 @@ import static com.ironhack.ScreenManager.InputReader.*;
  * results are stored in "outValues"
  */
 public class InputScreen extends CRMScreen{
-    InputReader[] inputTypes;//Type of data that will prompt to user, ordered
-    String[] inputNames;//Names of data that will prompt to user, ordered
+    final InputReader[] inputTypes;//Type of data that will prompt to user, ordered
+    final String[] inputNames;//Names of data that will prompt to user, ordered
     java.util.ArrayList<String>outValues;//User answers 
-    TextObject content;//Text Content
+    final TextObject content;//Text Content
     
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public InputScreen(CRMManager manager,
@@ -46,9 +46,17 @@ public class InputScreen extends CRMScreen{
             printer.startPrint();
             try {
                 input = inputTypes[i].getInput(this, printer);
-            }catch(BackScreenInput back) {
+            }catch(com.ironhack.Exceptions.GoBackException back) {
                 //allow to go back to correct last input
                 inputTypes[i].password = null;
+                if (outValues.isEmpty()){
+                    if (crmManager.currentUser == null) {
+                        constructContent();
+                        continue;
+                    }
+//                    return
+                    //TODO RETURN TO Table Screen
+                }
                 i--;
                 outValues.remove(outValues.size() - 1);
                 constructContent();
@@ -59,14 +67,20 @@ public class InputScreen extends CRMScreen{
                 constructContent();
                 input="";
                 continue;
-            }catch (LogoutException logout){
-                if(this.crmManager.showModalScreen("Confirmation Needed",
-                        "You have changes without save, are you sure you want to exit and lose them?")) {
+            }catch (LogoutException logout) {
+                if (this.crmManager.currentUser != null){
+                    if (this.crmManager.showModalScreen("Confirmation Needed",
+                            "You have changes without save, are you sure you want to exit and lose them?")) {
+                        inputTypes[i].password = null;
+                        crmManager.currentUser = null;
+                        break;
+                    }
+                }else{
                     inputTypes[i].password = null;
-                    crmManager.currentUser = null;
-                    break;
+                    constructContent();
+                    continue;
                 }
-            } catch (CRMException e){
+            } catch (ExitException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModalScreen("Confirmation Needed",
                         "You have changes without save, are you sure you want to exit and lose them?")){
@@ -100,6 +114,7 @@ public class InputScreen extends CRMScreen{
     }
 
     private void constructContent() {
+        constructTitle(getName());
         addText(content);
         for (int j = 0; j < outValues.size(); j++) {
             addText(inputNames[j]+ ":  "

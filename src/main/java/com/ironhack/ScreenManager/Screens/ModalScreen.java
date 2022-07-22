@@ -34,6 +34,7 @@ public class ModalScreen extends CRMScreen{
         try {
             input = COMMAND.getInput(this, printer);
         }catch (com.ironhack.Exceptions.CRMException e){
+            return NO.name();
         }
         return input;
     }
