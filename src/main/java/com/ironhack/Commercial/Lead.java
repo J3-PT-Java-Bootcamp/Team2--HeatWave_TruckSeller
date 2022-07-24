@@ -1,6 +1,8 @@
 package com.ironhack.Commercial;
 
-public class Lead {
+import com.ironhack.ScreenManager.Text.TextObject;
+
+public class Lead implements Printable{
 
     private String name;
     private String id;
@@ -58,5 +60,14 @@ public class Lead {
 
     public Opportunity convertToOpp() {
         return new Opportunity();
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject()
+                .addText(getId()).addText(getName())
+                .addText(getPhoneNumber())
+                .addText(geteMail())
+                .addText(getCompanyName());
     }
 }

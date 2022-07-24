@@ -40,9 +40,6 @@ public class CRMData {
         } else if (Lead.class.equals(objClass)) {
             leadCounter++;
             sb.append("L").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - leadCounter));
-        } else if (Account.class.equals(objClass)) {
-            accountCounter++;
-            sb.append("A").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - accountCounter));
         } else if (Contact.class.equals(objClass)) {
             contactCounter++;
             sb.append("C").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - contactCounter));
@@ -109,7 +106,7 @@ public class CRMData {
         return accountMap.get(id);
     }
      CRMData addAccount(Account account) {
-        this.accountMap.put(account.getId(),account);
+        this.accountMap.put(account.getCompanyName(),account);
         return this;
     }
     

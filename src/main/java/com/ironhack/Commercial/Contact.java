@@ -1,6 +1,8 @@
 package com.ironhack.Commercial;
 
-public class Contact {
+import com.ironhack.ScreenManager.Text.TextObject;
+
+public class Contact implements Printable{
     private String  name;
     private String id;
     private String phoneNumber;
@@ -57,5 +59,10 @@ public class Contact {
 
     public void setCompany(Account company) {
         this.company = company;
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject();
     }
 }

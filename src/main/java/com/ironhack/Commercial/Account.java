@@ -1,22 +1,23 @@
 package com.ironhack.Commercial;
 
 import com.ironhack.Constants.IndustryType;
+import com.ironhack.ScreenManager.Text.TextObject;
 
-public class Account {
-    private com.ironhack.Constants.IndustryType industryType;
-    private String id;
+public class Account implements Printable{
+    private IndustryType industryType;
     private int employeeCount;
     private String city;
     private String country;
     private Contact contact;
     private Opportunity opportunity;
+    private String companyName;
 
-    public Account(IndustryType industryType, String id, int employeeCount, String city, String country) {
+    public Account(IndustryType industryType, int employeeCount, String city, String country,String companyName) {
         setIndustryType(industryType);
-        setId(id);
         setEmployeeCount(employeeCount);
         setCity(city);
         setCountry(country);
+        setCompanyName(companyName);
     }
 
     public Account(Contact contact, Opportunity opportunity) {
@@ -30,14 +31,6 @@ public class Account {
 
     public void setIndustryType(IndustryType industryType) {
         this.industryType = industryType;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public int getEmployeeCount() {
@@ -78,5 +71,18 @@ public class Account {
 
     public void setOpportunity(Opportunity opportunity) {
         this.opportunity = opportunity;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject();
     }
 }

@@ -4,12 +4,15 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Commercial.Account;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
+import com.ironhack.*;
+import com.ironhack.Commercial.Printable;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.ColorFactory.BgColors;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
@@ -17,17 +20,16 @@ import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
 
-public class TableScreen<T> extends CRMScreen{
+public class TableScreen extends CRMScreen{
     int pages,currentPage;
-    Class<T> type;
-    ArrayList<List<TextObject>> masterArr; //TODO change TextObject for T
+    Class<? extends Printable> type;
+    ArrayList<List<? extends Printable>> masterArr;
 
-    public TableScreen(CRMManager manager, String name, java.util.ArrayList<T> data) {
+    public TableScreen(CRMManager manager, String name, ArrayList<? extends Printable> data) {
         super(manager, manager.getPrinter(), name);
-        var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
-        masterArr = getLists(fakeData);
+        masterArr = getLists(data);
         addCommand(NEXT).addCommand(PREVIOUS);
-        if(data!=null&&!data.isEmpty()) {
+        if(!data.isEmpty()) {
             var tClass= data.get(0).getClass();
             if (Opportunity.class.equals(tClass)) {
                 addCommand(CLOSE).addCommand(VIEW);
@@ -44,7 +46,7 @@ public class TableScreen<T> extends CRMScreen{
 //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
         try {
-            constructTable(getMaxWidth(), masterArr.get(currentPage).toArray(new TextObject[0])
+            constructTable(getMaxWidth(), masterArr.get(currentPage)
                     , new String[]{"ID", "Name", "Phone","Mail", "Company"},
                     ColorFactory.BgColors.BLUE,
                     ColorFactory.BgColors.PURPLE);
@@ -59,32 +61,33 @@ public class TableScreen<T> extends CRMScreen{
                 .addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{
                         new TextObject(),
                         new TextObject(currentPage > 0 ? "[ PREVIOUS ]" : "", getMaxWidth() / 4, 1),
-                        new TextObject(currentPage + "/" + pages, getMaxWidth() / 4, 1),
-                        new TextObject(currentPage < pages ? "[ NEXT ]" : "", getMaxWidth() / 4, 1)
+                        new TextObject((currentPage+1) + "/" + pages, getMaxWidth() / 4, 1),
+                        new TextObject(currentPage+1 < pages ? "[ NEXT ]" : "", getMaxWidth() / 4, 1)
         }));
     }
 
-    private ArrayList<List<TextObject>> getLists(java.util.ArrayList<TextObject> fakeData) {
-        ArrayList<List<TextObject>> masterArr= new java.util.ArrayList<>();
-        pages= fakeData.size()/15 + (fakeData.size()%15==0?0:1);
+    private ArrayList<List<? extends Printable>> getLists(ArrayList<? extends Printable> data) {
+        ArrayList<List<? extends Printable>> masterArr= new java.util.ArrayList<>();
+        pages= (int) Math.floor(data.size()/15)+(data.size()%15==0?0:1);
         int lastIndex=0;
         for (int i = 0; i < pages; i++) {
-            masterArr.add(fakeData.subList(lastIndex, Math.min((i+1)*15, fakeData.size())));
-            lastIndex=  Math.min((i+1)*15, fakeData.size());
+            masterArr.add(data.subList(lastIndex, Math.min((i+1)*15, data.size())));
+            lastIndex=  Math.min((i+1)*15, data.size());
         }
         return masterArr;
     }
 
-    public void constructTable(int totalSize, TextObject[] tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
+    public void constructTable(int totalSize, List<? extends Printable> tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
         //Calculate min size for each column and total lenght for each line
-        int [] totalLineSize=new int[tableEntries.length];
+        int [] totalLineSize=new int[tableEntries.size()];
         int[] columnsMinSize=new int[columnTitles.length];
         boolean fits=true;
-        for (int i = 0; i < tableEntries.length; i++) {
-            for (int j = 0; j < tableEntries[i].getTotalHeight(); j++) {
+        for (int i = 0; i < tableEntries.size(); i++) {
+            var currentTxtObj= tableEntries.get(i).toTextObject();
+            for (int j = 0; j < currentTxtObj.getTotalHeight(); j++) {
                 try {
-                    columnsMinSize[j]=Math.max(columnsMinSize[j], textObject.countValidCharacters(tableEntries[i].get(j))+1);
-                    totalLineSize[i]+=textObject.countValidCharacters(tableEntries[i].get(j))+1;
+                    columnsMinSize[j]=Math.max(columnsMinSize[j], textObject.countValidCharacters(currentTxtObj.get(j))+1);
+                    totalLineSize[i]+=textObject.countValidCharacters(currentTxtObj.get(j))+1;
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -108,13 +111,14 @@ public class TableScreen<T> extends CRMScreen{
             columnsMinSize[largestFieldIndex]=totalSize-restLength-3;
         }
         int remainingSpace= Math.max(0,(totalSize-totalMinSize)/columnTitles.length-1);
-        for (int i = -1; i < tableEntries.length; i++) {
+        for (int i = -1; i < tableEntries.size(); i++) {
             var sb=new StringBuilder();
+            var currentTxtObj= i>=0?tableEntries.get(i).toTextObject():null;
             if(i>=0)sb.append(colors[i%2==0?0:1]);
             for (int j = 0; j < columnTitles.length; j++) {
                 String currentField="";
                 if(i<0) currentField= UNDERLINE+columnTitles[j];
-                else currentField=tableEntries[i].get(j);
+                else currentField=currentTxtObj.get(j);
                 if(!fits&&j==largestFieldIndex&&i>=0){
 
                     sb.append(currentField, 0, columnsMinSize[j]-5);
@@ -124,7 +128,7 @@ public class TableScreen<T> extends CRMScreen{
                             textObject.centerLine(currentField,columnsMinSize[j]+remainingSpace)
                             );
                 }
-                if(i>=0&&j<tableEntries[i].getTotalHeight()-1)sb.append("|");
+                if(i>=0&&j<currentTxtObj.getTotalHeight()-1)sb.append("|");
                 else if (i<0&&j<columnTitles.length-1)sb.append(" ");
 
             }
@@ -145,7 +149,7 @@ public class TableScreen<T> extends CRMScreen{
             comm = COMMAND.getInput(this, printer, commands.toArray(new Commands[0]));
             Commands command;
             if (Commands.valueOf(comm) == NEXT) {
-                if (currentPage < pages) currentPage++;
+                if (currentPage+1 < pages) currentPage++;
 
             } else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
@@ -172,7 +176,7 @@ public class TableScreen<T> extends CRMScreen{
             }
         } catch (GoBackException back) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            return BACK.name();
+            if (currentPage > 0) currentPage--;
         } catch (GoToMenuException back) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             return MENU.name();
