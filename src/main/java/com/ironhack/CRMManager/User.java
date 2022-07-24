@@ -2,6 +2,7 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
+import com.ironhack.ScreenManager.Screens.Commands;
 
 import java.util.HashMap;
 
@@ -59,5 +60,9 @@ public class User {
 
     public void removeFromLeadlist(String id){
         leadList.remove(id);
+    }
+
+    public boolean isAdmin() {
+        return this.isAdmin;
     }
 }

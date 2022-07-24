@@ -34,7 +34,7 @@ public class TableScreen extends CRMScreen{
             if (Opportunity.class.equals(tClass)) {
                 addCommand(CLOSE).addCommand(VIEW);
             } else if (Lead.class.equals(tClass)) {
-                addCommand(CONVERT).addCommand(DISCARD).addCommand(DELAY);
+                addCommand(CONVERT).addCommand(DISCARD);
             } else if (Account.class.equals(tClass)) {
                 addCommand(VIEW).addCommand(DISCARD);
             } else {
@@ -153,6 +153,10 @@ public class TableScreen extends CRMScreen{
 
             } else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
+            } else if (Commands.valueOf(comm) == CONVERT) {
+//                crmManager.convertLeadToOpp(Commands.valueOf(comm));
+//                crmManager.crmData.getLead()
+                //TODO
             }
 
         } catch (IllegalArgumentException e) {
@@ -177,6 +181,7 @@ public class TableScreen extends CRMScreen{
         } catch (GoBackException back) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (currentPage > 0) currentPage--;
+            else return MENU.name();
         } catch (GoToMenuException back) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             return MENU.name();

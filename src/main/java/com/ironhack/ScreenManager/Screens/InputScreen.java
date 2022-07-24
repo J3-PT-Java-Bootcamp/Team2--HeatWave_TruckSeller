@@ -4,9 +4,12 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.*;
 import com.ironhack.ScreenManager.Text.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.ScreenManager.InputReader.*;
+
 
 /**
  * InputScreen is a CRMScreen that prompts 1..* inputs provided by inputTypes/inputNames
@@ -15,7 +18,7 @@ import static com.ironhack.ScreenManager.InputReader.*;
 public class InputScreen extends CRMScreen{
     final InputReader[] inputTypes;//Type of data that will prompt to user, ordered
     final String[] inputNames;//Names of data that will prompt to user, ordered
-    java.util.ArrayList<String>outValues;//User answers 
+    final java.util.ArrayList<String>outValues;//User answers
     final TextObject content;//Text Content
     
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR

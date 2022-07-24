@@ -15,7 +15,7 @@ public abstract class CRMScreen {
     ConsolePrinter printer;
     java.util.ArrayList<Commands> commands;
     private String name;
-    CRMManager crmManager;
+    public CRMManager crmManager;
 
     public CRMScreen(CRMManager manager, ConsolePrinter printer, String name){
         this.printer=printer;

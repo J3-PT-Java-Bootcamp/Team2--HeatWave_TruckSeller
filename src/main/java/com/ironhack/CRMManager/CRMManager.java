@@ -1,8 +1,6 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Account;
 import com.ironhack.Commercial.Lead;
-import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
 import com.ironhack.ScreenManager.ConsolePrinter;
@@ -13,13 +11,13 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
+
 @lombok.Data
 public class CRMManager {
     public boolean exit;
     public User currentUser;
     private final ConsolePrinter printer;
     public static CRMData crmData;
-
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public CRMManager() {
         this.exit = false;
@@ -65,8 +63,6 @@ public class CRMManager {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    //convert--> inputScreen--> account screen
-                    //discard--> same lead screen
                 }
                 case ACCOUNT -> {
                     account_screen();
@@ -87,15 +83,22 @@ public class CRMManager {
     //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
     public void closeOpportunity(String[] caughtInput) {
     }
-/*product - an Enum with options HYBRID, FLATBED, or BOX
-quantity - the number of trucks being considered for purchase
-decisionMaker - a Contact
-status*/
+
+    /*product - an Enum with options HYBRID, FLATBED, or BOX
+    quantity - the number of trucks being considered for purchase
+    decisionMaker - a Contact
+    status*/
     public void convertLeadToOpp(String[] caughtInput) {
         try {
-            new com.ironhack.ScreenManager.Screens.InputScreen(this,printer,"New Opportunity",new com.ironhack.ScreenManager.Text.TextObject("Enter the information offered to customer:"),
-                    new String[]{"Product","Quantity","Decision Maker","Account"},
-                    OPEN,OPEN,OPEN,OPEN).start();
+            new InputScreen(this,
+                    printer,
+                    "New Opportunity",
+                    new com.ironhack.ScreenManager.Text.TextObject("Enter the information offered to customer:"),
+                    new String[]{"Product", "Quantity", "Decision Maker", "Account"},
+                    OPEN,
+                    INTEGER,
+                    CONTACT_INPUT,
+                    ACCOUNT_INPUT).start();
         } catch (com.ironhack.Exceptions.CRMException e) {
             throw new RuntimeException(e);
         }
@@ -112,7 +115,6 @@ status*/
      * if there is not previous user it makes admin user by default
      *
      * @param isAdmin true if must create an admin
-     *
      * @throws CRMException if Back/Exit/Logout/Menu commands are read
      */
     private void newUser_screen(boolean isAdmin) throws CRMException {
@@ -148,7 +150,6 @@ status*/
      *
      * @param name    Screen name
      * @param message Message to be printed
-     *
      * @return boolean value (true=YES, false=NO)
      */
     public boolean showModalScreen(String name, String message) {
@@ -191,13 +192,30 @@ status*/
      * Shows different menu for User or Admin
      *
      * @param currentUser User that is logged
-     *
      * @return Command selected by user
      */
     private Commands menu_screen(User currentUser) {
         //todo
+        MenuScreen main_menu;
+        if(currentUser.isAdmin()){
+            main_menu = new MenuScreen(this,
+                    printer,
+                    "Main Menu",
+                    currentUser,
+                    LEAD,
+                    ACCOUNT,
+                    OPP);
+        }else {
+            main_menu = new MenuScreen(this,
+                    printer,
+                    "Main Menu",
+                    currentUser,
+                    LEAD,
+                    ACCOUNT,
+                    OPP);
+        }
         try {
-            return Commands.valueOf(new MenuScreen(this, printer, "Main Menu", LEAD, ACCOUNT, OPP).start().split(" ")[0].toUpperCase());//fixme
+            return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());//fixme
         } catch (Exception e) {
             printer.showErrorLine(COMMAND_NOK);
             return menu_screen(currentUser);
@@ -205,17 +223,37 @@ status*/
     }
 
     private void lead_screen() throws Exception {
-        var list=  new java.util.ArrayList<Lead>();
+        var list = new java.util.ArrayList<Lead>();
+        boolean stop = false;
+        //FIXME : meanwhile leads are no implemented
         var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
-        for (TextObject data:fakeData){
+        Commands comm = null;
+        do {
+            for (TextObject data : fakeData) {
                 list.add(new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4)));
-        }
+            }
+            try {
+                comm = Commands.valueOf(new TableScreen(this, "Leads", list).start());
 
-
-
-        var leadScreen = new TableScreen(this,
-                "Leads",list).start();
-
+                switch (comm) {
+                    case MENU, BACK, LOGOUT -> {
+                        stop = true;
+                    }
+                    case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
+                    case VIEW -> viewObject(comm.getCaughtInput());
+                    case DISCARD -> {
+                        if (new ModalScreen(this, getPrinter(), "Confirmation needed", "Do you want to discard this lead? ").start().equalsIgnoreCase(YES.name())) {
+                            //TODO Delete lead from map and user list
+                        }
+                    }
+                    case HELP -> {
+                        //fixme Show be there?¿
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } while (!stop);
 
     }
 
@@ -250,7 +288,6 @@ status*/
      *
      * @param userName Username input
      * @param password password input
-     *
      * @return true if user and password coincide with saved one
      */
     public boolean checkCredentials(String userName, String password) {

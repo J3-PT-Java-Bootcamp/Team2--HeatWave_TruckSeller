@@ -70,4 +70,14 @@ public class Lead implements Printable{
                 .addText(geteMail())
                 .addText(getCompanyName());
     }
+
+    @Override
+    public String shortPrint() {
+        return null;
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return null;
+    }
 }

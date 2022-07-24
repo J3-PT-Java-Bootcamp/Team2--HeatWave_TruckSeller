@@ -7,19 +7,17 @@ public class Contact implements Printable{
     private String id;
     private String phoneNumber;
     private String eMail;
-    private Account company;
+    private String company;
 
-    public Contact(String name, String id, String phoneNumber, String eMail) {
+    public Contact(String name, String id, String phoneNumber, String eMail,String company) {
         setName(name);
         setId(id);
         setPhoneNumber(phoneNumber);
         seteMail(eMail);
-    }
-
-
-    public Contact(Account company) {
         setCompany(company);
     }
+
+
 
     public String getName() {
         return name;
@@ -53,16 +51,26 @@ public class Contact implements Printable{
         this.eMail = eMail;
     }
 
-    public Account getCompany() {
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(Account company) {
+    public void setCompany(String company) {
         this.company = company;
     }
 
     @Override
     public TextObject toTextObject() {
         return new TextObject();
+    }
+
+    @Override
+    public String shortPrint() {
+        return null;
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return null;
     }
 }
