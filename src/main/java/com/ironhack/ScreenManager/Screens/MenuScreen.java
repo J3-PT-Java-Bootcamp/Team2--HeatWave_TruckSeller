@@ -13,8 +13,7 @@ import com.ironhack.ScreenManager.Text.TextObject;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
-import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.ScreenManager.Screens.Commands.LOGOUT;
+import static com.ironhack.ScreenManager.Screens.Commands.*;
 import static com.ironhack.ScreenManager.Text.TextObject.Scroll.NO;
 
 public class MenuScreen extends CRMScreen {
@@ -24,10 +23,11 @@ public class MenuScreen extends CRMScreen {
     private final User user;
 
 
-    public MenuScreen(CRMManager manager, ConsolePrinter printer, String title, User user, Commands... options) {
+    public MenuScreen(CRMManager manager, ConsolePrinter printer, String title, User user) {
         super(manager, printer, title);
         this.user=user;
-        this.options = options;
+        this.options =user.isAdmin()?
+                new Commands[]{USERS,STATS,LOAD} : new Commands[]{LEAD,ACCOUNT,OPP};
         optionsNames = new TextObject(NO, LIMIT_X / 3, LIMIT_Y / 2);
         globalCommands = new TextObject("GLOBAL COMMANDS", NO, LIMIT_X / 3, LIMIT_Y / 2);
 //        var names= new java.util.ArrayList<TextObject>();
