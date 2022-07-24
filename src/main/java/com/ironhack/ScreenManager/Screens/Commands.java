@@ -15,8 +15,8 @@ public enum Commands {
     ACCOUNT("account","accounts","view accounts","view account"),
     CONVERT("convert"),
     CLOSE("close"),
-    YES("yes","ok","confirm"),
-    NO("no","cancel"),
+    YES("yes","ok","confirm","y"),
+    NO("no","cancel","n"),
     BACK("back"),
     NEXT("next"),
     PREVIOUS("prev","previous"),
@@ -62,12 +62,12 @@ public enum Commands {
             }
             case CONVERT -> {
                 caughtInput =input.split(" ");
-                var leadID=caughtInput[1];
-                var lead= CRMManager.crmData.getLead(leadID);
-                if (lead == null)throw new WrongInputException(ErrorType.ID_NOK);
-                var opp=lead.convertToOpp();
-                //FIXME how to send the new opportunity to keep enterin data?
-                //TODO move to opp screen
+//                var leadID=caughtInput[1];
+//                var lead= CRMManager.crmData.getLead(leadID);
+//                if (lead == null)throw new WrongInputException(ErrorType.ID_NOK);
+//                var opp=lead.convertToOpp();
+//                //FIXME how to send the new opportunity to keep enterin data?
+//                //TODO move to opp screen
                 return true;
             }
             case CLOSE -> {

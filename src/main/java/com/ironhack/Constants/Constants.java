@@ -10,4 +10,6 @@ public class Constants {
 
     public static final String MAX_ID= "FFF";
     public static final String APP_NAME= "TruckSeller v0.1";
+    public static final String CLOSE_WITHOUT_SAVE = "You have changes without save, are you sure you want to exit and lose them?";
+
 }

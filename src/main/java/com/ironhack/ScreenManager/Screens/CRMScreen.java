@@ -76,6 +76,7 @@ public abstract class CRMScreen {
     public abstract String start() throws CRMException;
 
 
+    public abstract void constructScreen();
     /**Adds a new command to be listened on screen
      * @param command Command enum value to be added
      *
