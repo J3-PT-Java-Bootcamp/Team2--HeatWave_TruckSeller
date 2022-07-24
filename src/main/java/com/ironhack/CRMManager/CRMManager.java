@@ -50,7 +50,7 @@ public class CRMManager {
     /**
      * Main app Screens loop
      */
-    public void appStart() {
+    private void appStart() {
         while (!exit) {//if in any moment we enter EXIT it must turn this.exit to true so while will end
             var comm = menu_screen(currentUser == null ? login_screen() : currentUser);
             switch (comm) {
@@ -59,7 +59,12 @@ public class CRMManager {
                     //TODO
                 }
                 case LEAD -> {
-                    lead_screen();
+
+                    try {
+                        lead_screen();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     //convert--> inputScreen--> account screen
                     //discard--> same lead screen
                 }
@@ -133,9 +138,8 @@ status*/
             } else {
                 new ConfirmationScreen(this, printer, "Confirmation", message).start();
             }
-        } catch (CRMException e) {
-            //start() a confirmationScreen wont send a exception
-            throw new RuntimeException(e.getMessage());
+        } catch (CRMException ignored) {
+            //start() a confirmationScreen won't send any exception
         }
     }
 
@@ -200,22 +204,27 @@ status*/
         }
     }
 
-    private void opp_screen() {
-        var oppScreen = new TableScreen<Opportunity>(this, "Opportunities", null).start();
-    }
-
-    private void account_screen() {
-        var account_screen = new TableScreen<Account>(this, "Accounts", null).start();
-    }
-
-    private void lead_screen() {
+    private void lead_screen() throws Exception {
         var list=  new java.util.ArrayList<Lead>();
-        list.add(new Lead("a","0","96666666","ffff@fff.com","cocacola"));
+        var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
+        for (TextObject data:fakeData){
+                list.add(new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4)));
+        }
 
-                var leadScreen = new TableScreen<Lead>(this,
+
+
+        var leadScreen = new TableScreen(this,
                 "Leads",list).start();
 
 
+    }
+
+    private void opp_screen() {
+        var oppScreen = new TableScreen(this, "Opportunities", null).start();
+    }
+
+    private void account_screen() {
+        var account_screen = new TableScreen(this, "Accounts", null).start();
     }
 
 

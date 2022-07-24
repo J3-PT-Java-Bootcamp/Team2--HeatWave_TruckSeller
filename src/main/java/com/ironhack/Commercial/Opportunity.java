@@ -8,7 +8,7 @@ import com.ironhack.Constants.Product;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 
-public class Opportunity {
+public class Opportunity implements Printable{
     private String id;
     private Product product;
     private int quantity;
@@ -101,6 +101,7 @@ public class Opportunity {
     public void close(Boolean won){
         //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
     }
+    @Override
     public TextObject toTextObject(){
         TextObject opportunityLine = new TextObject();
         //TODO opportunityLine.addText(value) for each value to be printed in console when opportunities list is shown
