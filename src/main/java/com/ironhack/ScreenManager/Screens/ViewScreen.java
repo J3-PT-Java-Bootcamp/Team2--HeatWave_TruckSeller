@@ -1,5 +1,7 @@
 package com.ironhack.ScreenManager.Screens;
 
+import com.ironhack.Exceptions.CRMException;
+
 public class ViewScreen<T> extends CRMScreen{
     //Screen that prints properties of an object
     public ViewScreen(com.ironhack.CRMManager.CRMManager manager, com.ironhack.ScreenManager.ConsolePrinter printer, String name) {
@@ -7,7 +9,7 @@ public class ViewScreen<T> extends CRMScreen{
     }
 
     @Override
-    public String start() throws com.ironhack.Exceptions.CRMException {
+    public String start() throws CRMException {
         return null;
     }
 }

@@ -7,8 +7,8 @@ import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
 
-import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.Constants.*;
 
 /**
  *
@@ -21,24 +21,6 @@ public class ConsolePrinter {
     public ConsolePrinter(CRMManager crm) {
         this.crm = crm;
         this.printQueue = new java.util.ArrayList<>();
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createNewAccountScreen() {
-        return null;
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createNewContactScreen() {
-        return null;
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createNewOppScreen() {
-        return null;
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createAccountScreen() {
-        return null;
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createOppScreen() {
-        return null;
-    }
-    private com.ironhack.ScreenManager.Screens.CRMScreen createLeadScreen() {
-        return null;
     }
 
     //---------------------------------------------------------------------------   PUBLIC METHODS

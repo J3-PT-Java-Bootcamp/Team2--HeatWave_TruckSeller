@@ -6,28 +6,24 @@ import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.ColorFactory.BgColors;
-import com.ironhack.Exceptions.ErrorType;
 import com.ironhack.Exceptions.*;
-import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ironhack.Constants.ColorFactory.TextStyle.*;
+import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
+import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
-import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.ScreenManager.Screens.Commands.LOGOUT;
-import static com.ironhack.ScreenManager.Text.TextObject.*;
 
 public class TableScreen<T> extends CRMScreen{
     int pages,currentPage;
     Class<T> type;
     ArrayList<List<TextObject>> masterArr; //TODO change TextObject for T
 
-    public TableScreen(CRMManager manager, ConsolePrinter printer, String name, java.util.ArrayList<T> data) {
-        super(manager, printer, name);
+    public TableScreen(CRMManager manager, String name, java.util.ArrayList<T> data) {
+        super(manager, manager.getPrinter(), name);
         var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
         masterArr = getLists(fakeData);
         addCommand(NEXT).addCommand(PREVIOUS);
@@ -46,7 +42,7 @@ public class TableScreen<T> extends CRMScreen{
         constructScreen();
     }
 //----------------------------------------------------------------------------------------------------------CONSTRUCTION
-    private void constructScreen() {
+    public void constructScreen() {
         try {
             constructTable(getMaxWidth(), masterArr.get(currentPage).toArray(new TextObject[0])
                     , new String[]{"ID", "Name", "Phone","Mail", "Company"},

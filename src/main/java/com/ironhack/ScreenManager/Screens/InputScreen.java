@@ -36,13 +36,15 @@ public class InputScreen extends CRMScreen{
     }
 
     @Override
-    public String start() throws com.ironhack.Exceptions.CRMException {
+    public String start() throws CRMException {
         int i=0;
         String input="";
         do  {
             printer.clearScreen();
             printer.sendToQueue(this.getTextObject());
-            printer.sendToQueue(new DynamicLine(LIMIT_X/2,1,0).addText(inputNames[i]+": ").alignTextCenter());
+            printer.sendToQueue(new DynamicLine(LIMIT_X/2,
+                    1,
+                    0).addText(inputNames[i]+": ").alignTextCenter());
             printer.startPrint();
             try {
                 input = inputTypes[i].getInput(this, printer);
@@ -70,7 +72,7 @@ public class InputScreen extends CRMScreen{
             }catch (LogoutException logout) {
                 if (this.crmManager.currentUser != null){
                     if (this.crmManager.showModalScreen("Confirmation Needed",
-                            "You have changes without save, are you sure you want to exit and lose them?")) {
+                            CLOSE_WITHOUT_SAVE)) {
                         inputTypes[i].password = null;
                         crmManager.currentUser = null;
                         break;
@@ -83,7 +85,7 @@ public class InputScreen extends CRMScreen{
             } catch (ExitException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModalScreen("Confirmation Needed",
-                        "You have changes without save, are you sure you want to exit and lose them?")){
+                        CLOSE_WITHOUT_SAVE)){
                     inputTypes[i].password=null;
                     crmManager.currentUser=null;
                     crmManager.exit=true;

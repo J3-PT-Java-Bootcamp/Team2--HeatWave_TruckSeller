@@ -4,7 +4,6 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
 import com.ironhack.Exceptions.GoBackException;
-import com.ironhack.Exceptions.GoToMenuException;
 import com.ironhack.Exceptions.HelpException;
 import com.ironhack.Exceptions.LogoutException;
 import com.ironhack.ScreenManager.ConsolePrinter;
@@ -20,12 +19,10 @@ import static com.ironhack.ScreenManager.Text.TextObject.Scroll.NO;
 public class MenuScreen extends CRMScreen {
 
     private final Commands[] options;
-    private final TextObject optionsNames,globalCommands;
+    private final TextObject optionsNames, globalCommands;
 
 
-    public MenuScreen(CRMManager manager,
-                      ConsolePrinter printer,
-                      String name, Commands... options) {
+    public MenuScreen(CRMManager manager, ConsolePrinter printer, String name, Commands... options) {
         super(manager, printer, name);
         this.options = options;
         optionsNames = new TextObject(NO, LIMIT_X / 3, LIMIT_Y / 2);
@@ -45,7 +42,7 @@ public class MenuScreen extends CRMScreen {
         printer.startPrint();
         String input = "";
         try {
-            return COMMAND.getInput(this, printer,commands.toArray(new Commands[0]));
+            return COMMAND.getInput(this, printer, commands.toArray(new Commands[0]));
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException logout) {
@@ -53,28 +50,25 @@ public class MenuScreen extends CRMScreen {
             return LOGOUT.name();
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (this.crmManager.showModalScreen("Confirmation Needed",
-                    "Do you want to close app?")) {
+            if (this.crmManager.showModalScreen("Confirmation Needed", "Do you want to close app?")) {
                 crmManager.currentUser = null;
                 crmManager.exit = true;
                 return EXIT.name();
             }
         } catch (GoBackException e) {
-            if (this.crmManager.showModalScreen("Confirmation Needed",
-                    "Do you want to logout?")) {
+            if (this.crmManager.showModalScreen("Confirmation Needed", "Do you want to logout?")) {
                 crmManager.currentUser = null;
                 return LOGOUT.name();
             }
-        } catch (com.ironhack.Exceptions.CRMException ignored) {
+        } catch (CRMException ignored) {
         }
         constructContent();
         return start();
     }
-    private void constructContent(){
+
+    private void constructContent() {
         this.constructTitle(getName());
-        this.textObject.addGroupInColumns(2,
-                this.getMaxWidth(),
-                new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
+        this.textObject.addGroupInColumns(2, this.getMaxWidth(), new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
 
     }
 }
