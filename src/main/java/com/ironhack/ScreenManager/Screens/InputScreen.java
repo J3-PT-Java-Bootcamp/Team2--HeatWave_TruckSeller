@@ -103,6 +103,11 @@ public class InputScreen extends CRMScreen{
         return printOutValues();
     }
 
+    @Override
+    public void constructScreen() {
+
+    }
+
     private String printOutValues() {
         var sb= new StringBuilder();
         for (int j = 0; j < outValues.size(); j++) {
