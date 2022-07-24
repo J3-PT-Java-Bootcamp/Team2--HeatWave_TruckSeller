@@ -71,15 +71,7 @@ public enum InputReader {
     }
 
     private String validateMailInput(CRMScreen screen) throws CRMException {
-        String input = "";
-        try {
-            input = waitForInput();
-        } catch (Exception e) {
-            printer.showErrorLine(FATAL_ERR);
-            return validateMailInput(screen);
-        }
-
-        validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
+        String input = validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
         //Mail regex provided by the RFC standards
         if (!patternMatches(input.trim(), "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")) {
             printer.showErrorLine(MAIL_NOK);
@@ -89,17 +81,9 @@ public enum InputReader {
     }
 
     private String validatePhoneInput(CRMScreen screen) throws CRMException {
-        String input = "";
-        try {
-            input = waitForInput();
-        } catch (Exception e) {
-            printer.showErrorLine(FATAL_ERR);
-            return validatePhoneInput(screen);
-        }
-
-        validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
+        var input= validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
         //Mail regex provided by the RFC standards
-        if (!patternMatches(input.trim(), "^(\\+\\d{1,3}( )?)?(\\d{3}[- .]?){2}\\d{4}$")) {
+        if (!patternMatches(input.trim(), "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$")) {
             printer.showErrorLine(PHONE_NOK);
             return validatePhoneInput(screen);
         }
@@ -109,7 +93,7 @@ public enum InputReader {
     private String validateCommand(Commands[] commands, CRMScreen screen) throws CRMException {
         String input = "";
         try {
-            input = waitForInput().trim().toLowerCase();
+            input = waitForInput().trim().toUpperCase();
 
         } catch (Exception e) {
             printer.showErrorLine(FATAL_ERR);
@@ -152,9 +136,9 @@ public enum InputReader {
     }
 
 
-    private boolean patternMatches(String emailAddress, String regexPattern) {
+    private boolean patternMatches(String input, String regexPattern) {
         return Pattern.compile(regexPattern)
-                .matcher(emailAddress)
+                .matcher(input)
                 .matches();
     }
 

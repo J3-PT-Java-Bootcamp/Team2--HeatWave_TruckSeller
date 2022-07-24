@@ -6,12 +6,12 @@ import com.ironhack.Exceptions.ExitException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
+import lombok.NoArgsConstructor;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
-
 @lombok.Data
 public class CRMManager {
     public boolean exit;
@@ -22,14 +22,22 @@ public class CRMManager {
     public CRMManager() {
         this.exit = false;
         this.printer = new ConsolePrinter(this);
-
         try {
             crmData = loadData();
         } catch (Exception e) {
             crmData = new CRMData();
-            runFirstConfig();
+//            runFirstConfig(); FIXME UNCOMMENT TO DEPLOY
+            crmData.addToUserList(new User("ADMIN","ADMIN",true));
+            crmData.addToUserList(new User("USER","USER",false));
+
         }
         appStart();
+    }
+    public CRMManager(Boolean test) {
+        this.exit = false;
+        this.printer = new ConsolePrinter(this);
+
+            crmData = new CRMData();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
 
@@ -52,22 +60,12 @@ public class CRMManager {
         while (!exit) {//if in any moment we enter EXIT it must turn this.exit to true so while will end
             var comm = menu_screen(currentUser == null ? login_screen() : currentUser);
             switch (comm) {
-                case OPP -> {
-                    opp_screen();
-                    //TODO
-                }
-                case LEAD -> {
-
-                    try {
-                        lead_screen();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                case ACCOUNT -> {
-                    account_screen();
-                    //todo
-                }
+                case OPP -> opp_screen();
+                case LEAD ->  lead_screen();
+                case ACCOUNT -> account_screen();
+                case USERS -> manageUsers_screen();
+                case STATS -> showStats_screen();
+                case LOAD -> loadLeadData();
                 case CLOSE -> closeOpportunity(comm.getCaughtInput());
                 case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
                 case VIEW -> viewObject(comm.getCaughtInput());
@@ -80,8 +78,21 @@ public class CRMManager {
         System.exit(0);
     }
 
+    private void loadLeadData() {
+        //TODO
+    }
+
+    private void showStats_screen() {
+        //TODO
+    }
+
+    private void manageUsers_screen() {
+        //TODO
+    }
+
     //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
     public void closeOpportunity(String[] caughtInput) {
+        //TODO
     }
 
     /*product - an Enum with options HYBRID, FLATBED, or BOX
@@ -197,23 +208,10 @@ public class CRMManager {
     private Commands menu_screen(User currentUser) {
         //todo
         MenuScreen main_menu;
-        if(currentUser.isAdmin()){
             main_menu = new MenuScreen(this,
                     printer,
                     "Main Menu",
-                    currentUser,
-                    LEAD,
-                    ACCOUNT,
-                    OPP);
-        }else {
-            main_menu = new MenuScreen(this,
-                    printer,
-                    "Main Menu",
-                    currentUser,
-                    LEAD,
-                    ACCOUNT,
-                    OPP);
-        }
+                    currentUser);
         try {
             return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());//fixme
         } catch (Exception e) {
@@ -222,17 +220,17 @@ public class CRMManager {
         }
     }
 
-    private void lead_screen() throws Exception {
+    private void lead_screen() {
         var list = new java.util.ArrayList<Lead>();
         boolean stop = false;
         //FIXME : meanwhile leads are no implemented
         var fakeData = new java.util.ArrayList<>(java.util.List.of(com.ironhack.FakeLead.getRawLeads(200)));
         Commands comm = null;
         do {
-            for (TextObject data : fakeData) {
-                list.add(new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4)));
-            }
             try {
+                for (TextObject data : fakeData) {
+                    list.add(new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4)));
+                }
                 comm = Commands.valueOf(new TableScreen(this, "Leads", list).start());
 
                 switch (comm) {
