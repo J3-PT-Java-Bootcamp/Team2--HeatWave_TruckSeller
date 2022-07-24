@@ -3,13 +3,14 @@ package com.ironhack.Commercial;
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.ScreenManager.Text.TextObject;
 
+import java.util.ArrayList;
+
 public class Account implements Printable{
     private IndustryType industryType;
     private int employeeCount;
-    private String city;
-    private String country;
-    private Contact contact;
-    private Opportunity opportunity;
+    private String city, country;
+    private ArrayList<String> contacts, opportunities;
+
     private String companyName;
 
     public Account(IndustryType industryType, int employeeCount, String city, String country,String companyName) {
@@ -18,11 +19,6 @@ public class Account implements Printable{
         setCity(city);
         setCountry(country);
         setCompanyName(companyName);
-    }
-
-    public Account(Contact contact, Opportunity opportunity) {
-        setContact(contact);
-        setOpportunity(opportunity);
     }
 
     public IndustryType getIndustryType() {
@@ -57,21 +53,6 @@ public class Account implements Printable{
         this.country = country;
     }
 
-    public Contact getContact() {
-        return contact;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
-    public Opportunity getOpportunity() {
-        return opportunity;
-    }
-
-    public void setOpportunity(Opportunity opportunity) {
-        this.opportunity = opportunity;
-    }
 
     public String getCompanyName() {
         return companyName;
@@ -84,5 +65,15 @@ public class Account implements Printable{
     @Override
     public TextObject toTextObject() {
         return new TextObject();
+    }
+
+    @Override
+    public String shortPrint() {
+        return this.companyName;
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return null;
     }
 }

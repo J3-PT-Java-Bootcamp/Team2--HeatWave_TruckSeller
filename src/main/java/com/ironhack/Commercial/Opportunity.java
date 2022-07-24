@@ -103,9 +103,17 @@ public class Opportunity implements Printable{
     }
     @Override
     public TextObject toTextObject(){
-        TextObject opportunityLine = new TextObject();
-        //TODO opportunityLine.addText(value) for each value to be printed in console when opportunities list is shown
-        opportunityLine.setAllTextBackground(getStatus()==OpportunityStatus.OPEN? BgColors.BRIGHT_BLUE: BgColors.RED);
-        return opportunityLine;
+        //TODO
+        return new TextObject();
+    }
+
+    @Override
+    public String shortPrint() {
+        return this.account.getCompanyName();
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return null;
     }
 }

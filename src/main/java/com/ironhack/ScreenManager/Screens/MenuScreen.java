@@ -1,6 +1,7 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.CRMManager.User;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
 import com.ironhack.Exceptions.GoBackException;
@@ -20,10 +21,12 @@ public class MenuScreen extends CRMScreen {
 
     private final Commands[] options;
     private final TextObject optionsNames, globalCommands;
+    private final User user;
 
 
-    public MenuScreen(CRMManager manager, ConsolePrinter printer, String name, Commands... options) {
-        super(manager, printer, name);
+    public MenuScreen(CRMManager manager, ConsolePrinter printer, String title, User user, Commands... options) {
+        super(manager, printer, title);
+        this.user=user;
         this.options = options;
         optionsNames = new TextObject(NO, LIMIT_X / 3, LIMIT_Y / 2);
         globalCommands = new TextObject("GLOBAL COMMANDS", NO, LIMIT_X / 3, LIMIT_Y / 2);

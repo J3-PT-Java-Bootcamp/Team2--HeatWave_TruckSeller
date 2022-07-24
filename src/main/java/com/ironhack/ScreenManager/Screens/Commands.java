@@ -13,17 +13,20 @@ public enum Commands {
     OPP("opp","opportunity","opportunities","view opportunity","view opp"),
     LEAD("lead","leads","view leads","view lead"),
     ACCOUNT("account","accounts","view accounts","view account"),
-    CONVERT("convert"),
-    CLOSE("close"),
+    USERS("manage users","users","user"),
+    LOAD("load leads","load data","load"),
+    STATS("stats","statistics","view stats","view statistics"),
     YES("yes","ok","confirm","y"),
     NO("no","cancel","n"),
     BACK("back"),
     NEXT("next"),
     PREVIOUS("prev","previous"),
     HELP("help"),
+    CREATE("create","new"),
+    CONVERT("convert"),
+    CLOSE("close"),
     VIEW("view","check","see"),
-    DISCARD("discard","delete","remove"),
-    DELAY("delay","aplace","snooze","skip");
+    DISCARD("discard","delete","remove");
 
     final String[] commands;
 
@@ -57,54 +60,34 @@ public enum Commands {
             case LOGOUT -> {
                 throw new LogoutException(OK);
             }
-            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD, STATS, LOAD, USERS -> {
                 return true;
             }
-            case CONVERT -> {
-                caughtInput =input.split(" ");
-//                var leadID=caughtInput[1];
-//                var lead= CRMManager.crmData.getLead(leadID);
-//                if (lead == null)throw new WrongInputException(ErrorType.ID_NOK);
-//                var opp=lead.convertToOpp();
-//                //FIXME how to send the new opportunity to keep enterin data?
-//                //TODO move to opp screen
-                return true;
-            }
-            case CLOSE -> {
-                caughtInput =input.split(" ");
-                var commandList= caughtInput;
-                if(commandList.length!=3)throw new WrongInputException(ErrorType.COMMAND_NOK);
-                var closeType=commandList[1];
-                var oppID= commandList[2];
-                var opp= CRMManager.crmData.getOpportunity(oppID);
-                if (opp==null)throw new WrongInputException(ErrorType.ID_NOK);
-                if (closeType.equalsIgnoreCase("lost"))opp.close(false);
-                else if (closeType.equalsIgnoreCase("won")) opp.close(true);
-                return true;
-            }
-            case VIEW -> {
-                caughtInput =input.split(" ");
-                if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
-                return true;
-
-            }
-            case DISCARD -> {
-                caughtInput = input.split(" ");
-                if (caughtInput.length != 2) throw new WrongInputException(ErrorType.COMMAND_NOK);
-                return true;
-            }
-            case DELAY -> {
-                caughtInput =input.split(" ");
-                if (caughtInput.length != 2) throw new WrongInputException(ErrorType.COMMAND_NOK);
-                return true;
-            }
-
-
             case BACK -> {
                 throw new GoBackException(screen);
             }
             case HELP -> {
                 throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
+            }
+            case VIEW, DISCARD, CLOSE, CONVERT -> {
+                caughtInput =input.split(" ");
+                if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
+                var inputId= caughtInput[1].trim().toUpperCase();
+                char identifier= inputId.toCharArray()[0];
+                if(identifier=='L'){
+                    if(!CRMManager.crmData.getLeadMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                }else if(identifier=='O') {
+                    if (!CRMManager.crmData.getOpportunityMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                }else if(identifier=='C'){
+                    if(!CRMManager.crmData.getContactMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                }else{
+                    if(!CRMManager.crmData.getAccountMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                }
+                return true;
+            }
+            case CREATE->{
+                caughtInput=input.split(" ");
+                return true;
             }
         }
         return false;

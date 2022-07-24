@@ -1,11 +1,12 @@
 package com.ironhack.CRMManager;
 
 import com.ironhack.Commercial.*;
+import lombok.Data;
 
 import java.util.HashMap;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
-
+@Data
 public class CRMData {
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
     private HashMap<String, Lead> leadMap;
@@ -56,32 +57,32 @@ public class CRMData {
 
     }
     //----------------------------------------LEAD
-     int getLeadCounter() {
+     public int getLeadCounter() {
         return leadCounter;
     }
-     CRMData increaseLeadCounter() {
+     public CRMData increaseLeadCounter() {
         this.leadCounter++;
         return this;
     }
-     CRMData addLead(Lead lead) {
+     public CRMData addLead(Lead lead) {
         this.leadMap.put(lead.getId(),lead);
         return this;
     }
-     HashMap<String, Lead> getLeadMap() {
+     public HashMap<String, Lead> getLeadMap() {
         return leadMap;
     }
      public Lead getLead(String id) {
         return leadMap.get(id);
     }
     //----------------------------------------OPPORTUNITY
-     int getOpportunityCounter() {
+     public int getOpportunityCounter() {
         return opportunityCounter;
     }
-     CRMData increaseOpportunityCounter() {
+     public CRMData increaseOpportunityCounter() {
         this.opportunityCounter++;
         return this;
     }
-     HashMap<String, Opportunity> getOpportunityMap() {
+     public HashMap<String, Opportunity> getOpportunityMap() {
     return opportunityMap;
 }
      public Opportunity getOpportunity(String id) {
@@ -92,33 +93,33 @@ public class CRMData {
         return this;
     }
     //----------------------------------------ACCOUNT
-     int getAccountCounter() {
+     public int getAccountCounter() {
         return accountCounter;
     }
-     CRMData increaseAccountCounter() {
+     public CRMData increaseAccountCounter() {
         this.accountCounter++;
         return this;
     }    
-     HashMap<String, Account> getAccountMap() {
+     public HashMap<String, Account> getAccountMap() {
         return accountMap;
     }
-     Account getAccount(String id) {
+     public Account getAccount(String id) {
         return accountMap.get(id);
     }
-     CRMData addAccount(Account account) {
+     public CRMData addAccount(Account account) {
         this.accountMap.put(account.getCompanyName(),account);
         return this;
     }
     
     //----------------------------------------CONTACT
-     int getContactCounter() {
+     public int getContactCounter() {
         return contactCounter;
     }
-     CRMData increaseContactCounter() {
+     public CRMData increaseContactCounter() {
         this.contactCounter++;
         return this;
     }
-     HashMap<String, Contact> getContactMap() {
+     public HashMap<String, Contact> getContactMap() {
         return contactMap;
     }
      Contact getContact(String id) {

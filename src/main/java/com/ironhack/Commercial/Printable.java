@@ -5,6 +5,9 @@ import com.ironhack.ScreenManager.Text.TextObject;
 public interface Printable {
 
     TextObject toTextObject();
+    String shortPrint();
+
+    TextObject printFullObject();
 
 
 }

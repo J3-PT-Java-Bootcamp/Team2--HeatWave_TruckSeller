@@ -1,12 +1,13 @@
 package com.ironhack.ScreenManager;
 
-import com.ironhack.Constants.ColorFactory.CColors;
-import com.ironhack.Constants.ColorFactory.TextStyle;
+import com.ironhack.Constants.IndustryType;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.WrongInputException;
 import com.ironhack.ScreenManager.Screens.CRMScreen;
 import com.ironhack.ScreenManager.Screens.Commands;
+import com.ironhack.ScreenManager.Screens.InputScreen;
 import com.ironhack.ScreenManager.Text.DynamicLine;
+import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.regex.Pattern;
 
@@ -26,7 +27,10 @@ public enum InputReader {
     NEW_PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
     PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
     OPEN("Expects a String value, special characters not allowed"),
-    COMMAND("Check the commands box to see available actions");
+    COMMAND("Available commands are: "),
+    CONTACT_INPUT(""),
+    ACCOUNT_INPUT(""),
+    INDUSTRY_TYPE("");
 
     private String hint;
     private ConsolePrinter printer;
@@ -37,6 +41,12 @@ public enum InputReader {
 
 
     //------------------------------------------------------------------------------------------------------------VALIDATORS
+    private String validateIndustryType(CRMScreen screen) throws CRMException {
+        var input = validateOpenInput(screen);
+        var type= IndustryType.valueOf(input.trim().toUpperCase());
+        return type.toString();
+
+    }
     private String validateOpenInput(CRMScreen screen) throws CRMException {
         String input =validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
         if (input.trim().length() < 3 || !isValidString(input.trim())) {
@@ -174,6 +184,9 @@ public enum InputReader {
                 case OPEN, PASSWORD -> validateOpenInput(screen);
                 case COMMAND -> validateCommand(options, screen);
                 case NEW_PASSWORD -> validatePassword(screen);
+                case CONTACT_INPUT -> createNewContact(screen);
+                case ACCOUNT_INPUT -> selectAccount(screen);
+                case INDUSTRY_TYPE -> validateIndustryType(screen);
             };
         }catch (CRMException e){
             if(e.getClass().equals(WrongInputException.class)){
@@ -181,6 +194,43 @@ public enum InputReader {
                 return getInput(screen,printer,options);
             }
             else throw e;
+        }
+    }
+
+
+
+    private String selectAccount(CRMScreen screen) {
+        //TODO WHEN INDUSTRYTIPE
+        var data= new InputScreen(screen.crmManager, printer, "New Account", new TextObject(), new String[]{
+                "Name",
+                "Phone Number",
+                "e-Mail",
+                "Company"
+        }, OPEN,PHONE,MAIL,OPEN);
+        try {
+            data.start();
+            //Returns the contact name
+            return data.getValues().get(0);
+        } catch (CRMException e) {
+            //TODO
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String createNewContact(CRMScreen screen) {
+        var data= new InputScreen(screen.crmManager, printer, "New Contact", new TextObject(), new String[]{
+                "Name",
+                "Phone Number",
+                "e-Mail",
+                "Company"
+        }, OPEN,PHONE,MAIL,OPEN);
+        try {
+            data.start();
+            //Returns the contact name
+            return data.getValues().get(0);
+        } catch (CRMException e) {
+            //TODO
+            throw new RuntimeException(e);
         }
     }
 
