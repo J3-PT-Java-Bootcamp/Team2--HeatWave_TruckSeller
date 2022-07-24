@@ -38,4 +38,9 @@ public class ModalScreen extends CRMScreen{
         }
         return input;
     }
+
+    @Override
+    public void constructScreen() {
+
+    }
 }

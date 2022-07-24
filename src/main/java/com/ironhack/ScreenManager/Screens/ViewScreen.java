@@ -12,4 +12,9 @@ public class ViewScreen<T> extends CRMScreen{
     public String start() throws CRMException {
         return null;
     }
+
+    @Override
+    public void constructScreen() {
+
+    }
 }

@@ -66,6 +66,11 @@ public class MenuScreen extends CRMScreen {
         return start();
     }
 
+    @Override
+    public void constructScreen() {
+
+    }
+
     private void constructContent() {
         this.constructTitle(getName());
         this.textObject.addGroupInColumns(2, this.getMaxWidth(), new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});

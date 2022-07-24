@@ -30,4 +30,9 @@ public class ConfirmationScreen extends CRMScreen{
         printer.waitFor(DURATION);
         return null;
     }
+
+    @Override
+    public void constructScreen() {
+
+    }
 }
