@@ -17,7 +17,6 @@ public class CRMData {
     private HashMap<String, Contact> contactMap;
     private HashMap<String, User> userList;
     
-    
     public CRMData(){
         leadCounter=0;
         opportunityCounter=0;

@@ -10,6 +10,7 @@ import com.ironhack.Exceptions.LogoutException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.TextObject;
 
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
@@ -31,7 +32,7 @@ public class MenuScreen extends CRMScreen {
         optionsNames = new TextObject(NO, LIMIT_X / 3, LIMIT_Y / 2);
         globalCommands = new TextObject("GLOBAL COMMANDS", NO, LIMIT_X / 3, LIMIT_Y / 2);
 //        var names= new java.util.ArrayList<TextObject>();
-        for (Commands opt : options) optionsNames.addText(opt.toString());
+        for (Commands opt : options) optionsNames.addText("-"+opt.toString()+"-").addText(BLANK_SPACE);
         for (Commands comm : this.commands) globalCommands.addText(comm.toString());
         this.textObject.addGroupInColumns(2,
                 this.getMaxWidth(),
