@@ -33,7 +33,9 @@ public class MenuScreen extends CRMScreen {
 //        var names= new java.util.ArrayList<TextObject>();
         for (Commands opt : options) optionsNames.addText(opt.toString());
         for (Commands comm : this.commands) globalCommands.addText(comm.toString());
-        this.textObject.addGroupInColumns(2, this.getMaxWidth(), new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
+        this.textObject.addGroupInColumns(2,
+                this.getMaxWidth(),
+                new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
 
         for (Commands opt : options) this.addCommand(opt);
     }
@@ -53,13 +55,15 @@ public class MenuScreen extends CRMScreen {
             return LOGOUT.name();
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (this.crmManager.showModalScreen("Confirmation Needed", "Do you want to close app?")) {
+            if (this.crmManager.showModalScreen("Confirmation Needed",
+                    new TextObject("Do you want to close app?"))) {
                 crmManager.currentUser = null;
                 crmManager.exit = true;
                 return EXIT.name();
             }
         } catch (GoBackException e) {
-            if (this.crmManager.showModalScreen("Confirmation Needed", "Do you want to logout?")) {
+            if (this.crmManager.showModalScreen("Confirmation Needed",
+                    new TextObject("Do you want to logout?"))) {
                 crmManager.currentUser = null;
                 return LOGOUT.name();
             }

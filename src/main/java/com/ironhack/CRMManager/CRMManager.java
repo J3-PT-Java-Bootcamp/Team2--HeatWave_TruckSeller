@@ -1,17 +1,23 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Lead;
+import com.ironhack.Commercial.*;
+import com.ironhack.Constants.OpportunityStatus;
+import com.ironhack.Constants.Product;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
-import lombok.NoArgsConstructor;
+import net.datafaker.Company;
+
+import java.util.ArrayList;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
+import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
+
 @lombok.Data
 public class CRMManager {
     public boolean exit;
@@ -62,19 +68,17 @@ public class CRMManager {
             switch (comm) {
                 case OPP -> opp_screen();
                 case LEAD ->  lead_screen();
-                case ACCOUNT -> account_screen();
+                case ACCOUNT -> account_screen(false);
                 case USERS -> manageUsers_screen();
                 case STATS -> showStats_screen();
                 case LOAD -> loadLeadData();
                 case CLOSE -> closeOpportunity(comm.getCaughtInput());
-                case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
+                case CONVERT -> convertLeadToOpp(COMMAND.lastInput.split(" "));
                 case VIEW -> viewObject(comm.getCaughtInput());
                 default -> {
-
                 }
             }
         }
-        //TODO beforeClose();
         System.exit(0);
     }
 
@@ -91,28 +95,80 @@ public class CRMManager {
     }
 
     //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
-    public void closeOpportunity(String[] caughtInput) {
+    public String closeOpportunity(String[] caughtInput) {
         //TODO
+        return null;
     }
 
     /*product - an Enum with options HYBRID, FLATBED, or BOX
     quantity - the number of trucks being considered for purchase
     decisionMaker - a Contact
     status*/
-    public void convertLeadToOpp(String[] caughtInput) {
-        try {
-            new InputScreen(this,
-                    printer,
-                    "New Opportunity",
-                    new com.ironhack.ScreenManager.Text.TextObject("Enter the information offered to customer:"),
-                    new String[]{"Product", "Quantity", "Decision Maker", "Account"},
-                    OPEN,
-                    INTEGER,
-                    CONTACT_INPUT,
-                    ACCOUNT_INPUT).start();
-        } catch (com.ironhack.Exceptions.CRMException e) {
-            throw new RuntimeException(e);
+    public String convertLeadToOpp(String[] caughtInput) {
+        if(caughtInput!=null&&caughtInput.length==2) {
+
+            var lead= crmData.getLead(caughtInput[1]);
+            try {
+                var firstScreen= new InputScreen(this,
+                        printer,
+                        "New Opportunity",
+                        new TextObject("Enter the information offered to customer:"),
+                        new String[]{"Product", "Quantity", "Decision Maker", "Account"},
+                        PRODUCT_TYPE,
+                        INTEGER);
+
+                var result = firstScreen.start();
+                if (result.equalsIgnoreCase(EXIT.name()))return EXIT.name();
+                var accountName=account_screen(true);
+
+                var contact = createNewContact(lead,accountName);
+                var firstData=firstScreen.getValues();
+                var opp = new Opportunity(Product.valueOf(firstData.get(0)),
+                        Integer.parseInt(firstData.get(1)),
+                        contact,
+                        OpportunityStatus.OPEN,
+                        currentUser.getName());
+                crmData.addOpportunity(opp);
+                crmData.getLeadMap().remove(lead.getId());
+                try {saveData();} catch (Exception ignored) {}
+                return opp.getId();
+            } catch (com.ironhack.Exceptions.CRMException e) {
+                throw new RuntimeException(e);
+            }
         }
+
+        printer.showErrorLine(COMMAND_NOK);
+        return null;
+    }
+
+    private String createNewContact(Lead lead,String accountName) throws CRMException {
+        Contact contact;
+        if(showModalScreen("Copy Lead Data ?",
+                new TextObject("Do you want to create a new contact\n from the following Lead data?")
+                .addText(BLANK_SPACE).addText(lead.printFullObject())
+                        .addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
+            contact = new Contact(lead.getName(),
+                    crmData.getNextID(Contact.class),
+                    lead.getPhoneNumber(),
+                    lead.getMail(),
+                    accountName);
+        }else {
+            var screen = new InputScreen(this,
+                    printer,
+                    "-- New Contact --",
+                    new TextObject("Enter the information about Contact for current Opportunity:")
+                            .addText(BLANK_SPACE).addText("Company : "+accountName),
+                    new String[]{"Name", "Phone Number", "Mail"},
+                    OPEN, PHONE, MAIL);
+            screen.start();
+            var val= screen.getValues();
+            contact = new Contact(val.get(0),crmData.getNextID(Contact.class),val.get(1),val.get(2),accountName);
+
+        }
+
+        crmData.addContact(contact);
+        crmData.getAccountMap().get(accountName).getContacts().add(contact.getId());
+        return contact.getId();
     }
 
     public void viewObject(String[] caughtInput) {
@@ -129,7 +185,15 @@ public class CRMManager {
      * @throws CRMException if Back/Exit/Logout/Menu commands are read
      */
     private void newUser_screen(boolean isAdmin) throws CRMException {
-        var newUserScreen = new InputScreen(this, printer, "New User", new TextObject("Enter a Name and Password to create a New User:").addText(BLANK_SPACE).addText(BLANK_SPACE), new String[]{"User Name", "Password", "Repeat Password"}, OPEN, NEW_PASSWORD, NEW_PASSWORD);
+        var newUserScreen = new InputScreen(this,
+                printer,
+                "New User",
+                new TextObject("Enter a Name and Password to create a New User:")
+                        .addText(BLANK_SPACE).addText(BLANK_SPACE),
+                new String[]{"User Name", "Password", "Repeat Password"},
+                OPEN,
+                NEW_PASSWORD,
+                NEW_PASSWORD);
         var strRes = newUserScreen.start();
         var userVal = newUserScreen.getValues();
         if (userVal.size() == 3 && crmData.addToUserList(new User(userVal.get(0), userVal.get(1), isAdmin))) {
@@ -163,7 +227,7 @@ public class CRMManager {
      * @param message Message to be printed
      * @return boolean value (true=YES, false=NO)
      */
-    public boolean showModalScreen(String name, String message) {
+    public boolean showModalScreen(String name, TextObject message) {
         var modal = new ModalScreen(this, printer, name, message);
         try {
             var val = Commands.valueOf(modal.start().toUpperCase());
@@ -239,12 +303,14 @@ public class CRMManager {
                     case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
                     case VIEW -> viewObject(comm.getCaughtInput());
                     case DISCARD -> {
-                        if (new ModalScreen(this, getPrinter(), "Confirmation needed", "Do you want to discard this lead? ").start().equalsIgnoreCase(YES.name())) {
-                            //TODO Delete lead from map and user list
+                        var lead = crmData.getLeadMap().get(comm.getCaughtInput()[1]);
+                        if ( showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?")
+                                .addText(lead.printFullObject()))) {
+                            crmData.getLeadMap().remove(lead.getId(),lead);
                         }
                     }
                     case HELP -> {
-                        //fixme Show be there?¿
+                        //fixme Should be there?¿
                     }
                 }
             } catch (Exception e) {
@@ -258,8 +324,51 @@ public class CRMManager {
         var oppScreen = new TableScreen(this, "Opportunities", null).start();
     }
 
-    private void account_screen() {
-        var account_screen = new TableScreen(this, "Accounts", null).start();
+    private String account_screen(boolean selectionMode) {
+        boolean stop = false;
+        Commands res;
+        do {
+            var account_screen = new TableScreen(this,
+                    selectionMode?"Select an account: ":"-- Accounts --",
+                    (ArrayList<Account>) crmData.getAccountMap().values());
+            res = Commands.valueOf(account_screen.start());
+            switch (res) {
+                case EXIT, MENU, LOGOUT, BACK -> {
+                    stop=true;
+                }
+                case HELP -> {
+                    //fixme HELP CASE must be there?
+                }
+                case CREATE -> {
+                    createNewAccount();
+                }
+                case CONVERT -> {
+                    return convertLeadToOpp(res.getCaughtInput());
+                }
+                case CLOSE -> {
+                    return closeOpportunity(res.getCaughtInput());
+                }
+                case VIEW -> {
+                    if (selectionMode) return res.getCaughtInput()[1];
+                    viewObject(res.getCaughtInput());
+                }
+                case DISCARD -> {
+                    //FIXME should delete an account with active opps?¿
+                    var account = crmData.getAccountMap().get(res.getCaughtInput()[1]);
+                    if ( showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?")
+                            .addText(account.printFullObject()))) {
+                        crmData.getAccountMap().remove(account.getCompanyName());
+                    }
+
+
+                }
+            }
+
+        }while (!stop);
+        return res.name();
+    }
+
+    private void createNewAccount() {
     }
 
 

@@ -34,13 +34,13 @@ public class Opportunity implements Printable{
         setStatus(status);
         setOwner(owner.getName());
     }
-    public Opportunity( Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner) {
+    public Opportunity(Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner) {
         setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
-        setDecisionMakerID(decisionMaker.getId());
+        setDecisionMakerID(decisionMaker);
         setStatus(status);
-        setOwner(owner.getName());
+        setOwner(owner);
     }
 
 

@@ -3,44 +3,40 @@ package com.ironhack.ScreenManager.Screens;
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.InputReader;
-import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ironhack.Exceptions.ErrorType.OK;
 public enum Commands {
-    EXIT("exit"),
-    MENU("menu"),
-    LOGOUT("logout","log out"),
-    OPP("opp","opportunity","opportunities","view opportunity","view opp"),
-    LEAD("lead","leads","view leads","view lead"),
-    ACCOUNT("account","accounts","view accounts","view account"),
-    USERS("manage users","users","user"),
-    LOAD("load leads","load data","load"),
-    STATS("stats","statistics","view stats","view statistics"),
-    YES("yes","ok","confirm","y"),
-    NO("no","cancel","n"),
-    BACK("back"),
-    NEXT("next"),
-    PREVIOUS("prev","previous"),
-    HELP("help"),
-    CREATE("create","new"),
-    CONVERT("convert"),
-    CLOSE("close"),
-    VIEW("view","check","see"),
-    DISCARD("discard","delete","remove");
+    EXIT("EXIT"),
+    MENU("MENU"),
+    LOGOUT("LOGOUT","LOG OUT"),
+    OPP("OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
+    LEAD("LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
+    ACCOUNT("ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
+    USERS("MANAGE USERS","USERS","USER"),
+    LOAD("LOAD LEADS","LOAD DATA","LOAD"),
+    STATS("STATS","STATISTICS","VIEW STATS","VIEW STATISTICS"),
+    YES("YES","OK","CONFIRM","Y"),
+    NO("NO","CANCEL","N"),
+    BACK("BACK"),
+    NEXT("NEXT"),
+    PREVIOUS("PREV","PREVIOUS"),
+    HELP("HELP"),
+    CREATE("CREATE","NEW"),
+    CONVERT("CONVERT"),
+    CLOSE("CLOSE"),
+    VIEW("VIEW","CHECK","SEE","SELECT"),
+    DISCARD("DISCARD","DELETE","REMOVE");
 
-    final String[] commands;
+    final String[] keyWords;
 
     String[] caughtInput;
-    Commands(String... commands){
-        this.commands=commands;
+    Commands(String... keyWords){
+        this.keyWords = keyWords;
     }
     public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
-        caughtInput=input.trim().toLowerCase().split(" ");
-        for(String command:commands){
-            if(input.contains(command)) {
+        caughtInput=input.trim().split(" ");
+        for(String key: keyWords){
+            if(input.contains(key.toUpperCase())) {//TODO better method that "contains" to check also if it has more text than allowed
                 return act(input, screen,inputReader);
             }
         }
