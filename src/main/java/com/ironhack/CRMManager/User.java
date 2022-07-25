@@ -2,15 +2,15 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
-import com.ironhack.ScreenManager.Screens.Commands;
+import lombok.Data;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
+@Data
 public class User {
     private String name;
     private String password;
-    private HashMap<String, Opportunity> opportunityList;
-    private HashMap<String, Lead> leadList;
+    private ArrayList<String> opportunityList,leadList,recentObjects;
     private final boolean isAdmin;
 
 
@@ -18,50 +18,44 @@ public class User {
         this.name = name;
         this.isAdmin=isAdmin;
         this.password = password;
+        this.opportunityList=new ArrayList<>();
+        this.recentObjects=new ArrayList<>();
+        this.leadList=new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public void addToOpportunityList(Opportunity opportunity){
-       opportunityList.put(opportunity.getId(), opportunity);
+       addToOpportunityList(opportunity.getId());
+    }
+    public void addToOpportunityList(String opportunityID){
+        opportunityList.add(opportunityID);
+    }
+
+    public void addToLeadList(String leadID){
+        leadList.add(leadID);
     }
     public void addToLeadList(Lead lead){
-        leadList.put(lead.getId(), lead);
+        leadList.add(lead.getId());
     }
     public int getOpportunityListSize(){
        return this.opportunityList.size();
     }
 
-    public HashMap<String, Opportunity> getOpportunityList() {
-        return opportunityList;
-    }
 
-    public HashMap<String, Lead> getLeadList() {
-        return leadList;
-    }
-
-    public int getLeadlistSize(){
+    public int getLeadListSize(){
         return this.leadList.size();
     }
 
-    public void removeFromLeadlist(String id){
+    public void removeFromLeadList(String id){
         leadList.remove(id);
     }
-
+    public void addToRecentObjects(String id){
+        if(this.recentObjects.size()>=10){
+            recentObjects.remove(0);
+        }else {
+            recentObjects.add(id);
+        }
+    }
     public boolean isAdmin() {
         return this.isAdmin;
     }
