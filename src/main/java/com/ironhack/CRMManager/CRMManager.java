@@ -5,9 +5,9 @@ import com.ironhack.Commercial.Contact;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Constants.OpportunityStatus;
-import com.ironhack.Constants.Product;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
+import com.ironhack.FakeLead;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
@@ -35,19 +35,30 @@ public class CRMManager {
             crmData = loadData();
         } catch (Exception e) {
             crmData = new CRMData();
-//            runFirstConfig(); FIXME UNCOMMENT TO DEPLOY
-            crmData.addToUserList(new User("ADMIN", "ADMIN", true));
-            crmData.addToUserList(new User("USER", "USER", false));
+            runFirstConfig();
 
         }
         appStart();
     }
 
-    public CRMManager(Boolean test) {
+    public CRMManager(Boolean testWithScreens) {
         this.exit = false;
         this.printer = new ConsolePrinter(this);
-
         crmData = new CRMData();
+        var leadList= FakeLead.getRawLeads(200);
+
+        crmData.addToUserList(new User("ADMIN", "ADMIN", true));
+        crmData.addToUserList(new User("USER", "USER", false));
+        for (TextObject data : leadList) {
+            try {
+                var lead= new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4));
+                crmData.addLead(lead);
+                crmData.getUserList().get("USER").addToLeadList(lead.getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (testWithScreens)appStart();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
 
@@ -85,7 +96,7 @@ public class CRMManager {
         }
         System.exit(0);
     }
-
+    //----------------------------------------------------------------------------------------------ADMIN SCREEN OPTIONS
     private void loadLeadData() {
         //TODO
     }
@@ -100,9 +111,6 @@ public class CRMManager {
         } catch (CRMException e) {
 
         }
-
-
-        //TODO
     }
 
     //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
@@ -111,10 +119,6 @@ public class CRMManager {
         return null;
     }
 
-    /*product - an Enum with options HYBRID, FLATBED, or BOX
-    quantity - the number of trucks being considered for purchase
-    decisionMaker - a Contact
-    status*/
     public String convertLeadToOpp(String[] caughtInput) {
         if (caughtInput != null && caughtInput.length == 2) {
             var lead = crmData.getLead(caughtInput[1]);
@@ -126,7 +130,8 @@ public class CRMManager {
                     var accountName = account_screen(true);
                     var contact = createNewContact(lead, accountName);
                     var firstData = firstScreen.getValues();
-                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
+//                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
+                    var opp = new Opportunity(null, Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
                     crmData.addOpportunity(opp);
                     crmData.getLeadMap().remove(lead.getId());
                     try {
@@ -343,13 +348,11 @@ public class CRMManager {
     private void lead_screen() {
         var list = new java.util.ArrayList<Lead>();
         boolean stop = false;
-        //FIXME : meanwhile leads are no implemented
-       var fakeData = currentUser.getLeadList();
         Commands comm = null;
         do {
             try {
-                for (TextObject data : fakeData) {
-                    list.add(new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4)));
+                for (String id:currentUser.getLeadList()){
+                    list.add(crmData.getLead(id));
                 }
                 comm = Commands.valueOf(new TableScreen(this, "Leads", list).start());
 
@@ -372,6 +375,7 @@ public class CRMManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            list.clear();
         } while (!stop);
 
     }
@@ -384,7 +388,9 @@ public class CRMManager {
         boolean stop = false;
         Commands res;
         do {
-            var account_screen = new TableScreen(this, selectionMode ? "Select an account: " : "-- Accounts --", (ArrayList<Account>) crmData.getAccountMap().values());
+            var accountArr= new ArrayList<Account>();
+            if(!crmData.getAccountMap().isEmpty())accountArr= (ArrayList<Account>) crmData.getAccountMap().values();
+            var account_screen = new TableScreen(this, selectionMode ? "Select an account: " : "-- Accounts --", accountArr);
             res = Commands.valueOf(account_screen.start());
             switch (res) {
                 case EXIT, MENU, LOGOUT, BACK -> {

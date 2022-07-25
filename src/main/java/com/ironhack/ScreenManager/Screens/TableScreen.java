@@ -4,7 +4,6 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Commercial.Account;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
-import com.ironhack.*;
 import com.ironhack.Commercial.Printable;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.ColorFactory.BgColors;
@@ -12,7 +11,6 @@ import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
@@ -49,13 +47,17 @@ public class TableScreen extends CRMScreen{
     public void constructScreen() {
         try {
             constructTable(getMaxWidth(), masterArr.get(currentPage)
-                    , new String[]{"ID", "Name", "Phone","Mail", "Company"},
+                    , getColumnTitles(),
                     ColorFactory.BgColors.BLUE,
                     ColorFactory.BgColors.PURPLE);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            
         }
         constructLastLine();
+    }
+
+    private String[] getColumnTitles() {
+        return this.masterArr.get(0).get(0).getPrintableAttributes();
     }
 
     private void constructLastLine() {

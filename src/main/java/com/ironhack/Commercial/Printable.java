@@ -8,6 +8,8 @@ public interface Printable {
     String shortPrint();
 
     TextObject printFullObject();
+    String[] getPrintableAttributes();
+
 
 
 }

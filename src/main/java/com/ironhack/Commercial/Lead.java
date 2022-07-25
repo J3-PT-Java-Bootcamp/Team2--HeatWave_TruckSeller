@@ -26,7 +26,8 @@ public class Lead implements Printable{
     @Override
     public TextObject toTextObject() {
         return new TextObject()
-                .addText(getId()).addText(getName())
+                .addText(getId())
+                .addText(getName())
                 .addText(getPhoneNumber())
                 .addText(getMail())
                 .addText(getCompanyName());
@@ -39,6 +40,16 @@ public class Lead implements Printable{
 
     @Override
     public TextObject printFullObject() {
-        return null;
+        return new TextObject()
+                .addText("- Lead ID: "+getId())
+                .addText("- Name: "+getName())
+                .addText("- Phone Number: "+getPhoneNumber())
+                .addText("- Mail : "+getMail())
+                .addText("- Company: "+getCompanyName());
+    }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[]{"ID", "Name", "Phone", "Mail", "Company"};
     }
 }

@@ -34,4 +34,9 @@ public class Contact implements Printable{
     public TextObject printFullObject() {
         return null;
     }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[0];
+    }
 }
