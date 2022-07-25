@@ -1,73 +1,34 @@
 package com.ironhack.Commercial;
 
 import com.ironhack.ScreenManager.Text.TextObject;
+import lombok.Data;
 
+@Data
 public class Lead implements Printable{
 
     private String name;
     private String id;
     private String phoneNumber;
-    private String eMail;
+    private String mail;
     private String companyName;
 
-    public Lead(String name, String id, String phoneNumber, String eMail, String companyName) {
+    public Lead(String name, String id, String phoneNumber, String mail, String companyName) {
         setName(name);
         setId(id);
         setPhoneNumber(phoneNumber);
-        seteMail(eMail);
+        setMail(mail);
         setCompanyName(companyName);
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String geteMail() {
-        return eMail;
-    }
-
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public Opportunity convertToOpp() {
-        return new Opportunity();
-    }
-
+//-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
         return new TextObject()
                 .addText(getId()).addText(getName())
                 .addText(getPhoneNumber())
-                .addText(geteMail())
+                .addText(getMail())
                 .addText(getCompanyName());
     }
 
