@@ -2,16 +2,19 @@ package com.ironhack.Commercial;
 
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.ScreenManager.Text.TextObject;
+import lombok.Data;
 
 import java.util.ArrayList;
-
+@Data
 public class Account implements Printable{
+
     private IndustryType industryType;
     private int employeeCount;
     private String city, country;
     private ArrayList<String> contacts, opportunities;
-
     private String companyName;
+
+
 
     public Account(IndustryType industryType, int employeeCount, String city, String country,String companyName) {
         setIndustryType(industryType);
@@ -21,47 +24,7 @@ public class Account implements Printable{
         setCompanyName(companyName);
     }
 
-    public IndustryType getIndustryType() {
-        return industryType;
-    }
-
-    public void setIndustryType(IndustryType industryType) {
-        this.industryType = industryType;
-    }
-
-    public int getEmployeeCount() {
-        return employeeCount;
-    }
-
-    public void setEmployeeCount(int employeeCount) {
-        this.employeeCount = employeeCount;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
+//-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
         return new TextObject();

@@ -207,8 +207,7 @@ public class CRMManager {
      */
     private Commands menu_screen(User currentUser) {
         //todo
-        MenuScreen main_menu;
-            main_menu = new MenuScreen(this,
+        MenuScreen main_menu = new MenuScreen(this,
                     printer,
                     "Main Menu",
                     currentUser);

@@ -3,9 +3,12 @@ package com.ironhack.ScreenManager.Screens;
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.InputReader;
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ironhack.Exceptions.ErrorType.OK;
-
 public enum Commands {
     EXIT("exit"),
     MENU("menu"),
@@ -35,7 +38,7 @@ public enum Commands {
         this.commands=commands;
     }
     public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
-        input=input.trim().toLowerCase();
+        caughtInput=input.trim().toLowerCase().split(" ");
         for(String command:commands){
             if(input.contains(command)) {
                 return act(input, screen,inputReader);
@@ -44,9 +47,7 @@ public enum Commands {
         return false;
     }
     public String[] getCaughtInput(){
-        var inp= caughtInput.clone();
-        caughtInput=null;
-        return inp;
+        return caughtInput;
     }
     private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){

@@ -57,9 +57,6 @@ public class CRMData {
 
     }
     //----------------------------------------LEAD
-     public int getLeadCounter() {
-        return leadCounter;
-    }
      public CRMData increaseLeadCounter() {
         this.leadCounter++;
         return this;
@@ -68,23 +65,14 @@ public class CRMData {
         this.leadMap.put(lead.getId(),lead);
         return this;
     }
-     public HashMap<String, Lead> getLeadMap() {
-        return leadMap;
-    }
      public Lead getLead(String id) {
         return leadMap.get(id);
     }
     //----------------------------------------OPPORTUNITY
-     public int getOpportunityCounter() {
-        return opportunityCounter;
-    }
      public CRMData increaseOpportunityCounter() {
         this.opportunityCounter++;
         return this;
     }
-     public HashMap<String, Opportunity> getOpportunityMap() {
-    return opportunityMap;
-}
      public Opportunity getOpportunity(String id) {
         return opportunityMap.get(id);
     }
@@ -112,15 +100,9 @@ public class CRMData {
     }
     
     //----------------------------------------CONTACT
-     public int getContactCounter() {
-        return contactCounter;
-    }
      public CRMData increaseContactCounter() {
         this.contactCounter++;
         return this;
-    }
-     public HashMap<String, Contact> getContactMap() {
-        return contactMap;
     }
      Contact getContact(String id) {
         return contactMap.get(id);

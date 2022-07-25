@@ -63,7 +63,9 @@ public class InputScreen extends CRMScreen{
                     //TODO RETURN TO Table Screen
                 }
                 i--;
+                if(!outValues.isEmpty()){
                 outValues.remove(outValues.size() - 1);
+                }
                 constructContent();
                 input = "";
                 continue;
