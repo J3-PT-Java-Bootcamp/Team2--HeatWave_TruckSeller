@@ -13,6 +13,7 @@ import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Exceptions.ErrorType.*;
@@ -176,7 +177,6 @@ public class CRMManager {
                     if (object==null){break;}
                     title = "Opportunity: "+ object.getId();
                     try {
-
                         new ViewScreen(this, printer, title, object).start();
                     } catch (CRMException e) {
                         throw new RuntimeException(e);
@@ -196,9 +196,8 @@ public class CRMManager {
                 case 'L'->{
                     var object= crmData.getLead(caughtInput[1]);
                     if (object==null){break;}
-                    title = "Contact: "+ object.getId();
+                    title = "Lead: "+ object.getId();
                     try {
-
                         new ViewScreen(this, printer, title, object).start();
                     } catch (CRMException e) {
                         throw new RuntimeException(e);
@@ -428,6 +427,29 @@ public class CRMManager {
     }
 
     private void createNewAccount() {
+
+        var newAccountScreen = new InputScreen(this,
+                printer,
+                "New Account",
+                new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
+                new String[]{"Company name","Industry Type", "Employees","City","Country"},
+                OPEN,INDUSTRY_TYPE,INTEGER,OPEN,OPEN);
+        String strRes = null;
+        try {
+            strRes=newAccountScreen.start();
+            if(Objects.equals(strRes, EXIT.name()))return;
+        } catch (CRMException e) {
+            return;
+        }
+        var userVal = newAccountScreen.getValues();
+
+        if (userVal != null && !userVal.isEmpty()) {
+
+                    showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
+                            strRes,
+                            true);
+
+        }
     }
 
 

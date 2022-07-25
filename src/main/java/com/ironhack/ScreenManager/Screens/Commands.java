@@ -57,7 +57,7 @@ public enum Commands {
             case LOGOUT -> {
                 throw new LogoutException(OK);
             }
-            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD, STATS, LOAD, USERS -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD, STATS, LOAD, USERS, CREATE -> {
                 return true;
             }
             case BACK -> {
@@ -67,7 +67,6 @@ public enum Commands {
                 throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
             }
             case VIEW, DISCARD, CLOSE, CONVERT -> {
-                caughtInput =input.split(" ");
                 if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
                 var inputId= caughtInput[1].trim().toUpperCase();
                 char identifier= inputId.toCharArray()[0];
@@ -80,10 +79,6 @@ public enum Commands {
                 }else{
                     if(!CRMManager.crmData.getAccountMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
-                return true;
-            }
-            case CREATE->{
-                caughtInput=input.split(" ");
                 return true;
             }
         }

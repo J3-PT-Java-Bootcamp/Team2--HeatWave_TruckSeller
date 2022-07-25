@@ -7,6 +7,7 @@ import com.ironhack.Exceptions.WrongInputException;
 import com.ironhack.ScreenManager.Screens.CRMScreen;
 import com.ironhack.ScreenManager.Screens.Commands;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
@@ -24,8 +25,8 @@ public enum InputReader {
     PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
     OPEN("Expects a String value, special characters not allowed"),
     COMMAND("Available commands are: "),
-    INDUSTRY_TYPE("Enter a Industry type: "+IndustryType.values().toString()),
-    PRODUCT_TYPE("Enter a Product type: "+Product.values().toString());
+    INDUSTRY_TYPE("Enter a Industry type: "+ Arrays.toString(IndustryType.values())),
+    PRODUCT_TYPE("Enter a Product type: "+ Arrays.toString(Product.values()));
 
     private String hint;
     private ConsolePrinter printer;
@@ -39,7 +40,13 @@ public enum InputReader {
     //------------------------------------------------------------------------------------------------------------VALIDATORS
     private String validateIndustryType(CRMScreen screen) throws CRMException {
         var input = validateOpenInput(screen);
-        var type= IndustryType.valueOf(input.trim().toUpperCase());
+        IndustryType type;
+        try {
+            type = IndustryType.valueOf(input.trim().toUpperCase());
+        }catch (Exception e){
+            printer.showErrorLine(COMMAND_NOK);
+            return validateIndustryType(screen);
+        }
         return type.toString();
 
     }
@@ -59,18 +66,20 @@ public enum InputReader {
         return input.trim();
     }
 
-    private int validateIntegerInput(int min, int max) {
+    private int validateIntegerInput(int min, int max, CRMScreen screen) throws CRMException {
         int inputNumber = -1;
         try {
-            inputNumber = Integer.parseInt(waitForInput());
+            inputNumber = Integer.parseInt(validateCommand(screen.getCommands().toArray(new Commands[0]),screen));//check if there is any global command);
+        } catch (CRMException e) {
+            throw e;
         } catch (Exception e) {
             printer.showErrorLine(INTEGER_NOK);
-            validateIntegerInput(min, max);
+            validateIntegerInput(min, max,screen);
         }
         if (inputNumber <= max && inputNumber >= min) return inputNumber;
         printer.showErrorLine(FORMAT_NOK);
 //        startPrint();
-        return validateIntegerInput(min, max);
+        return validateIntegerInput(min, max,screen);
     }
 
     private String validateMailInput(CRMScreen screen) throws CRMException {
@@ -167,7 +176,7 @@ public enum InputReader {
             return switch (this) {
                 case MAIL -> validateMailInput(screen);
                 case PHONE -> validatePhoneInput(screen);
-                case INTEGER -> String.valueOf(validateIntegerInput(0, Integer.MAX_VALUE));
+                case INTEGER -> String.valueOf(validateIntegerInput(0, Integer.MAX_VALUE,screen));
                 case OPEN, PASSWORD -> validateOpenInput(screen);
                 case COMMAND -> validateCommand(options, screen);
                 case NEW_PASSWORD -> validatePassword(screen);

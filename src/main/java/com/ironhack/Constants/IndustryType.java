@@ -17,4 +17,5 @@ public enum IndustryType {
     public String toString() {
         return this.printName;
     }
+
 }
