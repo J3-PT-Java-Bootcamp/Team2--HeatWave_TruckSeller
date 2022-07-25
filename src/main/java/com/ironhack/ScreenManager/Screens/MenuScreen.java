@@ -39,6 +39,7 @@ public class MenuScreen extends CRMScreen {
                 new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
 
         for (Commands opt : options) this.addCommand(opt);
+        if(!user.isAdmin())addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
     }
 
     @Override
@@ -52,8 +53,11 @@ public class MenuScreen extends CRMScreen {
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException logout) {
-            crmManager.currentUser = null;
-            return LOGOUT.name();
+            if (this.crmManager.showModalScreen("Confirmation Needed",
+                    new TextObject("Do you want to logout?"))) {
+                crmManager.currentUser = null;
+                return LOGOUT.name();
+            }
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (this.crmManager.showModalScreen("Confirmation Needed",
