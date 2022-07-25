@@ -46,7 +46,7 @@ public abstract class CRMScreen {
         }
         return this.textObject.addText(str);
     }
-    TextObject addText(TextObject txtObj){
+    public TextObject addText(TextObject txtObj){
         return this.textObject.addText(txtObj);
     }
     /**Generates the Screen top title

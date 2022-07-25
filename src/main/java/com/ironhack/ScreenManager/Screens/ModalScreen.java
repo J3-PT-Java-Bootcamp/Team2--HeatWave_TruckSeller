@@ -9,19 +9,14 @@ import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
 
 public class ModalScreen extends CRMScreen{
+    TextObject message;
 
-
-    public ModalScreen(CRMManager manager, ConsolePrinter printer, String name, String message) {
+    public ModalScreen(CRMManager manager, ConsolePrinter printer, String name, TextObject message) {
         super(manager, printer, name);
+        this.message=message;
         this.commands= new java.util.ArrayList<>();
         this.addCommand(YES).addCommand(NO);
-        this.addText(new TextObject(message,getMaxWidth()/3,textObject.MAX_HEIGHT-6).alignTextMiddle());
-        this.addText(BLANK_SPACE).addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{
-                new TextObject("-".repeat((getMaxWidth()/4)-(getMaxWidth()%4))),
-                new TextObject("[  YES ]",getMaxWidth()/4,1),
-                new TextObject("[  NO  ]",getMaxWidth()/4,1),
-                new TextObject("-".repeat(getMaxWidth()/4))
-        });
+        constructScreen();
     }
 
     @Override
@@ -41,6 +36,16 @@ public class ModalScreen extends CRMScreen{
 
     @Override
     public void constructScreen() {
+        constructTitle(getName());
+        for(String msg: message.getText()) {
+            this.addText(new TextObject(msg, getMaxWidth() / 3, textObject.MAX_HEIGHT - 6).alignTextMiddle());
+        }
+        this.addText(BLANK_SPACE).addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{
+                new TextObject("-".repeat((getMaxWidth()/4)-(getMaxWidth()%4))),
+                new TextObject("[  YES ]",getMaxWidth()/4,1),
+                new TextObject("[  NO  ]",getMaxWidth()/4,1),
+                new TextObject("-".repeat(getMaxWidth()/4))
+        });
 
     }
 }

@@ -27,21 +27,23 @@ public class TableScreen extends CRMScreen{
 
     public TableScreen(CRMManager manager, String name, ArrayList<? extends Printable> data) {
         super(manager, manager.getPrinter(), name);
-        masterArr = getLists(data);
         addCommand(NEXT).addCommand(PREVIOUS);
-        if(!data.isEmpty()) {
-            var tClass= data.get(0).getClass();
-            if (Opportunity.class.equals(tClass)) {
-                addCommand(CLOSE).addCommand(VIEW);
-            } else if (Lead.class.equals(tClass)) {
-                addCommand(CONVERT).addCommand(DISCARD);
-            } else if (Account.class.equals(tClass)) {
-                addCommand(VIEW).addCommand(DISCARD);
-            } else {
-                throw new IllegalStateException("Unexpected value: " + data.get(0).getClass());
+        if(data==null||data.isEmpty()){}else {
+            masterArr = getLists(data);
+            if (!data.isEmpty()) {
+                var tClass = data.get(0).getClass();
+                if (Opportunity.class.equals(tClass)) {
+                    addCommand(CLOSE).addCommand(VIEW);
+                } else if (Lead.class.equals(tClass)) {
+                    addCommand(CONVERT).addCommand(DISCARD);
+                } else if (Account.class.equals(tClass)) {
+                    addCommand(VIEW).addCommand(DISCARD);
+                } else {
+                    throw new IllegalStateException("Unexpected value: " + data.get(0).getClass());
+                }
             }
         }
-        constructScreen();
+            constructScreen();
     }
 //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
@@ -153,10 +155,11 @@ public class TableScreen extends CRMScreen{
 
             } else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
-            } else if (Commands.valueOf(comm) == CONVERT) {
-//                crmManager.convertLeadToOpp(Commands.valueOf(comm));
-//                crmManager.crmData.getLead()
-                //TODO
+            } else if (Commands.valueOf(comm) == CONVERT
+                    ||Commands.valueOf(comm) == CLOSE
+                    ||Commands.valueOf(comm) == CREATE
+                    ||Commands.valueOf(comm) ==  VIEW) {
+                return comm;
             }
 
         } catch (IllegalArgumentException e) {
@@ -166,14 +169,14 @@ public class TableScreen extends CRMScreen{
             printer.showHintLine("Available commands : ",commands.toArray(new Commands[0]));
         } catch (LogoutException logout) {
             if (this.crmManager.showModalScreen("Confirmation Needed",
-                    "Do you want to logout?")) {
+                    new TextObject("Do you want to logout?"))) {
                 crmManager.currentUser = null;
                 return LOGOUT.name();
             }
         } catch (ExitException exit) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (this.crmManager.showModalScreen("Confirmation Needed",
-                    "Do you want to close app?")) {
+                    new TextObject("Do you want to close app?"))) {
                 crmManager.currentUser = null;
                 crmManager.exit = true;
                 return EXIT.name();

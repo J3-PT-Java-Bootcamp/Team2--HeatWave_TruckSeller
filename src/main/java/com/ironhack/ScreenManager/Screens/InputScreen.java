@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import static com.ironhack.Constants.Constants.*;
 import static com.ironhack.ScreenManager.InputReader.*;
+import static com.ironhack.ScreenManager.Screens.Commands.BACK;
+import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
 
 
 /**
@@ -62,7 +64,8 @@ public class InputScreen extends CRMScreen{
 //                    return
                     //TODO RETURN TO Table Screen
                 }
-                i--;
+                if (i > 0) i--;
+                else return EXIT.name();
                 if(!outValues.isEmpty()){
                 outValues.remove(outValues.size() - 1);
                 }
@@ -77,10 +80,10 @@ public class InputScreen extends CRMScreen{
             }catch (LogoutException logout) {
                 if (this.crmManager.currentUser != null){
                     if (this.crmManager.showModalScreen("Confirmation Needed",
-                            CLOSE_WITHOUT_SAVE)) {
+                            new TextObject(CLOSE_WITHOUT_SAVE))) {
                         inputTypes[i].password = null;
                         crmManager.currentUser = null;
-                        break;
+                        return EXIT.name();
                     }
                 }else{
                     inputTypes[i].password = null;
@@ -90,11 +93,11 @@ public class InputScreen extends CRMScreen{
             } catch (ExitException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModalScreen("Confirmation Needed",
-                        CLOSE_WITHOUT_SAVE)){
+                        new TextObject(CLOSE_WITHOUT_SAVE))){
                     inputTypes[i].password=null;
                     crmManager.currentUser=null;
                     crmManager.exit=true;
-                    return null;
+                    return EXIT.name();
                 }
                 constructContent();
                 input="";
