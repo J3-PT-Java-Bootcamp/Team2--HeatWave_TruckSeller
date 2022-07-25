@@ -6,8 +6,6 @@ import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.WrongInputException;
 import com.ironhack.ScreenManager.Screens.CRMScreen;
 import com.ironhack.ScreenManager.Screens.Commands;
-import com.ironhack.ScreenManager.Screens.InputScreen;
-import com.ironhack.ScreenManager.Text.TextObject;
 
 import java.util.regex.Pattern;
 
@@ -47,10 +45,10 @@ public enum InputReader {
     }
 
     private String validateProductType(CRMScreen screen) throws CRMException {
-        var input = validateOpenInput(screen);
-        var type= PRODUCT_TYPE.valueOf(input.trim().toUpperCase());
-        return type.toString();
-
+//        var input = validateOpenInput(screen);
+//        var type= PRODUCT_TYPE.valueOf(input.trim().toUpperCase());
+//        return type.toString();
+        return validateOpenInput(screen);
     }
     private String validateOpenInput(CRMScreen screen) throws CRMException {
         String input =validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command

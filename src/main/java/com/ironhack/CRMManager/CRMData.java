@@ -22,6 +22,9 @@ public class CRMData {
         opportunityCounter=0;
         leadMap =new HashMap<>();
         opportunityMap =new HashMap<>();
+        contactMap=new HashMap<>();
+        accountMap=new HashMap<>();
+
         userList=new HashMap<>();
     }
     public static CRMData loadCRMData(String rawData){

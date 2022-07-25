@@ -2,12 +2,14 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
+import com.ironhack.Commercial.Printable;
+import com.ironhack.ScreenManager.Text.TextObject;
 import lombok.Data;
 
 import java.util.ArrayList;
 
 @Data
-public class User {
+public class User implements Printable {
     private String name;
     private String password;
     private ArrayList<String> opportunityList,leadList,recentObjects;
@@ -35,7 +37,7 @@ public class User {
         leadList.add(leadID);
     }
     public void addToLeadList(Lead lead){
-        leadList.add(lead.getId());
+        addToLeadList(lead.getId());
     }
     public int getOpportunityListSize(){
        return this.opportunityList.size();
@@ -58,5 +60,28 @@ public class User {
     }
     public boolean isAdmin() {
         return this.isAdmin;
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public String shortPrint() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[0];
     }
 }

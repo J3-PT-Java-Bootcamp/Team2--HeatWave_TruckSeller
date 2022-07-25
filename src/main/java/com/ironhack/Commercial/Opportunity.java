@@ -74,4 +74,9 @@ public class Opportunity implements Printable{
         // .
         return null;
     }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[0];
+    }
 }
