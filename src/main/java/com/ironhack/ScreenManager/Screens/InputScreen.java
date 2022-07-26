@@ -39,8 +39,7 @@ public class InputScreen extends CRMScreen{
         this.inputTypes=inputTypesOrdered;
         this.inputNames=inputNames;
         this.outValues=new java.util.ArrayList<>();
-        addText(content);
-
+        constructScreen();
 
     }
 
@@ -62,7 +61,7 @@ public class InputScreen extends CRMScreen{
                 inputTypes[i].password = null;
                 if (outValues.isEmpty()){
                     if (crmManager.currentUser == null) {
-                        constructContent();
+                        constructScreen();
                         continue;
                     }
 //                    return
@@ -73,12 +72,12 @@ public class InputScreen extends CRMScreen{
                 if(!outValues.isEmpty()){
                 outValues.remove(outValues.size() - 1);
                 }
-                constructContent();
+                constructScreen();
                 input = "";
                 continue;
             }catch (HelpException help){
                 printer.showHintLine(help.hint,help.commands);
-                constructContent();
+                constructScreen();
                 input="";
                 continue;
             }catch (LogoutException logout) {
@@ -91,7 +90,7 @@ public class InputScreen extends CRMScreen{
                     }
                 }else{
                     inputTypes[i].password = null;
-                    constructContent();
+                    constructScreen();
                     continue;
                 }
             } catch (ExitException e){
@@ -103,12 +102,12 @@ public class InputScreen extends CRMScreen{
                     crmManager.exit=true;
                     return EXIT.name();
                 }
-                constructContent();
+                constructScreen();
                 input="";
                 continue;
             }
             this.outValues.add(input);
-            constructContent();
+            constructScreen();
             input="";
             i++;
         }while(i < inputTypes.length);
@@ -117,7 +116,17 @@ public class InputScreen extends CRMScreen{
 
     @Override
     public void constructScreen() {
-
+        int maxHeight= textObject.MAX_HEIGHT-2;
+        constructTitle(getName());
+        var container= new TextObject(textObject.MAX_WIDTH,maxHeight)
+                .addText(content).addText("-".repeat((textObject.MAX_WIDTH/3)*2)).setBgcolor(textObject.bgColor).setTxtColor(textObject.txtColor);
+        for (int j = 0; j < outValues.size(); j++) {
+            container.addText(inputNames[j]+ ":  "
+                    + (inputTypes[j].equals(NEW_PASSWORD)||
+                    inputTypes[j].equals(PASSWORD)?"*"
+                    .repeat(outValues.get(j).length()):outValues.get(j)));
+        }
+        textObject.addText(container.alignTextMiddle()).alignTextTop(maxHeight);
     }
 
     private String printOutValues() {
@@ -132,16 +141,6 @@ public class InputScreen extends CRMScreen{
         return sb.toString();
     }
 
-    private void constructContent() {
-        constructTitle(getName());
-        addText(content);
-        for (int j = 0; j < outValues.size(); j++) {
-            addText(inputNames[j]+ ":  "
-                    + (inputTypes[j].equals(NEW_PASSWORD)||
-                    inputTypes[j].equals(PASSWORD)?"*"
-                    .repeat(outValues.get(j).length()):outValues.get(j)));
-        }
-    }
 
 
     public java.util.ArrayList<String> getValues() {

@@ -5,6 +5,8 @@ import com.ironhack.Exceptions.CRMException;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.*;
 
+import static com.ironhack.CRMManager.CRMManager.MAIN_BG;
+import static com.ironhack.CRMManager.CRMManager.MAIN_TXT_COLOR;
 import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.Constants.Constants.*;
@@ -24,15 +26,13 @@ public abstract class CRMScreen {
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
         this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
-                .setBgColor(BgColors.CYAN)
                 .setFrameColor(BgColors.WHITE)
-                .setTxtColor(CColors.BLACK)
                 .setTitleColor(CColors.BRIGHT_WHITE);
-        constructTitle(name);
+        this.textObject.setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
     }
 
     void constructTitle(String name) {
-        this.addText(BOLD+UNDERLINE.toString()+ name +RESET).alignTextCenter().addText(BLANK_SPACE);
+        this.addText(BLANK_SPACE).addText(BOLD+UNDERLINE.toString()+ "---- "+name+" ----" +RESET+textObject.getTextModifications()).alignTextCenter().addText(BLANK_SPACE);
     }
 
     /**Adds new text to main TextObject

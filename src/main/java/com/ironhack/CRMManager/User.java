@@ -77,7 +77,7 @@ public class User implements Printable {
     @Override
     public TextObject printFullObject() {
         //TODO
-        return null;
+        return new TextObject();
     }
 
     @Override

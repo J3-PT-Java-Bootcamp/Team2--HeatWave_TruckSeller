@@ -2,13 +2,15 @@ package com.ironhack.ScreenManager.Text;
 
 
 import com.ironhack.Constants.ColorFactory;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
-import static com.ironhack.Constants.ColorFactory.*;
 
 /**
  * TextObject class:
@@ -21,12 +23,13 @@ import static com.ironhack.Constants.ColorFactory.*;
  * @author DidacLL
  * @since v0.1
  */
+@Data
 public class TextObject {
 
     public enum Scroll {NO, BLOCK, LINE, TYPEWRITER}
-    BgColors bgColor;
-    CColors txtColor;
-    TextStyle txtStyle;
+    public BgColors bgColor;
+    public CColors txtColor;
+    public TextStyle txtStyle;
 
 
 
@@ -54,6 +57,12 @@ public class TextObject {
         addText(text);
 
     };
+    public TextObject( int maxWidth, int maxHeight) {
+        this.scroll = Scroll.NO;
+        MAX_WIDTH = maxWidth;
+        MAX_HEIGHT = maxHeight;
+        this.text = new ArrayList<>();
+    }
     public TextObject(Scroll scroll, int maxWidth, int maxHeight) {
         this.scroll = scroll;
         MAX_WIDTH = maxWidth;
@@ -100,7 +109,7 @@ public class TextObject {
         return bgColor;
     }
 
-    TextObject setBgcolor(BgColors bgColor) {
+    public TextObject setBgcolor(BgColors bgColor) {
         this.bgColor = bgColor;
         return this;
     }
@@ -109,7 +118,7 @@ public class TextObject {
         return txtColor;
     }
 
-    TextObject setTxtColor(CColors txtColor) {
+    public TextObject setTxtColor(CColors txtColor) {
         this.txtColor = txtColor;
         return this;
     }
@@ -118,7 +127,7 @@ public class TextObject {
         return txtStyle;
     }
 
-    TextObject setTxtStyle(TextStyle txtStyle) {
+    public TextObject setTxtStyle(TextStyle txtStyle) {
         this.txtStyle = txtStyle;
         return this;
     }
@@ -235,17 +244,21 @@ public class TextObject {
         for (int j = 0; j < totalLines; j++) {
             var strBuilder = new StringBuilder();
             for (int i = 0; i < numberOfColumns; i++) {
+                var currentContent=columnsContent[i];
                 String currentVal;
                 try {
-                    currentVal = columnsContent[i].get(j);
+                    currentVal = getTextColorsModifiers()+currentContent.getTextColorsModifiers()
+                            +currentContent.centerLine(currentContent.get(j),charLimit)
+                            +RESET+getTextColorsModifiers();
                 } catch (Exception e) {
-                    currentVal = BLANK_SPACE.repeat(charLimit);
+                    currentVal = getTextColorsModifiers()+currentContent.getTextColorsModifiers()
+                            +BLANK_SPACE.repeat(charLimit)+getTextColorsModifiers();
                 }
                 strBuilder.append(centerLine(currentVal,charLimit));
             }
             if (rest>0) strBuilder.append(BLANK_SPACE.repeat(rest));
             var val=strBuilder.toString();
-            addText(applyTextColorsToLine(val));
+            addText(val);
         }
         return this;
     }
@@ -253,9 +266,9 @@ public class TextObject {
 
     private String createTableCell(int charLimit, String currentField,boolean isLast) {
         int availableSpace= charLimit -1;
-        return (TextStyle.BOLD+"|"+TextStyle.RESET
+        return (TextStyle.BOLD+"|"+ RESET
                 +centerLine(currentField,availableSpace)
-                +(isLast?TextStyle.BOLD+"|"+TextStyle.RESET:TextStyle.RESET));
+                +(isLast?TextStyle.BOLD+"|"+ RESET: RESET));
     }
 
     //-----------------------------------------------------------------------------------------------------INNER_METHODS
@@ -363,7 +376,7 @@ public class TextObject {
      *
      * @return resulting String
      */
-    private String fillLine(String line, int width) {
+    public String fillLine(String line, int width) {
         return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
     }
 
@@ -401,7 +414,7 @@ public class TextObject {
         remainSpace = width - countValidCharacters(line);
         leftSpace = remainSpace / 2;
         rightSpace = (remainSpace % 2 == 0) ? leftSpace : leftSpace + 1;
-        return getTextColorsModifiers()+(BLANK_SPACE.repeat(leftSpace)) + line+getTextColorsModifiers() + (BLANK_SPACE.repeat(rightSpace));
+        return getTextColorsModifiers()+(BLANK_SPACE.repeat(leftSpace)) + line + (BLANK_SPACE.repeat(rightSpace)+getTextColorsModifiers());
     }
     public String centerLineWithoutColors(String line, int width){
         int leftSpace, rightSpace, remainSpace;
@@ -424,7 +437,7 @@ public class TextObject {
      * @return modified String
      */
     private String colorizeLine(String s, CColors color) {
-        return color + s + TextStyle.RESET;
+        return color + s + RESET;
     }
 
     /**
@@ -436,7 +449,7 @@ public class TextObject {
      * @return modified String
      */
     private String stylizeLine(String s, TextStyle style) {
-        return style + s + TextStyle.RESET;
+        return style + s + RESET;
     }
 
     /**
@@ -448,7 +461,7 @@ public class TextObject {
      * @return modified String
      */
     private String setLineBackground(String s, BgColors bgColor) {
-        return bgColor + s + TextStyle.RESET;
+        return bgColor + s + RESET;
     }
 
     /**
@@ -522,10 +535,15 @@ public class TextObject {
      */
     public TextObject alignTextTop() {
         if (getTotalHeight() < MAX_HEIGHT) {
-            int missingLines = MAX_HEIGHT - getTotalHeight();
-            for (int i = 0; i < missingLines; i++) {
                 addSafe(BLANK_SPACE);
-            }
+                alignTextTop();
+        }
+        return this;
+    }
+    public TextObject alignTextTop(int size) {
+        if (getTotalHeight() < size) {
+            addSafe(BLANK_SPACE);
+            alignTextTop(size);
         }
         return this;
     }
@@ -579,7 +597,7 @@ public class TextObject {
             case 1 -> {
                 int lastIndex = text.size() - 1;
                 text.set(0, colors[0] + text.get(0));
-                text.set(lastIndex, text.get(lastIndex) + TextStyle.RESET);
+                text.set(lastIndex, text.get(lastIndex) + RESET);
             }
             default -> {
                 int colorCount = 0;
@@ -606,7 +624,7 @@ public class TextObject {
     public TextObject stylizeAllText(TextStyle style) {
         this.txtStyle=style;
         for (int i = 0; i <getTotalHeight(); i++) {
-            this.text.set(i,style+text.get(i)+TextStyle.RESET);
+            this.text.set(i,style+text.get(i)+ RESET);
         }
         return this;
     }
@@ -631,7 +649,7 @@ public class TextObject {
     public TextObject setAllTextColor(CColors color) {
         this.txtColor=color;
         for (int i = 0; i < totalHeight; i++) {
-            text.set(i, color+text.get(i)+TextStyle.RESET);
+            text.set(i, color+text.get(i)+ RESET);
         }
         return this;
     }
@@ -650,7 +668,7 @@ public class TextObject {
                             +(txtStyle!=null?txtStyle.toString():"")
                             +text.get(i)
                             +(mustFill?BLANK_SPACE.repeat(MAX_WIDTH-countValidCharacters(text.get(i))):"")
-                            +TextStyle.RESET);
+                            + RESET);
         }
         return this;
     }
@@ -659,7 +677,7 @@ public class TextObject {
                     +(txtColor!=null?txtColor.toString():"")
                     +(txtStyle!=null?txtStyle.toString():"")
                     +line
-                    +TextStyle.RESET;
+                    + RESET;
 
     }
     public String getTextColorsModifiers(){

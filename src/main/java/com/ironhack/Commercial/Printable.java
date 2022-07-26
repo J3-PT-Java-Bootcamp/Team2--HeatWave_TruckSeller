@@ -6,7 +6,6 @@ public interface Printable {
 
     TextObject toTextObject();
     String shortPrint();
-
     TextObject printFullObject();
     String[] getPrintableAttributes();
 

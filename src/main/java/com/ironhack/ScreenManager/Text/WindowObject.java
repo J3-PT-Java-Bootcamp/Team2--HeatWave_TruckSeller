@@ -105,14 +105,6 @@ public class WindowObject extends com.ironhack.ScreenManager.Text.TextObject {
         return this;
     }
 
-    public com.ironhack.ScreenManager.Text.WindowObject setBgColor(BgColors bgColor) {
-        this.bgColor = bgColor;
-        return this;
-    }
-    public com.ironhack.ScreenManager.Text.WindowObject setTxtColor(CColors color){
-        this.txtColor=color;
-        return this;
-    }
     public com.ironhack.ScreenManager.Text.WindowObject setTitleColor(CColors color){
         this.titleColor=color;
         return this;

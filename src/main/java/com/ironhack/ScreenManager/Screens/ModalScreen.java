@@ -37,9 +37,13 @@ public class ModalScreen extends CRMScreen{
     @Override
     public void constructScreen() {
         constructTitle(getName());
+        var container = new TextObject(textObject.MAX_WIDTH,textObject.MAX_HEIGHT-4)
+                .setTxtColor(textObject.txtColor).setBgcolor(textObject.bgColor);
         for(String msg: message.getText()) {
-            this.addText(new TextObject(msg, getMaxWidth() / 3, textObject.MAX_HEIGHT - 6).alignTextMiddle());
+            container.addText(new TextObject(msg, getMaxWidth() / 3, textObject.MAX_HEIGHT - 6).alignTextMiddle());
         }
+        container.alignTextMiddle();
+        this.textObject.addText(container);
         this.addText(BLANK_SPACE).addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{
                 new TextObject("-".repeat((getMaxWidth()/4)-(getMaxWidth()%4))),
                 new TextObject("[  YES ]",getMaxWidth()/4,1),
