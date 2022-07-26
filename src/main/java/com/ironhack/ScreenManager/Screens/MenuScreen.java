@@ -18,6 +18,7 @@ import static com.ironhack.ScreenManager.Text.TextObject.Scroll;
 
 public class MenuScreen extends CRMScreen {
 
+    public static final String SMART_RESET = "$€€$";
     private final Commands[] options;
     private TextObject optionsNames;
     private TextObject historicObjects;
@@ -27,12 +28,12 @@ public class MenuScreen extends CRMScreen {
 
     public MenuScreen(CRMManager manager, ConsolePrinter printer, String title, User user) {
         super(manager, printer, title);
-        this.user=user;
-        this.options =user.isAdmin()?
-                new Commands[]{USERS,STATS,LOAD} : new Commands[]{LEAD,ACCOUNT,OPP};
+        this.user = user;
+        this.options = user.isAdmin() ?
+                new Commands[]{USERS, STATS, LOAD} : new Commands[]{LEAD, ACCOUNT, OPP};
         constructScreen();
         for (Commands opt : options) this.addCommand(opt);
-        if(!user.isAdmin())addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
+        if (!user.isAdmin()) addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
     }
 
     @Override
@@ -73,30 +74,36 @@ public class MenuScreen extends CRMScreen {
     @Override
     public void constructScreen() {
         this.constructTitle(getName());
-        var width= textObject.MAX_WIDTH;
-        var height=textObject.getMAX_HEIGHT()-4;
-        var container= new TextObject(Scroll.NO,width,height);
+        var width = textObject.MAX_WIDTH;
+        var height = textObject.getMAX_HEIGHT() - 4;
+        var container = new TextObject(Scroll.NO, width, height);
         container.setBgcolor(this.textObject.bgColor);
         container.setTxtColor(textObject.txtColor);
         container.setTxtStyle(textObject.txtStyle);
-        statistics= new TextObject(user.getName()+" :",width/4,height);
-        optionsNames = new TextObject(BOLD+UNDERLINE.toString()
-                +"Options :"+RESET+this.textObject.getTextModifications(),width / 4, height)
-                .addText(BLANK_SPACE).alignTextTop(height);
-        historicObjects = new TextObject("History :",width /4, height).setBgcolor(BgColors.BRIGHT_BLACK)
-                .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
+        statistics = new TextObject(user.getName() + " :", width / 4, height);
+        optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
+        historicObjects = new TextObject("History :", width / 4, height);
         statistics.addText(user.printFullObject());
-        for (Commands opt : options) optionsNames.addText("-"+opt.toString()+"-").addText(BLANK_SPACE);
-        for (String id : user.getRecentObjects()) historicObjects.addText("- "+id+": "+crmData.getUnknownObject(id).shortPrint());
-//        historicObjects.fillAllLines();
+        for (Commands opt : options) optionsNames.addText("-" + opt.toString() + "-").addText(BLANK_SPACE);
+        optionsNames.alignTextMiddle();
+        for (String id : user.getRecentObjects())
+            historicObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
+        historicObjects.fillAllLines();
+        optionsNames.alignTextCenter()
+                .setBgcolor(BgColors.CYAN).setTxtStyle(BOLD).smartReplaceReset();
+        statistics.setBgcolor(BgColors.WHITE).alignTextTop(height)
+                .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
+        historicObjects.alignTextTop(height)
+                .setBgcolor(BgColors.BRIGHT_BLACK)
+                .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
         container.addGroupInColumns(3,
                 width,
-                new TextObject[]{statistics.setBgcolor(BgColors.BRIGHT_BLACK).alignTextTop(height)
-                        .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle(),
-                        optionsNames.alignTextCenter(), historicObjects.alignTextTop(height)});
+                new TextObject[]{optionsNames,statistics, historicObjects});
         container.alignTextMiddle();
 
         this.textObject.addText(container).alignTextTop(height);
 
     }
 }
+
+
