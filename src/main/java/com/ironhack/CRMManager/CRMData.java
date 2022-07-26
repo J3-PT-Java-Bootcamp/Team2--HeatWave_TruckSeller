@@ -3,6 +3,7 @@ package com.ironhack.CRMManager;
 import com.ironhack.Commercial.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
@@ -113,5 +114,13 @@ public class CRMData {
         this.contactMap.put(contact.getId(),contact);
         return this;
     }
-    
+
+    public ArrayList<User> getUsers(boolean includeAdmin) {
+        if(includeAdmin)return (ArrayList<User>) this.getUserList().values();
+        var resArr= new ArrayList<User>();
+        for (User user:userList.values()) {
+            if (user.isAdmin())resArr.add(user);
+        }
+        return resArr;
+    }
 }

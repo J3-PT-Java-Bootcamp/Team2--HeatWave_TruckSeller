@@ -12,7 +12,7 @@ import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -120,15 +120,92 @@ public class CRMManager {
                     new String[]{"File Index"}, INTEGER);
             try {
                 var resVal= inpScreen.start();
-                if(Objects.equals(resVal, EXIT.name()))stop=true;
+                if(resVal.contains(":"))resVal=resVal.split(":")[1].trim();
+                if(resVal.equals(EXIT.name()))stop=true;
+                var index = Integer.parseInt(resVal);
+                var leads=parseCSVLeads(files[index]);
+                if(!leads.isEmpty()){
+                    assignLeadsToUser(leads);
+                };
 
-
-            } catch (CRMException ignored) {
-
+            } catch (Exception ignored) {
             }
 
 
         }while(!stop);
+    }
+
+    private void assignLeadsToUser(ArrayList<Lead> leadList) throws Exception {
+        TextObject txtObj;
+        boolean stop=false;
+        do {
+            if (crmData.getUserList().isEmpty()) {
+                break;
+            } else {
+                txtObj = new TextObject("-- USERS --").addText(BLANK_SPACE);
+                for (User user : crmData.getUserList().values()) {
+                    txtObj.addText(user.getName());
+                }
+                txtObj.addText(BLANK_SPACE)
+                        .addText("Enter a user name to assign loaded Leads")
+                        .addText("Or enter \"ALL\" to divide leads between all users")
+                        .addText(BLANK_SPACE).addText(BLANK_SPACE);
+            }
+            var selectUserScreen = new InputScreen(this,
+                    printer,
+                    "Select User:",
+                    txtObj,
+                    new String[]{"User Name"},
+                    OPEN);
+            var strRes = selectUserScreen.start();
+            if (strRes.equalsIgnoreCase(EXIT.name())) break;
+            var userVal = selectUserScreen.getValues();
+            if (userVal != null && !userVal.isEmpty()) {
+                var users = crmData.getUsers(false);
+                int leadsPerUser = leadList.size()/users.size();
+                int rest= leadList.size()%users.size();
+                int counter=0;
+                if (userVal.get(0).equalsIgnoreCase("ALL")) {
+                    for (int i = 0; i < users.size(); i++) {
+                        for (int j = 0; j < leadsPerUser+(i== users.size()-1?rest:0); j++) {
+                            String id = leadList.get(j+counter).getId();
+                            users.get(i).addToLeadList(id);
+                            crmData.addLead(leadList.get(j+counter));
+                        }
+                        counter+=leadsPerUser;
+                    }
+                    saveData();
+                    showConfirmingScreen("All leads assigned correctly",
+                            "",
+                            false);
+                    stop=true;
+                } else if (crmData.getUserList().containsKey(userVal.get(0))) {
+                    var user = crmData.getUserList().get(userVal.get(0));
+                    for(Lead lead: leadList ){
+                        user.getLeadList().add(lead.getId());
+                        crmData.addLead(lead);
+                    }
+                    saveData();
+                    showConfirmingScreen("All leads assigned to: " + userVal.get(0) + " correctly",
+                            "",
+                            false);
+                    stop=true;
+                }
+            }
+        }while (!stop);
+    }
+
+    private ArrayList<Lead> parseCSVLeads(File file) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        ArrayList<Lead>resVal=new ArrayList<>();
+        String line;
+        while ((line=br.readLine())!=null){
+            String[] values=line.split(",");
+            Lead lead = new Lead(values[0], crmData.getNextID(Lead.class), values[1], values[2], values[3]);
+            resVal.add(lead);
+        }
+        saveData();
+        return resVal;
     }
 
     private void showStats_screen() {
@@ -400,8 +477,8 @@ public class CRMManager {
                         //fixme Should be there?¿
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (NullPointerException e) {
+                break;
             }
             list.clear();
         } while (!stop);
@@ -490,7 +567,6 @@ public class CRMManager {
 
     private void saveData() throws Exception {
         //TODO Save crmData object to .json file in ./data
-        throw new IllegalAccessException();
     }
 
     private void handleCRMExceptions(CRMException e) {
