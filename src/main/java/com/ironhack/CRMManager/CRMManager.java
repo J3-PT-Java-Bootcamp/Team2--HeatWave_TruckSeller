@@ -12,7 +12,9 @@ import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -46,6 +48,10 @@ public class CRMManager {
         appStart();
     }
 
+    /**
+     * Constructor only for tests purposes
+     * @param testWithScreens if true it will prompt all screens, else it will run silently
+     */
     public CRMManager(Boolean testWithScreens) {
         this.exit = false;
         this.printer = new ConsolePrinter(this);
@@ -54,6 +60,8 @@ public class CRMManager {
 
         crmData.addToUserList(new User("ADMIN", "ADMIN", true));
         crmData.addToUserList(new User("USER", "USER", false));
+        crmData.addToUserList(new User("PATATA", "111", false));
+        crmData.addToUserList(new User("FRITA", "111", false));
         for (TextObject data : leadList) {
             try {
                 var lead= new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4));

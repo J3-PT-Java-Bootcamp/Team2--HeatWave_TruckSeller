@@ -131,7 +131,6 @@ public class TableScreen extends CRMScreen {
         for (int i = -1; i < tableEntries.size(); i++) {
             var sb = new StringBuilder();
             var currentTxtObj = i >= 0 ? tableEntries.get(i).toTextObject() : null;
-            if (i >= 0) sb.append(colors[i % 2 == 0 ? 0 : 1]);
             for (int j = 0; j < columnTitles.length; j++) {
                 String currentField = "";
                 if (i < 0) currentField = UNDERLINE + columnTitles[j];
@@ -141,8 +140,9 @@ public class TableScreen extends CRMScreen {
                     sb.append(currentField, 0, columnsMinSize[j] - 5);
                     sb.append("...");
                 } else {
+                    if (i >= 0) sb.append(colors[i % 2 == 0 ? 0 : 1]);
                     sb.append(
-                            textObject.centerLine(currentField, columnsMinSize[j] + remainingSpace)
+                            textObject.centerLineWithoutColors(currentField, columnsMinSize[j] + remainingSpace)
                     );
                 }
                 if (i >= 0 && j < currentTxtObj.getTotalHeight() - 1) sb.append("|");
