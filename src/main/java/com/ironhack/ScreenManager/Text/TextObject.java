@@ -403,6 +403,13 @@ public class TextObject {
         rightSpace = (remainSpace % 2 == 0) ? leftSpace : leftSpace + 1;
         return getTextColorsModifiers()+(BLANK_SPACE.repeat(leftSpace)) + line+getTextColorsModifiers() + (BLANK_SPACE.repeat(rightSpace));
     }
+    public String centerLineWithoutColors(String line, int width){
+        int leftSpace, rightSpace, remainSpace;
+        remainSpace = width - countValidCharacters(line);
+        leftSpace = remainSpace / 2;
+        rightSpace = (remainSpace % 2 == 0) ? leftSpace : leftSpace + 1;
+        return (BLANK_SPACE.repeat(leftSpace)) + line + (BLANK_SPACE.repeat(rightSpace));
+    }
 
     public String centerLine(String line) {
         return centerLine(line, MAX_WIDTH);

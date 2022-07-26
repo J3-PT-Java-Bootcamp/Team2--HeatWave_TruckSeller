@@ -119,7 +119,7 @@ public class CRMData {
         if(includeAdmin)return (ArrayList<User>) this.getUserList().values();
         var resArr= new ArrayList<User>();
         for (User user:userList.values()) {
-            if (user.isAdmin())resArr.add(user);
+            if (!user.isAdmin())resArr.add(user);
         }
         return resArr;
     }
