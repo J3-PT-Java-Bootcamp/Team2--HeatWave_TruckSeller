@@ -364,7 +364,7 @@ public class TextObject {
      * @return resulting String
      */
     private String fillLine(String line, int width) {
-        return line + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
+        return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
     }
 
     String fillLine(String line) {
@@ -381,7 +381,7 @@ public class TextObject {
      */
     private String lineToRight(String line, int width) {
         int count = width - countValidCharacters(line);
-        return (count > 0 ? BLANK_SPACE.repeat(count) : "") + line;
+        return applyTextColorsToLine((count > 0 ? BLANK_SPACE.repeat(count) : "") + line);
     }
 
     private String lineToRight(String line) {
@@ -401,7 +401,7 @@ public class TextObject {
         remainSpace = width - countValidCharacters(line);
         leftSpace = remainSpace / 2;
         rightSpace = (remainSpace % 2 == 0) ? leftSpace : leftSpace + 1;
-        return (BLANK_SPACE.repeat(leftSpace)) + line + (BLANK_SPACE.repeat(rightSpace));
+        return getTextColorsModifiers()+(BLANK_SPACE.repeat(leftSpace)) + line+getTextColorsModifiers() + (BLANK_SPACE.repeat(rightSpace));
     }
 
     public String centerLine(String line) {
@@ -654,6 +654,11 @@ public class TextObject {
                     +line
                     +TextStyle.RESET;
 
+    }
+    public String getTextColorsModifiers(){
+        return (bgColor !=null? bgColor.toString():"")
+                +(txtColor!=null?txtColor.toString():"")
+                +(txtStyle!=null?txtStyle.toString():"");
     }
 
     @Override

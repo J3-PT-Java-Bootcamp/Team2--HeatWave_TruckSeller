@@ -12,10 +12,14 @@ import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
 import com.ironhack.ScreenManager.Text.TextObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
+import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
+import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
@@ -99,7 +103,32 @@ public class CRMManager {
     }
     //----------------------------------------------------------------------------------------------ADMIN SCREEN OPTIONS
     private void loadLeadData() {
-        //TODO
+        boolean stop = false;
+        do {
+            var txtObj=  new TextObject("You can load lead data from any CSV file saved on root/import",LIMIT_X/2,LIMIT_Y)
+                    .addText(BLANK_SPACE);
+            var rightCol= new TextObject(UNDERLINE+"File names:");
+            var leftCol= new TextObject(UNDERLINE+"INDEX: ");
+            var files = new File("import").listFiles();
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+                rightCol.addText(file.getName());
+                leftCol.addText("-"+i+": ");
+            }
+            txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH,new TextObject[]{leftCol,rightCol} );
+            var inpScreen=new InputScreen(this, printer, "Select a File: ",txtObj,
+                    new String[]{"File Index"}, INTEGER);
+            try {
+                var resVal= inpScreen.start();
+                if(Objects.equals(resVal, EXIT.name()))stop=true;
+
+
+            } catch (CRMException ignored) {
+
+            }
+
+
+        }while(!stop);
     }
 
     private void showStats_screen() {

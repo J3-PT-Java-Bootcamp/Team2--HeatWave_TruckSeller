@@ -1,15 +1,19 @@
 package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Exceptions.*;
-import com.ironhack.ScreenManager.*;
-import com.ironhack.ScreenManager.Text.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ironhack.Exceptions.CRMException;
+import com.ironhack.Exceptions.ExitException;
+import com.ironhack.Exceptions.HelpException;
+import com.ironhack.Exceptions.LogoutException;
+import com.ironhack.ScreenManager.ConsolePrinter;
+import com.ironhack.ScreenManager.InputReader;
+import com.ironhack.ScreenManager.Text.DynamicLine;
+import com.ironhack.ScreenManager.Text.TextObject;
 
-import static com.ironhack.Constants.Constants.*;
-import static com.ironhack.ScreenManager.InputReader.*;
-import static com.ironhack.ScreenManager.Screens.Commands.BACK;
+import static com.ironhack.Constants.Constants.CLOSE_WITHOUT_SAVE;
+import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.ScreenManager.InputReader.NEW_PASSWORD;
+import static com.ironhack.ScreenManager.InputReader.PASSWORD;
 import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
 
 
