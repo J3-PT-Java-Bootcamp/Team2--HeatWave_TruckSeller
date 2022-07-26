@@ -4,6 +4,7 @@ import com.ironhack.Commercial.Account;
 import com.ironhack.Commercial.Contact;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
+import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.Exceptions.ErrorType.*;
@@ -29,6 +29,8 @@ import static com.ironhack.ScreenManager.Screens.Commands.YES;
 
 @lombok.Data
 public class CRMManager {
+    public static final ColorFactory.BgColors MAIN_BG = ColorFactory.BgColors.CYAN;
+    public static final ColorFactory.CColors MAIN_TXT_COLOR = ColorFactory.CColors.BLACK;
     public boolean exit;
     public User currentUser;
     private final ConsolePrinter printer;
@@ -114,9 +116,9 @@ public class CRMManager {
         boolean stop = false;
         do {
             var txtObj=  new TextObject("You can load lead data from any CSV file saved on root/import",LIMIT_X/2,LIMIT_Y)
-                    .addText(BLANK_SPACE);
-            var rightCol= new TextObject(UNDERLINE+"File names:");
-            var leftCol= new TextObject(UNDERLINE+"INDEX: ");
+                    .addText(BLANK_SPACE).setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
+            var rightCol= new TextObject("File names:");
+            var leftCol= new TextObject("INDEX: ");
             var files = new File("import").listFiles();
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
@@ -569,12 +571,13 @@ public class CRMManager {
 
     //-------------------------------------------------------------------------------------------------------PRIVATE METHODS
     private CRMData loadData() throws Exception {
-        //TODO LOAD FULL CRMData object from json and asign it to crmData field
+        //TODO LOAD FULL CRMData object from json and aSsign it to crmData field
         throw new IllegalAccessException();
     }
 
     private void saveData() throws Exception {
         //TODO Save crmData object to .json file in ./data
+
     }
 
     private void handleCRMExceptions(CRMException e) {

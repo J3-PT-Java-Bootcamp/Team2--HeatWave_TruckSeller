@@ -2,25 +2,26 @@ package com.ironhack.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.User;
-import com.ironhack.Exceptions.CRMException;
-import com.ironhack.Exceptions.ExitException;
-import com.ironhack.Exceptions.GoBackException;
-import com.ironhack.Exceptions.HelpException;
-import com.ironhack.Exceptions.LogoutException;
+import com.ironhack.Constants.ColorFactory;
+import com.ironhack.Constants.ColorFactory.CColors;
+import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.TextObject;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.Constants.LIMIT_X;
-import static com.ironhack.Constants.Constants.LIMIT_Y;
+import static com.ironhack.Constants.ColorFactory.BgColors;
+import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
-import static com.ironhack.ScreenManager.Text.TextObject.Scroll.NO;
+import static com.ironhack.ScreenManager.Text.TextObject.Scroll;
 
 public class MenuScreen extends CRMScreen {
 
     private final Commands[] options;
-    private final TextObject optionsNames, globalCommands;
+    private TextObject optionsNames;
+    private TextObject historicObjects;
+    private TextObject statistics;
     private final User user;
 
 
@@ -29,15 +30,7 @@ public class MenuScreen extends CRMScreen {
         this.user=user;
         this.options =user.isAdmin()?
                 new Commands[]{USERS,STATS,LOAD} : new Commands[]{LEAD,ACCOUNT,OPP};
-        optionsNames = new TextObject(NO, LIMIT_X / 3, LIMIT_Y / 2);
-        globalCommands = new TextObject("GLOBAL COMMANDS", NO, LIMIT_X / 3, LIMIT_Y / 2);
-//        var names= new java.util.ArrayList<TextObject>();
-        for (Commands opt : options) optionsNames.addText("-"+opt.toString()+"-").addText(BLANK_SPACE);
-        for (Commands comm : this.commands) globalCommands.addText(comm.toString());
-        this.textObject.addGroupInColumns(2,
-                this.getMaxWidth(),
-                new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
-
+        constructScreen();
         for (Commands opt : options) this.addCommand(opt);
         if(!user.isAdmin())addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
     }
@@ -73,18 +66,37 @@ public class MenuScreen extends CRMScreen {
             }
         } catch (CRMException ignored) {
         }
-        constructContent();
+        constructScreen();
         return start();
     }
 
     @Override
     public void constructScreen() {
-
-    }
-
-    private void constructContent() {
         this.constructTitle(getName());
-        this.textObject.addGroupInColumns(2, this.getMaxWidth(), new TextObject[]{optionsNames.alignTextCenter(), globalCommands.alignTextCenter()});
+        var width= textObject.MAX_WIDTH;
+        var height=textObject.getMAX_HEIGHT()-4;
+        var container= new TextObject(Scroll.NO,width,height);
+        container.setBgcolor(this.textObject.bgColor);
+        container.setTxtColor(textObject.txtColor);
+        container.setTxtStyle(textObject.txtStyle);
+        statistics= new TextObject(user.getName()+" :",width/4,height);
+        optionsNames = new TextObject(BOLD+UNDERLINE.toString()
+                +"Options :"+RESET+this.textObject.getTextModifications(),width / 4, height)
+                .addText(BLANK_SPACE).alignTextTop(height);
+        historicObjects = new TextObject("History :",width /4, height).setBgcolor(BgColors.BRIGHT_BLACK)
+                .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
+        statistics.addText(user.printFullObject());
+        for (Commands opt : options) optionsNames.addText("-"+opt.toString()+"-").addText(BLANK_SPACE);
+        for (String id : user.getRecentObjects()) historicObjects.addText("- "+id+": "+crmData.getUnknownObject(id).shortPrint());
+//        historicObjects.fillAllLines();
+        container.addGroupInColumns(3,
+                width,
+                new TextObject[]{statistics.setBgcolor(BgColors.BRIGHT_BLACK).alignTextTop(height)
+                        .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle(),
+                        optionsNames.alignTextCenter(), historicObjects.alignTextTop(height)});
+        container.alignTextMiddle();
+
+        this.textObject.addText(container).alignTextTop(height);
 
     }
 }

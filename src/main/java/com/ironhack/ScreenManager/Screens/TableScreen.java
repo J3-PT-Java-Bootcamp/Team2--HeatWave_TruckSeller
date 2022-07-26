@@ -50,10 +50,9 @@ public class TableScreen extends CRMScreen {
 
     //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
+        constructTitle(getName());
         if (hasContent) {
             try {
-
-
                 constructTable(getMaxWidth(), masterArr.get(currentPage)
                         , getColumnTitles(),
                         ColorFactory.BgColors.BLUE,
@@ -74,7 +73,8 @@ public class TableScreen extends CRMScreen {
     }
 
     private void constructLastLine() {
-        textObject.addText(new TextObject(TextObject.Scroll.NO, textObject.MAX_WIDTH, textObject.MAX_HEIGHT)
+        textObject.addText(new TextObject( textObject.MAX_WIDTH, textObject.MAX_HEIGHT).setTxtColor(textObject.txtColor)
+                .setBgcolor(textObject.bgColor)
                 .addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{
                         new TextObject(),
                         new TextObject(currentPage > 0 ? "[ PREVIOUS ]" : "", getMaxWidth() / 4, 1),

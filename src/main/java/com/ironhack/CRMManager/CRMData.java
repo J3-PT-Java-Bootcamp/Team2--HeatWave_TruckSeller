@@ -123,4 +123,11 @@ public class CRMData {
         }
         return resArr;
     }
+
+    public Printable getUnknownObject(String id) {
+        if(id.startsWith("L")) return leadMap.get(id);
+        else if (id.startsWith("O")) return opportunityMap.get(id);
+        else if (id.startsWith("C")) return contactMap.get(id);
+        return accountMap.get(id);
+    }
 }

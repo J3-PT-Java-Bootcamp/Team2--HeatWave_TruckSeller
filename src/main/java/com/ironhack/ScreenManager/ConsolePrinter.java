@@ -46,8 +46,9 @@ public class ConsolePrinter {
      * waits until user confirm
      */
     public void calibrateScreen() throws Exception {
-        sendToQueue(new com.ironhack.ScreenManager.Text.WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1).setBgColor(BgColors.CYAN)
-                .setFrameColor(BgColors.BRIGHT_BLACK).setTxtColor(CColors.BRIGHT_WHITE)
+        sendToQueue(new com.ironhack.ScreenManager.Text.WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1)
+                .setFrameColor(BgColors.BRIGHT_BLACK).setBgcolor(BgColors.CYAN)
+                .setTxtColor(CColors.BRIGHT_WHITE)
                 .addText(TextStyle.BOLD + "Adjust your console size to fit this box.")
                 .addText(TextStyle.BOLD + "Press Enter when done").alignTextCenter().alignTextMiddle()
                 .addText(CENTER_CARET));
