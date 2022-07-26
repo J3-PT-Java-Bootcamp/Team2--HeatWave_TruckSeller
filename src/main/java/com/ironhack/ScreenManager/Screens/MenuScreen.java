@@ -62,7 +62,6 @@ public class MenuScreen extends CRMScreen {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (this.crmManager.showModalScreen("Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
-                crmManager.currentUser = null;
                 crmManager.exit = true;
                 return EXIT.name();
             }
