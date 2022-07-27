@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountBuilderTest {
-
+   @BeforeEach
    @Test
     void constructAccount_test_1() throws NoCompleteObjectException {
        var crm=new CRMManager(false);
@@ -23,6 +23,7 @@ class AccountBuilderTest {
        accountOne.setCompanyName("Cocacola");
        accountOne.setIndustryType(IndustryType.MEDICAL);
        accountOne.setOpportunities(new ArrayList<String>());
+
        var finalAccount= accountOne.constructAccount();
        assertEquals("Barcelona",finalAccount.getCity()); //TODO TEST INDUSTRYTYPE no lagafa
 
