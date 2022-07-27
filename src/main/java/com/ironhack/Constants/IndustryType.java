@@ -20,7 +20,7 @@ public enum IndustryType {
     }
     private boolean containsKeyword(String input){
         for(String key: keywords) if (input.equalsIgnoreCase(key)) return true;
-        return false;
+        return input.equalsIgnoreCase(printName);
     }
     @Override
     public String toString() {
