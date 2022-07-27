@@ -26,6 +26,7 @@ public class InputScreen extends CRMScreen{
     final String[] inputNames;//Names of data that will prompt to user, ordered
     final java.util.ArrayList<String>outValues;//User answers
     final TextObject content;//Text Content
+    private int inputIndex;
     
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public InputScreen(CRMManager manager,
@@ -39,26 +40,35 @@ public class InputScreen extends CRMScreen{
         this.inputTypes=inputTypesOrdered;
         this.inputNames=inputNames;
         this.outValues=new java.util.ArrayList<>();
+        this.inputIndex=0;
         constructScreen();
 
     }
 
+    public void simulateInputs(String... inputs){
+
+        for (String input: inputs){
+
+            this.outValues.add(input);
+            inputIndex++;
+        }
+
+    }
     @Override
     public String start() throws CRMException {
-        int i=0;
         String input="";
         do  {
             printer.clearScreen();
             printer.sendToQueue(this.getTextObject());
             printer.sendToQueue(new DynamicLine(LIMIT_X/2,
                     1,
-                    0).addText(inputNames[i]+": ").alignTextCenter());
+                    0).addText(inputNames[inputIndex]+": ").alignTextCenter());
             printer.startPrint();
             try {
-                input = inputTypes[i].getInput(this, printer);
+                input = inputTypes[inputIndex].getInput(this, printer);
             }catch(com.ironhack.Exceptions.GoBackException back) {
                 //allow to go back to correct last input
-                inputTypes[i].password = null;
+                inputTypes[inputIndex].password = null;
                 if (outValues.isEmpty()){
                     if (crmManager.currentUser == null) {
                         constructScreen();
@@ -67,7 +77,7 @@ public class InputScreen extends CRMScreen{
 //                    return
                     //TODO RETURN TO Table Screen
                 }
-                if (i > 0) i--;
+                if (inputIndex > 0) inputIndex--;
                 else return EXIT.name();
                 if(!outValues.isEmpty()){
                 outValues.remove(outValues.size() - 1);
@@ -84,12 +94,12 @@ public class InputScreen extends CRMScreen{
                 if (this.crmManager.currentUser != null){
                     if (this.crmManager.showModalScreen("Confirmation Needed",
                             new TextObject(CLOSE_WITHOUT_SAVE))) {
-                        inputTypes[i].password = null;
+                        inputTypes[inputIndex].password = null;
                         crmManager.currentUser = null;
                         return EXIT.name();
                     }
                 }else{
-                    inputTypes[i].password = null;
+                    inputTypes[inputIndex].password = null;
                     constructScreen();
                     continue;
                 }
@@ -97,7 +107,7 @@ public class InputScreen extends CRMScreen{
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
                 if(this.crmManager.showModalScreen("Confirmation Needed",
                         new TextObject(CLOSE_WITHOUT_SAVE))){
-                    inputTypes[i].password=null;
+                    inputTypes[inputIndex].password=null;
                     crmManager.currentUser=null;
                     crmManager.exit=true;
                     return EXIT.name();
@@ -109,8 +119,8 @@ public class InputScreen extends CRMScreen{
             this.outValues.add(input);
             constructScreen();
             input="";
-            i++;
-        }while(i < inputTypes.length);
+            inputIndex++;
+        }while(inputIndex < inputTypes.length);
         return printOutValues();
     }
 
