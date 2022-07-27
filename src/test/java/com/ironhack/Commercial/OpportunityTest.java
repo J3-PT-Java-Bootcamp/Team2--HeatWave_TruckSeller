@@ -14,7 +14,7 @@ class OpportunityTest extends com.ironhack.ScreenManager.Text.TextObject {
     @org.junit.jupiter.api.Test
     void getId_test() {
         String nextID = crm.getNextID(Opportunity.class);
-        var opp= new Opportunity(nextID,null,1,null,null,null);
+        var opp= new Opportunity(nextID,null,1,null,null,null,null);
         System.out.println(opp.getId());
         assertEquals("OPFFE",opp.getId());
     }

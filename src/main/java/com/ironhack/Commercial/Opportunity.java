@@ -26,7 +26,7 @@ public class Opportunity implements Printable{
     /*
      *Constructor used only for tests
      */
-    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner) {
+    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner,String companyName) {
         setId(id);
         setProduct(product);
         setQuantity(quantity);
@@ -34,13 +34,14 @@ public class Opportunity implements Printable{
         setStatus(status);
         setOwner(owner.getName());
     }
-    public Opportunity(Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner) {
+    public Opportunity( Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner, String companyName) {
         setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
         setStatus(status);
         setOwner(owner);
+        setAccount_companyName(account_companyName);
     }
 
 
@@ -77,6 +78,7 @@ public class Opportunity implements Printable{
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[0];
+        return new String[]{"ID","Product", "Quantity", "Decision Maker", "Status", "Account Company Name", "Owner"};
     }
+
 }
