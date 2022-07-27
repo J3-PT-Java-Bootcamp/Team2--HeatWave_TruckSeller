@@ -12,7 +12,6 @@ public class CRMData {
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
     private HashMap<String, Lead> leadMap;
     private HashMap<String, Opportunity> opportunityMap;
-
     private HashMap<String, Account> accountMap;
 
     private HashMap<String, Contact> contactMap;
@@ -107,10 +106,10 @@ public class CRMData {
         this.contactCounter++;
         return this;
     }
-     Contact getContact(String id) {
+     public Contact getContact(String id) {
         return contactMap.get(id);
     }
-     CRMData addContact(Contact contact) {
+     public CRMData addContact(Contact contact) {
         this.contactMap.put(contact.getId(),contact);
         return this;
     }
