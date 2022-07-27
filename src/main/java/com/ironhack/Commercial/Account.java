@@ -2,7 +2,6 @@ package com.ironhack.Commercial;
 
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.ScreenManager.Text.TextObject;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -32,7 +31,8 @@ public class Account implements Printable{
     //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject();
+        return new TextObject(this.companyName).addText("Provisional account")
+                .addText(" DELETE ME!").addText("ONLY FOR TESTS").addText("????");
     }
 
     @Override
@@ -42,12 +42,12 @@ public class Account implements Printable{
 
     @Override
     public TextObject printFullObject() {
-        return null;
+        return new TextObject("Provisional account").addText(this.companyName+" DELETE ME!").addText("ONLY FOR TESTS");
     }
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[]{"Industry Type", "Employee Count", "City","Country", "Contacts", "Opportunities", "Company Name"};
+        return new String[]{"Company Name","Industry", "Employees", "City","Country" };
     }
 
 }

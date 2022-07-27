@@ -1,13 +1,12 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Account;
-import com.ironhack.Commercial.Contact;
-import com.ironhack.Commercial.Lead;
-import com.ironhack.Commercial.Opportunity;
+import com.ironhack.Commercial.*;
 import com.ironhack.Constants.ColorFactory;
-import com.ironhack.Constants.OpportunityStatus;
+import com.ironhack.Constants.IndustryType;
+import com.ironhack.Constants.Product;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
+import com.ironhack.Exceptions.NoCompleteObjectException;
 import com.ironhack.FakeLead;
 import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Screens.*;
@@ -25,7 +24,7 @@ import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.ScreenManager.Screens.Commands.YES;
+import static com.ironhack.ScreenManager.Screens.Commands.*;
 
 @lombok.Data
 public class CRMManager {
@@ -241,23 +240,42 @@ public class CRMManager {
             var lead = crmData.getLead(caughtInput[1]);
             if (lead != null) {
                 try {
-                    var firstScreen = new InputScreen(this, printer, "New Opportunity", new TextObject("Enter the information offered to customer:"), new String[]{"Product", "Quantity", "Decision Maker", "Account"}, PRODUCT_TYPE, INTEGER);
+                    var oppBuilder= new OpportunityBuilder();
+                    var accBuilder= new AccountBuilder();
+                    var contactBuilder= new ContactBuilder();
+                    var firstScreen = new InputScreen(this,
+                            printer,
+                            "New Opportunity",
+                            new TextObject("Enter the information offered to customer:"),
+                            new String[]{"Product", "Quantity", "Decision Maker", "Account"},
+                            PRODUCT_TYPE,
+                            INTEGER);
                     var result = firstScreen.start();
                     if (result.equalsIgnoreCase(EXIT.name())) return EXIT.name();
+                    //TODO CHANGE FOR BUILDER
+
                     var accountName = account_screen(true);
+                    //TODO CHANGE FOR BUILDER
                     var contact = createNewContact(lead, accountName);
+
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
-                    var opp = new Opportunity( null, Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName(), accountName);
+                    //TODO CHANGE FOR BUILDER
+                    oppBuilder.setOwner(currentUser.getName());
+                    oppBuilder.setProduct(Product.valueOf(firstData.get(0)));
+                    oppBuilder.setQuantity(Integer.parseInt(firstData.get(1)));
+                    oppBuilder.setDecisionMakerID(contact);
+                    var opp =oppBuilder.constructOpportunity(accountName,contactBuilder);
                     crmData.addOpportunity(opp);
                     crmData.getLeadMap().remove(lead.getId());
-
                     try {
                         saveData();
                     } catch (Exception ignored) {
                     }
                     return opp.getId();
                 } catch (com.ironhack.Exceptions.CRMException e) {
+                    throw new RuntimeException(e);
+                } catch (NoCompleteObjectException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -267,21 +285,37 @@ public class CRMManager {
         return null;
     }
 
-    private String createNewContact(Lead lead, String accountName) throws CRMException {
-        Contact contact;
-        if (showModalScreen("Copy Lead Data ?", new TextObject("Do you want to create a new contact\n from the following Lead data?").addText(BLANK_SPACE).addText(lead.printFullObject()).addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
-            contact = new Contact(lead.getName(), crmData.getNextID(Contact.class), lead.getPhoneNumber(), lead.getMail(), accountName);
+    private String createNewContact(Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
+        ContactBuilder contact= new ContactBuilder();
+        if (showModalScreen("Copy Lead Data ?",
+                new TextObject("Do you want to create a new contact\n from the following Lead data?")
+                        .addText(BLANK_SPACE).addText(lead.printFullObject())
+                        .addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
+            contact.setName(lead.getName());
+            contact.setPhoneNumber(lead.getPhoneNumber());
+            contact.setMail(lead.getMail());
+            contact.setCompany(accountName);
         } else {
-            var screen = new InputScreen(this, printer, "-- New Contact --", new TextObject("Enter the information about Contact for current Opportunity:").addText(BLANK_SPACE).addText("Company : " + accountName), new String[]{"Name", "Phone Number", "Mail"}, OPEN, PHONE, MAIL);
+            var screen = new InputScreen(this,
+                    printer,
+                    "-- New Contact --",
+                    new TextObject("Enter the information about Contact for current Opportunity:").addText(BLANK_SPACE).addText("Company : " + accountName),
+                    new String[]{"Name", "Phone Number", "Mail"},
+                    OPEN,
+                    PHONE,
+                    MAIL);
             screen.start();
             var val = screen.getValues();
-            contact = new Contact(val.get(0), crmData.getNextID(Contact.class), val.get(1), val.get(2), accountName);
+            contact.setName(val.get(0));
+            contact.setPhoneNumber(val.get(1));
+            contact.setMail(val.get(2));
+            contact.setCompany(accountName);
 
         }
-
-        crmData.addContact(contact);
-        crmData.getAccountMap().get(accountName).getContacts().add(contact.getId());
-        return contact.getId();
+        var finalContact= contact.constructContact();
+        crmData.addContact(finalContact);
+//        crmData.getAccountMap().get(accountName).getContacts().add(finalContact.getId());
+        return finalContact.getId();
     }
 
     public void viewObject(String[] caughtInput) {
@@ -503,10 +537,15 @@ public class CRMManager {
     private String account_screen(boolean selectionMode) {
         boolean stop = false;
         Commands res;
+        if(selectionMode&&crmData.getAccountMap().isEmpty()) return createNewAccount();
         do {
             var accountArr= new ArrayList<Account>();
-            if(!crmData.getAccountMap().isEmpty())accountArr= (ArrayList<Account>) crmData.getAccountMap().values();
+            if(!crmData.getAccountMap().isEmpty()) {
+                accountArr = new ArrayList<Account>(crmData.getAccountMap().values());
+            }
             var account_screen = new TableScreen(this, selectionMode ? "Select an account: " : "-- Accounts --", accountArr);
+
+            account_screen.addCommand(CREATE);
             res = Commands.valueOf(account_screen.start());
             switch (res) {
                 case EXIT, MENU, LOGOUT, BACK -> {
@@ -543,7 +582,7 @@ public class CRMManager {
         return res.name();
     }
 
-    private void createNewAccount() {
+    private String createNewAccount(String... importedData) {
 
         var newAccountScreen = new InputScreen(this,
                 printer,
@@ -554,19 +593,32 @@ public class CRMManager {
         String strRes = null;
         try {
             strRes=newAccountScreen.start();
-            if(Objects.equals(strRes, EXIT.name()))return;
+            if(Objects.equals(strRes, EXIT.name()))return EXIT.name();
         } catch (CRMException e) {
-            return;
+            return "";
         }
         var userVal = newAccountScreen.getValues();
 
-        if (userVal != null && !userVal.isEmpty()) {
+        if (userVal != null && !userVal.isEmpty()&&userVal.size()>=5) {
+            var account=new AccountBuilder();
 
-                    showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
-                            strRes,
-                            true);
-
+            account.setCompanyName(userVal.get(0));
+            account.setIndustryType(IndustryType.valueOf(userVal.get(1)));
+            account.setEmployeeCount(Integer.parseInt(userVal.get(2)));
+            account.setCity(userVal.get(3));
+            account.setCountry(userVal.get(4));
+            try {
+                var finalAccount= account.constructAccount();
+                crmData.addAccount(finalAccount);
+                showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
+                        strRes,
+                        true);
+                return finalAccount.getCompanyName();
+            } catch (NoCompleteObjectException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return createNewAccount(importedData);
     }
 
 
