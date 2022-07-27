@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 @Data
+
 public class Account implements Printable{
 
     private IndustryType industryType;
@@ -16,7 +17,7 @@ public class Account implements Printable{
 
 
 
-    public Account(IndustryType industryType, int employeeCount, String city, String country,String companyName) {
+    protected Account(IndustryType industryType, int employeeCount, String city, String country, String companyName) {
         setIndustryType(industryType);
         setEmployeeCount(employeeCount);
         setCity(city);
@@ -24,10 +25,14 @@ public class Account implements Printable{
         setCompanyName(companyName);
     }
 
-//-------------------------------------------------------------------------------------------------------------PRINTABLE
+
+
+
+    //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject();
+        return new TextObject(this.companyName).addText("Provisional account")
+                .addText(" DELETE ME!").addText("ONLY FOR TESTS").addText("????");
     }
 
     @Override
@@ -37,11 +42,14 @@ public class Account implements Printable{
 
     @Override
     public TextObject printFullObject() {
-        return null;
+        return new TextObject("Provisional account").addText(this.companyName+" DELETE ME!").addText("ONLY FOR TESTS");
     }
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[0];
+        return new String[]{"Company Name","Industry", "Employees", "City","Country" };
     }
+
 }
+
+

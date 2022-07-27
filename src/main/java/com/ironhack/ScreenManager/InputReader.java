@@ -46,7 +46,7 @@ public enum InputReader {
             printer.showErrorLine(INDUSTRY_NOK);
             return validateIndustryType(screen);
         }
-        return type.toString();
+        return type.name();
 
     }
 

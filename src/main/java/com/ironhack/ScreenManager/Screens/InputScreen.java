@@ -48,7 +48,6 @@ public class InputScreen extends CRMScreen{
     public void simulateInputs(String... inputs){
 
         for (String input: inputs){
-
             this.outValues.add(input);
             inputIndex++;
         }

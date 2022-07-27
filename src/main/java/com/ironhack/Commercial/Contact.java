@@ -37,6 +37,9 @@ public class Contact implements Printable{
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[0];
+        return new String[]{"ID", "Name", "Phone", "Mail", "Company"};
     }
+
+
 }
+
