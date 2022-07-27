@@ -248,9 +248,10 @@ public class CRMManager {
                     var contact = createNewContact(lead, accountName);
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
-                    var opp = new Opportunity(null, Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
+                    var opp = new Opportunity( null, Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName(), accountName);
                     crmData.addOpportunity(opp);
                     crmData.getLeadMap().remove(lead.getId());
+
                     try {
                         saveData();
                     } catch (Exception ignored) {

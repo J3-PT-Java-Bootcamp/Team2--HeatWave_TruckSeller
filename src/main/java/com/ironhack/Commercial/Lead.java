@@ -12,12 +12,14 @@ public class Lead implements Printable{
     private String mail;
     private String companyName;
 
+
     public Lead(String name, String id, String phoneNumber, String mail, String companyName) {
         setName(name);
         setId(id);
         setPhoneNumber(phoneNumber);
         setMail(mail);
         setCompanyName(companyName);
+
     }
 
 
@@ -52,4 +54,12 @@ public class Lead implements Printable{
     public String[] getPrintableAttributes() {
         return new String[]{"ID", "Name", "Phone", "Mail", "Company"};
     }
+
+
+
+
+
 }
+
+
+
