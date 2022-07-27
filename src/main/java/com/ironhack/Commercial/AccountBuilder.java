@@ -28,6 +28,7 @@ public class AccountBuilder {
     public Account constructAccount() throws NoCompleteObjectException {
 
         if(industryType==null || employeeCount ==0 || city==null|| country==null||companyName==null) throw new NoCompleteObjectException();
+
         Account account = new Account(industryType, employeeCount, city, country, companyName );
         if(contacts!=null) account.setContacts(contacts);
         if(opportunities!=null) account.setOpportunities(opportunities);
