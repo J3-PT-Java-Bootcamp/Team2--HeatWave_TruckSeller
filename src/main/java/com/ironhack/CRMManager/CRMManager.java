@@ -25,8 +25,8 @@ import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
+import static com.ironhack.ScreenManager.Screens.Commands.*;
 import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.ScreenManager.Screens.Commands.YES;
 
 @lombok.Data
 public class CRMManager {
@@ -245,10 +245,14 @@ public class CRMManager {
                     var firstScreen = new InputScreen(this, printer, "New Opportunity", new TextObject("Enter the information offered to customer:"), new String[]{"Product", "Quantity", "Decision Maker", "Account"}, PRODUCT_TYPE, INTEGER);
                     var result = firstScreen.start();
                     if (result.equalsIgnoreCase(EXIT.name())) return EXIT.name();
+                    //TODO CHANGE FOR BUILDER
                     var accountName = account_screen(true);
+                    //TODO CHANGE FOR BUILDER
                     var contact = createNewContact(lead, accountName);
+
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
+                    //TODO CHANGE FOR BUILDER
                     var opp = new Opportunity(null,
                             Integer.parseInt(firstData.get(1)),
                             contact,
@@ -273,7 +277,10 @@ public class CRMManager {
 
     private String createNewContact(Lead lead, String accountName) throws CRMException {
         Contact contact;
-        if (showModalScreen("Copy Lead Data ?", new TextObject("Do you want to create a new contact\n from the following Lead data?").addText(BLANK_SPACE).addText(lead.printFullObject()).addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
+        if (showModalScreen("Copy Lead Data ?",
+                new TextObject("Do you want to create a new contact\n from the following Lead data?")
+                        .addText(BLANK_SPACE).addText(lead.printFullObject())
+                        .addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
             contact = new Contact(lead.getName(), crmData.getNextID(Contact.class), lead.getPhoneNumber(), lead.getMail(), accountName);
         } else {
             var screen = new InputScreen(this, printer, "-- New Contact --", new TextObject("Enter the information about Contact for current Opportunity:").addText(BLANK_SPACE).addText("Company : " + accountName), new String[]{"Name", "Phone Number", "Mail"}, OPEN, PHONE, MAIL);
@@ -512,6 +519,7 @@ public class CRMManager {
             var accountArr= new ArrayList<Account>();
             if(!crmData.getAccountMap().isEmpty())accountArr= (ArrayList<Account>) crmData.getAccountMap().values();
             var account_screen = new TableScreen(this, selectionMode ? "Select an account: " : "-- Accounts --", accountArr);
+            account_screen.addCommand(CREATE);
             res = Commands.valueOf(account_screen.start());
             switch (res) {
                 case EXIT, MENU, LOGOUT, BACK -> {
@@ -554,7 +562,7 @@ public class CRMManager {
                 printer,
                 "New Account",
                 new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
-                new String[]{"Company name","Industry Type", "Employees","City","Country"},
+                new String[]{"Company name","Product","Industry Type", "Employees","City","Country"},
                 OPEN,PRODUCT_TYPE,INDUSTRY_TYPE,INTEGER,OPEN,OPEN);
         String strRes = null;
         try {
