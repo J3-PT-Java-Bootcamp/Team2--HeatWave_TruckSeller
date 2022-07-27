@@ -39,12 +39,11 @@ public enum InputReader {
 
     //------------------------------------------------------------------------------------------------------------VALIDATORS
     private String validateIndustryType(CRMScreen screen) throws CRMException {
-        var input = validateOpenInput(screen);
         IndustryType type;
         try {
-            type = IndustryType.valueOf(input.trim().toUpperCase());
+            type = IndustryType.checkAllIndustries(validateOpenInput(screen));
         }catch (Exception e){
-            printer.showErrorLine(COMMAND_NOK);
+            printer.showErrorLine(INDUSTRY_NOK);
             return validateIndustryType(screen);
         }
         return type.toString();
@@ -52,6 +51,7 @@ public enum InputReader {
     }
 
     private String validateProductType(CRMScreen screen) throws CRMException {
+        //TODO WHEN ENUM PRODUCT IS IMPLEMENTED
 //        var input = validateOpenInput(screen);
 //        var type= PRODUCT_TYPE.valueOf(input.trim().toUpperCase());
 //        return type.toString();

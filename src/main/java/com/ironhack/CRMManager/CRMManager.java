@@ -5,6 +5,7 @@ import com.ironhack.Commercial.Contact;
 import com.ironhack.Commercial.Lead;
 import com.ironhack.Commercial.Opportunity;
 import com.ironhack.Constants.ColorFactory;
+import com.ironhack.Constants.IndustryType;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Exceptions.CRMException;
 import com.ironhack.Exceptions.ExitException;
@@ -248,7 +249,11 @@ public class CRMManager {
                     var contact = createNewContact(lead, accountName);
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
-                    var opp = new Opportunity(null, Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
+                    var opp = new Opportunity(null,
+                            Integer.parseInt(firstData.get(1)),
+                            contact,
+                            OpportunityStatus.OPEN,
+                            currentUser.getName());
                     crmData.addOpportunity(opp);
                     crmData.getLeadMap().remove(lead.getId());
                     try {
@@ -502,6 +507,7 @@ public class CRMManager {
     private String account_screen(boolean selectionMode) {
         boolean stop = false;
         Commands res;
+        if(selectionMode&&crmData.getAccountMap().isEmpty()) return createNewAccount();
         do {
             var accountArr= new ArrayList<Account>();
             if(!crmData.getAccountMap().isEmpty())accountArr= (ArrayList<Account>) crmData.getAccountMap().values();
@@ -542,30 +548,35 @@ public class CRMManager {
         return res.name();
     }
 
-    private void createNewAccount() {
+    private String createNewAccount(String... importedData) {
 
         var newAccountScreen = new InputScreen(this,
                 printer,
                 "New Account",
                 new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
                 new String[]{"Company name","Industry Type", "Employees","City","Country"},
-                OPEN,INDUSTRY_TYPE,INTEGER,OPEN,OPEN);
+                OPEN,PRODUCT_TYPE,INDUSTRY_TYPE,INTEGER,OPEN,OPEN);
         String strRes = null;
         try {
             strRes=newAccountScreen.start();
-            if(Objects.equals(strRes, EXIT.name()))return;
+            if(Objects.equals(strRes, EXIT.name()))return EXIT.name();
         } catch (CRMException e) {
-            return;
+            return "";
         }
         var userVal = newAccountScreen.getValues();
 
         if (userVal != null && !userVal.isEmpty()) {
-
-                    showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
-                            strRes,
-                            true);
-
+            var account=new Account(IndustryType.valueOf(userVal.get(1)),
+                    Integer.parseInt(userVal.get(2)),
+                    userVal.get(3),
+                    userVal.get(4),
+                    userVal.get(0));
+            showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
+                    strRes,
+                    true);
+            return account.getCompanyName();
         }
+        return createNewAccount(importedData);
     }
 
 
