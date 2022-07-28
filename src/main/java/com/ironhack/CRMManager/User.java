@@ -10,8 +10,10 @@ import lombok.Data;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
+import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 
 @Data
 public class User implements Printable {
@@ -86,7 +88,7 @@ public class User implements Printable {
     @Override
     public String shortPrint() {
         //TODO
-        return null;
+        return getName();
     }
 
     @Override
@@ -94,17 +96,17 @@ public class User implements Printable {
         var userStats = new TextObject();
         this.updateTotals();
         DecimalFormat df = new DecimalFormat("###.##");
-        userStats.addText("USER: " + getName())
+        userStats.addText("User Name: " + getName())
                 .addText("")
-                .addText("LEADS")
+                .addText("- LEADS- ")
                 .addText("Pending: " + getLeadListSize())
-                .addText("Closed: " + leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + SMART_RESET)
+                .addText("Closed: " +BOLD+ leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + SMART_RESET)
                 .addText("")
-                .addText("OPPORTUNITIES")
-                .addText("Pending:" + getOpportunityListSize())
-                .addText("Success rate :"+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + SMART_RESET )
-                .addText("")
-                .addText("Overall productivity : " + totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + SMART_RESET );
+                .addText("- OPPORTUNITIES -")
+                .addText("Pending: " + getOpportunityListSize())
+                .addText("Success Rate :"+BOLD+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + SMART_RESET )
+                .addText(BLANK_SPACE)
+                .addText("Overall Productivity : " +BOLD+ totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + SMART_RESET );
 
 
 
@@ -113,6 +115,7 @@ public class User implements Printable {
 
     @Override
     public String[] getPrintableAttributes() {
+        //TODO RETURN COLUMN TITLES
         return new String[0];
     }
 

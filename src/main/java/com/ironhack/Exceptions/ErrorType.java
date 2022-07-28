@@ -11,4 +11,8 @@ public enum ErrorType {
     PHONE_NOK,
     COMMAND_NOK, EXIT, PASSWORD_NOK, WRONG_PASSWORD,HELP, INDUSTRY_NOK;
 
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }
