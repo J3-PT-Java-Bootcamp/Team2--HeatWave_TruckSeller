@@ -42,6 +42,8 @@ public enum InputReader {
         IndustryType type;
         try {
             type = IndustryType.checkAllIndustries(validateOpenInput(screen));
+        }catch (CRMException e){
+            throw e;
         }catch (Exception e){
             printer.showErrorLine(INDUSTRY_NOK);
             return validateIndustryType(screen);

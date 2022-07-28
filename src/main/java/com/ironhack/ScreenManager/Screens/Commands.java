@@ -3,34 +3,39 @@ package com.ironhack.ScreenManager.Screens;
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.*;
 import com.ironhack.ScreenManager.InputReader;
+import lombok.Getter;
 
 import static com.ironhack.Exceptions.ErrorType.OK;
+@Getter
 public enum Commands {
-    EXIT("EXIT"),
-    MENU("MENU"),
-    LOGOUT("LOGOUT","LOG OUT"),
-    OPP("OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
-    LEAD("LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
-    ACCOUNT("ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
-    USERS("MANAGE USERS","USERS","USER"),
-    LOAD("LOAD LEADS","LOAD DATA","LOAD"),
-    STATS("STATS","STATISTICS","VIEW STATS","VIEW STATISTICS"),
-    YES("YES","OK","CONFIRM","Y"),
-    NO("NO","CANCEL","N"),
-    BACK("BACK"),
-    NEXT("NEXT"),
-    PREVIOUS("PREV","PREVIOUS"),
-    HELP("HELP"),
-    CREATE("CREATE","NEW"),
-    CONVERT("CONVERT"),
-    CLOSE("CLOSE"),
-    VIEW("VIEW","CHECK","SEE","SELECT"),
-    DISCARD("DISCARD","DELETE","REMOVE");
+    EXIT("Exit App","EXIT"),
+    MENU("Go to Menu","MENU"),
+    LOGOUT("Log Out","LOGOUT","LOG OUT"),
+    CREATE("Create New...","CREATE","NEW","CREATE NEW"),
+    CONVERT("Convert to Opportunity","CONVERT", "CONVERT LEAD"),
+    CLOSE("Close Opportunity","CLOSE","CLOSE OPP", "CLOSE OPPORTUNITY"),
+    OPP("View Opportunities","OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
+    LEAD("View Leads","LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
+    ACCOUNT("View Accounts","ACC","ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
+    CONTACTS("View Contacts","CONT","CONTACT","CONTACTS", "VIEW CONTACTS", "VIEW CONTACT"),
+    USERS("View Users","MANAGE USERS","USERS","USER"),
+    LOAD("Load Leads Data","LOAD LEADS","LOAD DATA","LOAD"),
+    STATS("View Statistics","STATS","STATISTICS","VIEW STATS","VIEW STATISTICS"),
+    YES("Confirm","YES","OK","CONFIRM","Y"),
+    NO("Cancel","NO","CANCEL","N"),
+    BACK("Go Back","BACK"),
+    NEXT("Next","NEXT"),
+    PREVIOUS("Previous","PREV","PREVIOUS"),
+    HELP("Help","HELP"),
+    VIEW("View object...","VIEW","CHECK","SEE","SELECT"),
+    DISCARD("Discard object...","DISCARD","DELETE","REMOVE");
 
     final String[] keyWords;
+    final String display;
 
     String[] caughtInput;
-    Commands(String... keyWords){
+    Commands(String display,String... keyWords){
+        this.display=display;
         this.keyWords = keyWords;
     }
     public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
@@ -57,7 +62,7 @@ public enum Commands {
             case LOGOUT -> {
                 throw new LogoutException(OK);
             }
-            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT, LEAD, STATS, LOAD, USERS, CREATE -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE -> {
                 return true;
             }
             case BACK -> {

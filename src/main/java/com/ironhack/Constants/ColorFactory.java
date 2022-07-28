@@ -4,10 +4,12 @@ public class ColorFactory {
 
     public static final char DELETE_CURRENT_LINE='\r';
     public static final char NEW_LINE_CH = '\n';
+    public static final String SMART_RESET = "$€€$";
     public static final String NEW_LINE = "\n";
     public static final char BLANK_SPACE_CH = ' ';
     public static final String BLANK_SPACE = " ";
     public static final String TAB_SPACE = "    ";
+
 
     public static final int COLOR_LABEL_CHAR_SIZE=6;
     public static final char COLOR_CHAR='\u001B';

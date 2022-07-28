@@ -515,7 +515,15 @@ public class CRMManager {
                     case DISCARD -> {
                         var lead = crmData.getLeadMap().get(comm.getCaughtInput()[1]);
                         if (showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?").addText(lead.printFullObject()))) {
+                           var arr=currentUser.getLeadList();
+                            for (int i = 0; i < arr.size(); i++) {
+                                if(arr.get(i).equalsIgnoreCase(lead.getId())) {
+                                    currentUser.getLeadList().remove(i);
+                                    break;
+                                }
+                            }
                             crmData.getLeadMap().remove(lead.getId(), lead);
+
                         }
                     }
                     case HELP -> {
@@ -543,9 +551,8 @@ public class CRMManager {
             if(!crmData.getAccountMap().isEmpty()) {
                 accountArr = new ArrayList<Account>(crmData.getAccountMap().values());
             }
-            var account_screen = new TableScreen(this, selectionMode ? "Select an account: " : "-- Accounts --", accountArr);
+            var account_screen = new TableScreen(this, selectionMode ? "Select an Account" : "Accounts", accountArr);
 
-            account_screen.addCommand(CREATE);
             res = Commands.valueOf(account_screen.start());
             switch (res) {
                 case EXIT, MENU, LOGOUT, BACK -> {
@@ -557,12 +564,6 @@ public class CRMManager {
                 case CREATE -> {
                     createNewAccount();
                 }
-                case CONVERT -> {
-                    return convertLeadToOpp(res.getCaughtInput());
-                }
-                case CLOSE -> {
-                    return closeOpportunity(res.getCaughtInput());
-                }
                 case VIEW -> {
                     if (selectionMode) return res.getCaughtInput()[1];
                     viewObject(res.getCaughtInput());
@@ -570,7 +571,7 @@ public class CRMManager {
                 case DISCARD -> {
                     //FIXME should delete an account with active opps?¿
                     var account = crmData.getAccountMap().get(res.getCaughtInput()[1]);
-                    if (showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?").addText(account.printFullObject()))) {
+                    if (showModalScreen("Delete Account ?", new TextObject("Do yo want to delete this Lead?").addText(account.printFullObject()))) {
                         crmData.getAccountMap().remove(account.getCompanyName());
                     }
 

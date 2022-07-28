@@ -9,8 +9,7 @@ import com.ironhack.ScreenManager.ConsolePrinter;
 import com.ironhack.ScreenManager.Text.TextObject;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
-import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.ColorFactory.BgColors;
+import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.ScreenManager.Screens.Commands.*;
@@ -18,7 +17,6 @@ import static com.ironhack.ScreenManager.Text.TextObject.Scroll;
 
 public class MenuScreen extends CRMScreen {
 
-    public static final String SMART_RESET = "$€€$";
     private final Commands[] options;
     private TextObject optionsNames;
     private TextObject historicObjects;
@@ -90,7 +88,7 @@ public class MenuScreen extends CRMScreen {
             historicObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
         historicObjects.fillAllLines();
         optionsNames.alignTextCenter()
-                .setBgcolor(BgColors.CYAN).setTxtStyle(BOLD).smartReplaceReset();
+                .setBgcolor(BgColors.CYAN).setTxtStyle(BOLD);
         statistics.setBgcolor(BgColors.WHITE).alignTextTop(height)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
         historicObjects.alignTextTop(height)
