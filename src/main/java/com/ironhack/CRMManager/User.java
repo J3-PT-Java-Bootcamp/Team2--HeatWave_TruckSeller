@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.ironhack.Constants.ColorFactory.CColors.RED;
-import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
+import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 
 @Data
 public class User implements Printable {
@@ -98,13 +98,13 @@ public class User implements Printable {
                 .addText("")
                 .addText("LEADS")
                 .addText("Pending: " + getLeadListSize())
-                .addText("Closed: " + leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + RESET)
+                .addText("Closed: " + leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + SMART_RESET)
                 .addText("")
                 .addText("OPPORTUNITIES")
                 .addText("Pending:" + getOpportunityListSize())
-                .addText("Success rate :"+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + RESET )
+                .addText("Success rate :"+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + SMART_RESET )
                 .addText("")
-                .addText("Overall productivity : " + totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + RESET );
+                .addText("Overall productivity : " + totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + SMART_RESET );
 
 
 

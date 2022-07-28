@@ -214,6 +214,7 @@ public class TextObject {
      * @return this TextObject itself to allow chained calls
      */
     public TextObject addText(TextObject txtObject) {
+//        txtObject.smartReplaceReset();
         for (int i = 0; i < txtObject.getTotalHeight(); i++) {
             try {
                 addSimpleLine(txtObject.get(i));
@@ -238,6 +239,7 @@ public class TextObject {
         int rest= totalSize%numberOfColumns;
         int totalLines = 0;
         for (TextObject textColumn : columnsContent) {
+            textColumn.smartReplaceReset();
             trimAllText();
             totalLines = Math.max(totalLines, textColumn.getTotalHeight());
         }
@@ -712,6 +714,16 @@ public class TextObject {
         if (hasText()) return text.remove(index);
         return "";
     }
+    public TextObject smartReplaceReset() {
 
+        for (int i = 0; i < text.size(); i++) {
+            String line = text.get(i);
+            while (line.contains(SMART_RESET)){
+                text.set(i,line.replace(SMART_RESET, RESET+getTextColorsModifiers()));
+                line = text.get(i);
+            }
+        }
+        return this;
+    }
 
 }
