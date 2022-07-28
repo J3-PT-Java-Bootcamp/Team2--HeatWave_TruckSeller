@@ -11,30 +11,20 @@ import static com.ironhack.CRMManager.CRMManager.crmData;
 @Data
 @NoArgsConstructor
 public class OpportunityBuilder {
-
-    private String id;
     private Product product;
     private int quantity;
-    private String decisionMakerID;
-    private OpportunityStatus status;
-    private String account_companyName;//Saves only the companyName as it is the key in the account map
     private String owner;//Saves only username as it is the key in the user map
 
     public Opportunity constructOpportunity(String accountName, ContactBuilder contactBuilder) throws NoCompleteObjectException {
 
-        if (id == null || product == null || quantity == 0 || decisionMakerID == null || status == null || account_companyName == null || owner == null)
+        if (product == null || quantity == 0 || owner == null)
             throw new NoCompleteObjectException();
-
-        Opportunity opportunity = new Opportunity();//TODO pasar parametres
-
         var account = crmData.getAccount(accountName);
-        account.getOpportunities().add(opportunity.getId());
-
         contactBuilder.setCompany(account.getCompanyName());
-        contactBuilder.constructContact();
-
+        var contact= contactBuilder.constructContact();
+        Opportunity opportunity = new Opportunity(product,quantity, contact.getId(), OpportunityStatus.OPEN,owner,accountName);//TODO pasar parametres
         crmData.addOpportunity(opportunity);
-
+        account.getOpportunities().add(opportunity.getId());
         return opportunity;
 
     }

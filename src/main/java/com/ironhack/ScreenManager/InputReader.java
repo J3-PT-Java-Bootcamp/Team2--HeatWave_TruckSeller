@@ -54,10 +54,17 @@ public enum InputReader {
 
     private String validateProductType(CRMScreen screen) throws CRMException {
         //TODO WHEN ENUM PRODUCT IS IMPLEMENTED
-//        var input = validateOpenInput(screen);
-//        var type= PRODUCT_TYPE.valueOf(input.trim().toUpperCase());
-//        return type.toString();
-        return validateOpenInput(screen);
+        Product type;
+        try {
+            type = Product.checkAllProducts(validateOpenInput(screen));
+        }catch (CRMException e){
+            throw e;
+        }catch (Exception e){
+            printer.showErrorLine(PRODUCT_NOK);
+            return validateProductType(screen);
+        }
+        return type.name();
+
     }
     private String validateOpenInput(CRMScreen screen) throws CRMException {
         String input =validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
