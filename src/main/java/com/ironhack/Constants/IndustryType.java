@@ -17,9 +17,10 @@ public enum IndustryType {
     IndustryType(String printName, String... keywords){
         this.printName=printName;
         this.keywords=keywords;
+
     }
     private boolean containsKeyword(String input){
-        for(String key: keywords) if (input.equalsIgnoreCase(key)) return true;
+        for(String key: this.keywords) if (input.equalsIgnoreCase(key)) return true;
         return input.equalsIgnoreCase(printName);
     }
     @Override
