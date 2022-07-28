@@ -1,5 +1,5 @@
 package com.ironhack.Constants;
 
 public enum OpportunityStatus {
-    OPEN
+    OPEN,CLOSE_LOST,CLOSE_WON
 }

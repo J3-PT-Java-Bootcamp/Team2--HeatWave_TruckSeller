@@ -3,9 +3,9 @@ package com.ironhack.CRMManager;
 import com.ironhack.Commercial.*;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.IndustryType;
+import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
 import com.ironhack.Exceptions.CRMException;
-import com.ironhack.Exceptions.ExitException;
 import com.ironhack.Exceptions.NoCompleteObjectException;
 import com.ironhack.FakeLead;
 import com.ironhack.ScreenManager.ConsolePrinter;
@@ -24,7 +24,7 @@ import static com.ironhack.Constants.Constants.LIMIT_Y;
 import static com.ironhack.Exceptions.ErrorType.*;
 import static com.ironhack.ScreenManager.InputReader.*;
 import static com.ironhack.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.ScreenManager.Screens.Commands.*;
+import static com.ironhack.ScreenManager.Screens.Commands.YES;
 
 @lombok.Data
 public class CRMManager {
@@ -51,13 +51,14 @@ public class CRMManager {
 
     /**
      * Constructor only for tests purposes
+     *
      * @param testWithScreens if true it will prompt all screens, else it will run silently
      */
     public CRMManager(Boolean testWithScreens) {
         this.exit = false;
         this.printer = new ConsolePrinter(this);
         crmData = new CRMData();
-        var leadList= FakeLead.getRawLeads(200);
+        var leadList = FakeLead.getRawLeads(200);
 
         crmData.addToUserList(new User("ADMIN", "ADMIN", true));
         crmData.addToUserList(new User("USER", "USER", false));
@@ -65,14 +66,14 @@ public class CRMManager {
         crmData.addToUserList(new User("FRITA", "111", false));
         for (TextObject data : leadList) {
             try {
-                var lead= new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4));
+                var lead = new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4));
                 crmData.addLead(lead);
                 crmData.getUserList().get("USER").addToLeadList(lead.getId());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-        if (testWithScreens)appStart();
+        if (testWithScreens) appStart();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
 
@@ -110,43 +111,45 @@ public class CRMManager {
         }
         System.exit(0);
     }
+
     //----------------------------------------------------------------------------------------------ADMIN SCREEN OPTIONS
     private void loadLeadData() {
         boolean stop = false;
         do {
-            var txtObj=  new TextObject("You can load lead data from any CSV file saved on root/import",LIMIT_X/2,LIMIT_Y)
+            var txtObj = new TextObject("You can load lead data from any CSV file saved on root/import", LIMIT_X / 2, LIMIT_Y)
                     .addText(BLANK_SPACE).setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
-            var rightCol= new TextObject("File names:");
-            var leftCol= new TextObject("INDEX: ");
+            var rightCol = new TextObject("File names:");
+            var leftCol = new TextObject("INDEX: ");
             var files = new File("import").listFiles();
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
                 rightCol.addText(file.getName());
-                leftCol.addText("-"+i+": ");
+                leftCol.addText("-" + i + ": ");
             }
-            txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH,new TextObject[]{leftCol,rightCol} );
-            var inpScreen=new InputScreen(this, printer, "Select a File: ",txtObj,
+            txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH, new TextObject[]{leftCol, rightCol});
+            var inpScreen = new InputScreen(this, printer, "Select a File: ", txtObj,
                     new String[]{"File Index"}, INTEGER);
             try {
-                var resVal= inpScreen.start();
-                if(resVal.contains(":"))resVal=resVal.split(":")[1].trim();
-                if(resVal.equals(EXIT.name()))stop=true;
+                var resVal = inpScreen.start();
+                if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
+                if (resVal.equals(EXIT.name())) stop = true;
                 var index = Integer.parseInt(resVal);
-                var leads=parseCSVLeads(files[index]);
-                if(!leads.isEmpty()){
+                var leads = parseCSVLeads(files[index]);
+                if (!leads.isEmpty()) {
                     assignLeadsToUser(leads);
-                };
+                }
+                ;
 
             } catch (Exception ignored) {
             }
 
 
-        }while(!stop);
+        } while (!stop);
     }
 
     private void assignLeadsToUser(ArrayList<Lead> leadList) throws Exception {
         TextObject txtObj;
-        boolean stop=false;
+        boolean stop = false;
         do {
             if (crmData.getUserList().isEmpty()) {
                 break;
@@ -171,26 +174,26 @@ public class CRMManager {
             var userVal = selectUserScreen.getValues();
             if (userVal != null && !userVal.isEmpty()) {
                 var users = crmData.getUsers(false);
-                int leadsPerUser = leadList.size()/users.size();
-                int rest= leadList.size()%users.size();
-                int counter=0;
+                int leadsPerUser = leadList.size() / users.size();
+                int rest = leadList.size() % users.size();
+                int counter = 0;
                 if (userVal.get(0).equalsIgnoreCase("ALL")) {
                     for (int i = 0; i < users.size(); i++) {
-                        for (int j = 0; j < leadsPerUser+(i== users.size()-1?rest:0); j++) {
-                            String id = leadList.get(j+counter).getId();
+                        for (int j = 0; j < leadsPerUser + (i == users.size() - 1 ? rest : 0); j++) {
+                            String id = leadList.get(j + counter).getId();
                             users.get(i).addToLeadList(id);
-                            crmData.addLead(leadList.get(j+counter));
+                            crmData.addLead(leadList.get(j + counter));
                         }
-                        counter+=leadsPerUser;
+                        counter += leadsPerUser;
                     }
                     saveData();
                     showConfirmingScreen("All leads assigned correctly",
                             "",
                             false);
-                    stop=true;
+                    stop = true;
                 } else if (crmData.getUserList().containsKey(userVal.get(0))) {
                     var user = crmData.getUserList().get(userVal.get(0));
-                    for(Lead lead: leadList ){
+                    for (Lead lead : leadList) {
                         user.getLeadList().add(lead.getId());
                         crmData.addLead(lead);
                     }
@@ -198,18 +201,18 @@ public class CRMManager {
                     showConfirmingScreen("All leads assigned to: " + userVal.get(0) + " correctly",
                             "",
                             false);
-                    stop=true;
+                    stop = true;
                 }
             }
-        }while (!stop);
+        } while (!stop);
     }
 
     private ArrayList<Lead> parseCSVLeads(File file) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(file));
-        ArrayList<Lead>resVal=new ArrayList<>();
+        ArrayList<Lead> resVal = new ArrayList<>();
         String line;
-        while ((line=br.readLine())!=null){
-            String[] values=line.split(",");
+        while ((line = br.readLine()) != null) {
+            String[] values = line.split(",");
             Lead lead = new Lead(values[0], crmData.getNextID(Lead.class), values[1], values[2], values[3]);
             resVal.add(lead);
         }
@@ -240,7 +243,7 @@ public class CRMManager {
             var lead = crmData.getLead(caughtInput[1]);
             if (lead != null) {
                 try {
-                    var oppBuilder= new OpportunityBuilder();
+                    var oppBuilder = new OpportunityBuilder();
                     var firstScreen = new InputScreen(this,
                             printer,
                             "New Opportunity",
@@ -262,8 +265,9 @@ public class CRMManager {
                     oppBuilder.setOwner(currentUser.getName());
                     oppBuilder.setProduct(Product.valueOf(firstData.get(0)));
                     oppBuilder.setQuantity(Integer.parseInt(firstData.get(1)));
-                    var opp =oppBuilder.constructOpportunity(accountName,contact);
+                    var opp = oppBuilder.constructOpportunity(accountName, contact);
                     crmData.addOpportunity(opp);
+                    currentUser.addToOpportunityList(opp.getId());
                     crmData.removeLead(lead.getId());
                     try {
                         saveData();
@@ -283,7 +287,7 @@ public class CRMManager {
     }
 
     private ContactBuilder createNewContactBuilder(Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
-        ContactBuilder contact= new ContactBuilder();
+        ContactBuilder contact = new ContactBuilder();
         if (showModalScreen("Copy Lead Data ?",
                 new TextObject("Do you want to create a new contact\n from the following Lead data?")
                         .addText(BLANK_SPACE).addText(lead.printFullObject())
@@ -308,47 +312,18 @@ public class CRMManager {
             contact.setMail(val.get(2));
             contact.setCompany(accountName);
         }
-            return contact;
+        return contact;
     }
 
     public void viewObject(String[] caughtInput) {
-        if(caughtInput!=null&&caughtInput.length==2) {
-            char identifier= caughtInput[1].toCharArray()[0];
-            String title;
-            switch (identifier){
-                case 'O'->{
-                    var object= crmData.getOpportunity(caughtInput[1]);
-                    if (object==null){break;}
-                    title = "Opportunity: "+ object.getId();
-                    try {
-                        new ViewScreen(this, printer, title, object).start();
-                    } catch (CRMException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                case 'C'->{
-                    var object= crmData.getContact(caughtInput[1]);
-                    if (object==null){break;}
-                    title = "Contact: "+ object.getName();
-                    try {
-
-                        new ViewScreen(this, printer, title, object).start();
-                    } catch (CRMException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                case 'L'->{
-                    var object= crmData.getLead(caughtInput[1]);
-                    if (object==null){break;}
-                    title = "Lead: "+ object.getId();
-                    try {
-                        new ViewScreen(this, printer, title, object).start();
-                    } catch (CRMException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+        if (caughtInput != null && caughtInput.length >= 2) {
+            var object = crmData.getUnknownObject(caughtInput[1]);
+            if (object == null) return;
+            try {
+                new ViewScreen(this, printer, object.shortPrint(), object).start();
+            } catch (CRMException e) {
+                throw new RuntimeException(e);
             }
-
         }
     }
 
@@ -457,7 +432,7 @@ public class CRMManager {
         try {
             strResult = loginScreen.start();
         } catch (CRMException e) {
-            handleCRMExceptions(e);
+            exit = true;
         }
         var userVal = loginScreen.getValues();
         if (userVal == null || userVal.size() < 2) return null;
@@ -494,7 +469,7 @@ public class CRMManager {
         Commands comm = null;
         do {
             try {
-                for (String id:currentUser.getLeadList()){
+                for (String id : currentUser.getLeadList()) {
                     list.add(crmData.getLead(id));
                 }
                 comm = Commands.valueOf(new TableScreen(this, "Leads", list).start());
@@ -508,9 +483,9 @@ public class CRMManager {
                     case DISCARD -> {
                         var lead = crmData.getLead(comm.getCaughtInput()[1]);
                         if (showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?").addText(lead.printFullObject()))) {
-                           var arr=currentUser.getLeadList();
+                            var arr = currentUser.getLeadList();
                             for (int i = 0; i < arr.size(); i++) {
-                                if(arr.get(i).equalsIgnoreCase(lead.getId())) {
+                                if (arr.get(i).equalsIgnoreCase(lead.getId())) {
                                     currentUser.getLeadList().remove(i);
                                     break;
                                 }
@@ -532,17 +507,46 @@ public class CRMManager {
     }
 
     private void opp_screen() {
-        var oppScreen = new TableScreen(this, "Opportunities", null).start();
+        var list = new java.util.ArrayList<Opportunity>();
+        boolean stop = false;
+        Commands comm = null;
+        do {
+            try {
+                for (String id : currentUser.getOpportunityList()) {
+                    var opp = crmData.getOpportunity(id);
+                    if (opp.getStatus().equals(OpportunityStatus.OPEN)) list.add(opp);
+                }
+                comm = Commands.valueOf(new TableScreen(this, "Opportunities", list).start());
+
+                switch (comm) {
+                    case MENU, BACK, LOGOUT -> {
+                        stop = true;
+                    }
+                    case VIEW -> viewObject(comm.getCaughtInput());
+                    case DISCARD -> {
+                        var opp = crmData.getOpportunity(comm.getCaughtInput()[1]);
+                        if (showModalScreen("Delete Opportunity ?", new TextObject("Do yo want to delete this Opportunity?").addText(opp.printFullObject()))) {
+                            currentUser.removeFromOpportunities(opp.getId());
+                            crmData.removeOpportunity(opp.getId());
+                            crmData.removeContact(opp.getDecisionMakerID());
+                        }
+                    }
+                }
+            } catch (NullPointerException e) {
+                break;
+            }
+            list.clear();
+        } while (!stop);
     }
 
     private String account_screen(boolean selectionMode) {
         boolean stop = false;
         Commands res;
-        if(selectionMode&&crmData.isEmptyMap(Account.class)) return createNewAccount();
+        if (selectionMode && crmData.isEmptyMap(Account.class)) return createNewAccount();
         do {
-            var accountArr= new ArrayList<Account>();
-            if(!crmData.isEmptyMap(Account.class)) {
-                accountArr =crmData.getAccountsAsList();
+            var accountArr = new ArrayList<Account>();
+            if (!crmData.isEmptyMap(Account.class)) {
+                accountArr = crmData.getAccountsAsList();
             }
             var account_screen = new TableScreen(this, selectionMode ? "Select an Account" : "Accounts", accountArr);
 
@@ -582,19 +586,19 @@ public class CRMManager {
                 printer,
                 "New Account",
                 new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
-                new String[]{"Company name","Industry Type", "Employees","City","Country"},
-                OPEN,INDUSTRY_TYPE,INTEGER,OPEN,OPEN);
+                new String[]{"Company name", "Industry Type", "Employees", "City", "Country"},
+                OPEN, INDUSTRY_TYPE, INTEGER, OPEN, OPEN);
         String strRes = null;
         try {
-            strRes=newAccountScreen.start();
-            if(Objects.equals(strRes, EXIT.name()))return EXIT.name();
+            strRes = newAccountScreen.start();
+            if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
         } catch (CRMException e) {
             return "";
         }
         var userVal = newAccountScreen.getValues();
 
-        if (userVal != null && !userVal.isEmpty()&&userVal.size()>=5) {
-            var account=new AccountBuilder();
+        if (userVal != null && !userVal.isEmpty() && userVal.size() >= 5) {
+            var account = new AccountBuilder();
 
             account.setCompanyName(userVal.get(0));
             account.setIndustryType(IndustryType.valueOf(userVal.get(1)));
@@ -602,7 +606,7 @@ public class CRMManager {
             account.setCity(userVal.get(3));
             account.setCountry(userVal.get(4));
             try {
-                var finalAccount= account.constructAccount();
+                var finalAccount = account.constructAccount();
                 crmData.addAccount(finalAccount);
                 showConfirmingScreen("User " + userVal.get(0) + " password was properly updated.",
                         strRes,
@@ -627,11 +631,6 @@ public class CRMManager {
 
     }
 
-    private void handleCRMExceptions(CRMException e) {
-        if (e.getClass().equals(ExitException.class)) this.exit = true;
-//        appStart();
-        //TODO MANAGE OUR EXCEPTIONS NOT MANAGED IN SCREEN OR INPUT
-    }
 
     /**
      * Checks user and password
