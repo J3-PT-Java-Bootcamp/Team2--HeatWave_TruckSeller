@@ -17,11 +17,6 @@ public class Opportunity implements Printable{
     private OpportunityStatus status;
     private String account_companyName;//Saves only the companyName as it is the key in the account map
     private String owner;//Saves only username as it is the key in the user map
-//TODO:
-//      -   Builder pattern design to allow obtain each value after create the opportunityBuiilder
-//      -   Printable methods
-//      -   any constructor used should obtain id from CRMManager.crmData.nextID()
-
 
     /*
      *Constructor used only for tests

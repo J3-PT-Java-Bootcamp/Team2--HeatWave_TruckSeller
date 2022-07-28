@@ -149,4 +149,9 @@ public class User implements Printable {
         this.totalLeads = this.getLeadListSize() + this.getClosedLeads();
         this.totalOpps = this.getOpportunityListSize() + this.getSuccessfulOpp() + this.getLostOpp();
     }
+
+    public void removeFromOpportunities(String id) {
+        opportunityList.remove(id);
+        this.setClosedLeads(+1);
+    }
 }
