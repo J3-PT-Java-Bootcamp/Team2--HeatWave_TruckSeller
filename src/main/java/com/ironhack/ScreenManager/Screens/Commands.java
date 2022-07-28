@@ -76,13 +76,13 @@ public enum Commands {
                 var inputId= caughtInput[1].trim().toUpperCase();
                 char identifier= inputId.toCharArray()[0];
                 if(identifier=='L'){
-                    if(!CRMManager.crmData.getLeadMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }else if(identifier=='O') {
-                    if (!CRMManager.crmData.getOpportunityMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }else if(identifier=='C'){
-                    if(!CRMManager.crmData.getContactMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }else{
-                    if(!CRMManager.crmData.getAccountMap().containsKey(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
                 return true;
             }

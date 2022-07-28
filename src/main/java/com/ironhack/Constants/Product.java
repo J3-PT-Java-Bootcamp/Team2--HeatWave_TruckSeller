@@ -5,12 +5,12 @@ import com.ironhack.Exceptions.WrongInputException;
 import static com.ironhack.Exceptions.ErrorType.PRODUCT_NOK;
 
 public enum Product {
-    HYBRID("hybrid", "HYBRID TRUCK", "HYBT", "HYBRID"),
-    FLATBED("flatbed", "FLATBED", "FLBT", "FLAT"),
+    HYBRID("Hybrid", "HYBRID TRUCK", "HYBT", "HYBRID"),
+    FLATBED("Flatbed", "FLATBED", "FLBT", "FLAT"),
     BOX("Box","BOXED", "BOXT", "BOX");
 
     private final String[] keywords;
-    private String printName;
+    private final String printName;
 
     Product(String printName, String... keywords){
         this.printName=printName;
@@ -22,7 +22,7 @@ public enum Product {
     }
     @Override
     public String toString() {
-        return this.printName;
+        return this.printName+" Truck";
     }
 
     static public Product checkAllProducts(String input) throws WrongInputException {

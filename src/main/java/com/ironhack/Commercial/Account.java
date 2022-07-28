@@ -23,6 +23,8 @@ public class Account implements Printable{
         setCity(city);
         setCountry(country);
         setCompanyName(companyName);
+        this.contacts=new ArrayList<>();
+        this.opportunities=new ArrayList<>();
     }
 
 

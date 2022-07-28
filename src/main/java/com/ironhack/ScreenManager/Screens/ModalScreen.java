@@ -40,7 +40,7 @@ public class ModalScreen extends CRMScreen{
         var container = new TextObject(textObject.MAX_WIDTH,textObject.MAX_HEIGHT-4)
                 .setTxtColor(textObject.txtColor).setBgcolor(textObject.bgColor);
         for(String msg: message.getText()) {
-            container.addText(new TextObject(msg, getMaxWidth() / 3, textObject.MAX_HEIGHT - 6).alignTextMiddle());
+            container.addText(new TextObject(msg, getMaxWidth() / 3, textObject.MAX_HEIGHT - 6));
         }
         container.alignTextMiddle();
         this.textObject.addText(container);

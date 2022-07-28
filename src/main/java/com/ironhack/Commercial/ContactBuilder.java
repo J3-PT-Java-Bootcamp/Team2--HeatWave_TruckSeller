@@ -1,10 +1,8 @@
 package com.ironhack.Commercial;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.Exceptions.NoCompleteObjectException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
 
@@ -14,7 +12,6 @@ import static com.ironhack.CRMManager.CRMManager.crmData;
 public class ContactBuilder {
 
     private String  name;
-    private String id;
     private String phoneNumber;
     private String mail;
     private String company;

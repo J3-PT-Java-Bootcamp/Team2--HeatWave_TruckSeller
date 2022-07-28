@@ -241,8 +241,6 @@ public class CRMManager {
             if (lead != null) {
                 try {
                     var oppBuilder= new OpportunityBuilder();
-                    var accBuilder= new AccountBuilder();
-                    var contactBuilder= new ContactBuilder();
                     var firstScreen = new InputScreen(this,
                             printer,
                             "New Opportunity",
@@ -256,7 +254,7 @@ public class CRMManager {
 
                     var accountName = account_screen(true);
                     //TODO CHANGE FOR BUILDER
-                    var contact = createNewContact(lead, accountName);
+                    var contact = createNewContactBuilder(lead, accountName);
 
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
@@ -264,10 +262,9 @@ public class CRMManager {
                     oppBuilder.setOwner(currentUser.getName());
                     oppBuilder.setProduct(Product.valueOf(firstData.get(0)));
                     oppBuilder.setQuantity(Integer.parseInt(firstData.get(1)));
-                    oppBuilder.setDecisionMakerID(contact);
-                    var opp =oppBuilder.constructOpportunity(accountName,contactBuilder);
+                    var opp =oppBuilder.constructOpportunity(accountName,contact);
                     crmData.addOpportunity(opp);
-                    crmData.getLeadMap().remove(lead.getId());
+                    crmData.removeLead(lead.getId());
                     try {
                         saveData();
                     } catch (Exception ignored) {
@@ -285,7 +282,7 @@ public class CRMManager {
         return null;
     }
 
-    private String createNewContact(Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
+    private ContactBuilder createNewContactBuilder(Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
         ContactBuilder contact= new ContactBuilder();
         if (showModalScreen("Copy Lead Data ?",
                 new TextObject("Do you want to create a new contact\n from the following Lead data?")
@@ -310,12 +307,8 @@ public class CRMManager {
             contact.setPhoneNumber(val.get(1));
             contact.setMail(val.get(2));
             contact.setCompany(accountName);
-
         }
-        var finalContact= contact.constructContact();
-        crmData.addContact(finalContact);
-//        crmData.getAccountMap().get(accountName).getContacts().add(finalContact.getId());
-        return finalContact.getId();
+            return contact;
     }
 
     public void viewObject(String[] caughtInput) {
@@ -513,7 +506,7 @@ public class CRMManager {
                     case CONVERT -> convertLeadToOpp(comm.getCaughtInput());
                     case VIEW -> viewObject(comm.getCaughtInput());
                     case DISCARD -> {
-                        var lead = crmData.getLeadMap().get(comm.getCaughtInput()[1]);
+                        var lead = crmData.getLead(comm.getCaughtInput()[1]);
                         if (showModalScreen("Delete Lead ?", new TextObject("Do yo want to delete this Lead?").addText(lead.printFullObject()))) {
                            var arr=currentUser.getLeadList();
                             for (int i = 0; i < arr.size(); i++) {
@@ -522,7 +515,7 @@ public class CRMManager {
                                     break;
                                 }
                             }
-                            crmData.getLeadMap().remove(lead.getId(), lead);
+                            crmData.removeLead(lead.getId());
 
                         }
                     }
@@ -545,11 +538,11 @@ public class CRMManager {
     private String account_screen(boolean selectionMode) {
         boolean stop = false;
         Commands res;
-        if(selectionMode&&crmData.getAccountMap().isEmpty()) return createNewAccount();
+        if(selectionMode&&crmData.isEmptyMap(Account.class)) return createNewAccount();
         do {
             var accountArr= new ArrayList<Account>();
-            if(!crmData.getAccountMap().isEmpty()) {
-                accountArr = new ArrayList<Account>(crmData.getAccountMap().values());
+            if(!crmData.isEmptyMap(Account.class)) {
+                accountArr =crmData.getAccountsAsList();
             }
             var account_screen = new TableScreen(this, selectionMode ? "Select an Account" : "Accounts", accountArr);
 
@@ -570,9 +563,9 @@ public class CRMManager {
                 }
                 case DISCARD -> {
                     //FIXME should delete an account with active opps?¿
-                    var account = crmData.getAccountMap().get(res.getCaughtInput()[1]);
+                    var account = crmData.getAccount(res.getCaughtInput()[1]);
                     if (showModalScreen("Delete Account ?", new TextObject("Do yo want to delete this Lead?").addText(account.printFullObject()))) {
-                        crmData.getAccountMap().remove(account.getCompanyName());
+                        crmData.removeAccount(account.getCompanyName());
                     }
 
 
