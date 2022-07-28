@@ -239,4 +239,23 @@ public enum InputReader {
     public String getHint() {
         return this.hint;
     }
+
+    public String formatOutput(String output) {
+        return switch (this) {
+            case MAIL->output.toLowerCase();
+            case NEW_PASSWORD, PASSWORD ->"*".repeat(output.length());
+            case OPEN->toCamelCase(output);
+            case INDUSTRY_TYPE-> IndustryType.valueOf(output).toString();
+            case PRODUCT_TYPE-> Product.valueOf(output).toString();
+            default -> output;
+        };
+    }
+    private String toCamelCase(String output){
+        var outChArr= output.trim().toLowerCase().toCharArray();
+        outChArr[0]=Character.toUpperCase(outChArr[0]);
+        for (int i = 0; i < outChArr.length; i++) {
+            if(outChArr[i]==' ')outChArr[i+1]=Character.toUpperCase(outChArr[i+1]);
+        }
+        return String.copyValueOf(outChArr);
+    }
 }

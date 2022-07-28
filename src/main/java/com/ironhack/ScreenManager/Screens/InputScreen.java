@@ -130,13 +130,15 @@ public class InputScreen extends CRMScreen{
         var container= new TextObject(textObject.MAX_WIDTH,maxHeight)
                 .addText(content).addText("-".repeat((textObject.MAX_WIDTH/3)*2)).setBgcolor(textObject.bgColor).setTxtColor(textObject.txtColor);
         for (int j = 0; j < outValues.size(); j++) {
+            String output = outValues.get(j);
+            output = inputTypes[j].formatOutput(output);
             container.addText(inputNames[j]+ ":  "
-                    + (inputTypes[j].equals(NEW_PASSWORD)||
-                    inputTypes[j].equals(PASSWORD)?"*"
-                    .repeat(outValues.get(j).length()):outValues.get(j)));
+                    +output);
         }
         textObject.addText(container.alignTextMiddle()).alignTextTop(maxHeight);
     }
+
+
 
     private String printOutValues() {
         var sb= new StringBuilder();
