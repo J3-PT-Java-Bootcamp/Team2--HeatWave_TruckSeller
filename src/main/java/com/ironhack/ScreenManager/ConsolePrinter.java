@@ -8,6 +8,7 @@ import com.ironhack.ScreenManager.Text.TextObject;
 import java.util.ArrayList;
 
 import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.Constants.*;
 
 /**
@@ -55,10 +56,21 @@ public class ConsolePrinter {
         startPrint();
     }
     //---------------------------------------------------------------------------   CONSOLE MANAGER
+    public TextObject smartReplaceReset(TextObject obj) {
+
+        for (int i = 0; i < obj.getText().size(); i++) {
+            String line = obj.getText().get(i);
+            while (line.contains(SMART_RESET)){
+                obj.getText().set(i,line.replace(SMART_RESET, RESET+obj.getTextColorsModifiers()));
+                line = obj.getText().get(i);
+            }
+        }
+        return obj;
+    }
     public void startPrint() {
         var sb = new StringBuilder();
         while (!printQueue.isEmpty()) {
-            var txtObj = pollNext();
+            var txtObj = smartReplaceReset(pollNext());
             switch (txtObj.getScroll()) {
                 case NO -> {
                     if (queueContainsScroll( TextObject.Scroll.NO)) sb.append(txtObj.print()).append(NEW_LINE);
@@ -140,8 +152,8 @@ public class ConsolePrinter {
     }
     public void showErrorLine(com.ironhack.Exceptions.ErrorType errorType) {
         var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 1, 1);
-        line.addText(CColors.BRIGHT_RED + errorType.toString() + TextStyle.RESET);
-        line.addText(CColors.BRIGHT_GREEN + " TRY AGAIN or enter \"HELP\" " + TextStyle.RESET).alignTextCenter();
+        line.addText(CColors.BRIGHT_RED + errorType.toString() + SMART_RESET);
+        line.addText(CColors.BRIGHT_GREEN + " TRY AGAIN or enter \"HELP\" " + RESET).alignTextCenter();
         line.addText(CENTER_CARET);
         sendToQueue(line);
         startPrint();
@@ -149,10 +161,10 @@ public class ConsolePrinter {
     public void showHintLine(String message, Commands[] commands) {
         var line = new com.ironhack.ScreenManager.Text.DynamicLine(LIMIT_X, 5, 1);
         line.setPrintSpeed(0.5f);
-        line.addText(CColors.BRIGHT_GREEN + message + TextStyle.RESET).alignTextCenter();
+        line.addText(CColors.BRIGHT_GREEN + message + RESET).alignTextCenter();
         var sb= new StringBuilder("Available Commands: ");
         for(Commands comm:commands)sb.append("["+comm.toString()+"] ");
-        line.addText(CColors.BRIGHT_GREEN + sb.toString() + TextStyle.RESET).alignTextCenter();
+        line.addText(CColors.BRIGHT_GREEN + sb.toString() + RESET).alignTextCenter();
         line.addText(CENTER_CARET);
         sendToQueue(line);
         startPrint();

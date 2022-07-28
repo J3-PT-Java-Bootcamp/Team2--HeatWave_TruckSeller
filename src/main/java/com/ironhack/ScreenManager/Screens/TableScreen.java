@@ -26,7 +26,7 @@ public class TableScreen extends CRMScreen {
 
     public TableScreen(CRMManager manager, String name, ArrayList<? extends Printable> data) {
         super(manager, manager.getPrinter(), name);
-        addCommand(NEXT).addCommand(PREVIOUS);
+        addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
         if (data == null || data.isEmpty()) {
             hasContent = false;
         } else {
@@ -173,7 +173,8 @@ public class TableScreen extends CRMScreen {
             } else if (Commands.valueOf(comm) == CONVERT
                     || Commands.valueOf(comm) == CLOSE
                     || Commands.valueOf(comm) == CREATE
-                    || Commands.valueOf(comm) == VIEW) {
+                    || Commands.valueOf(comm) == VIEW
+                    || Commands.valueOf(comm)== DISCARD) {
                 return comm;
             }
 

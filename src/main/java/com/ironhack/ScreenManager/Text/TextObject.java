@@ -11,7 +11,6 @@ import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
-import static com.ironhack.ScreenManager.Screens.MenuScreen.SMART_RESET;
 
 /**
  * TextObject class:
@@ -250,7 +249,7 @@ public class TextObject {
                 try {
                     currentVal = getTextColorsModifiers()+currentContent.getTextColorsModifiers()
                             +currentContent.centerLine(currentContent.get(j),charLimit)
-                            +RESET+getTextColorsModifiers();
+                            +SMART_RESET+getTextColorsModifiers();
                 } catch (Exception e) {
                     currentVal = getTextColorsModifiers()+currentContent.getTextColorsModifiers()
                             +BLANK_SPACE.repeat(charLimit)+getTextColorsModifiers();
@@ -326,6 +325,7 @@ public class TextObject {
     public int countValidCharacters(String line) {
         int colourCount = 0;
         int charCount = 0;
+        while (line.contains(SMART_RESET))line=line.replace(SMART_RESET,"");
         var chArray = line.toCharArray();
         for (char ch : chArray) {
             charCount++;
@@ -712,15 +712,6 @@ public class TextObject {
         if (hasText()) return text.remove(index);
         return "";
     }
-    public TextObject smartReplaceReset() {
 
-        for (int i = 0; i < text.size(); i++) {
-            String line = text.get(i);
-            if (line.contains(SMART_RESET)){
-                text.set(i,line.replace(SMART_RESET, RESET+getTextColorsModifiers()));
-            }
-        }
-        return this;
-    }
 
 }
