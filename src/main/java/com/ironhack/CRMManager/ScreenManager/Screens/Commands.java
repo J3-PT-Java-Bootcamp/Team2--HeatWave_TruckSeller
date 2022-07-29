@@ -54,7 +54,7 @@ public enum Commands {
         switch (this){
             case EXIT -> throw new ExitException(false);
             case MENU -> {
-                if(screen.crmManager.getCurrentUser()!=null) throw new GoToMenuException();
+                if(screen.getCurrentUser()!=null) throw new GoToMenuException();
                 throw new GoBackException(screen);
             }
             case LOGOUT -> throw new LogoutException(OK);

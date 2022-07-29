@@ -1,27 +1,26 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
+import com.ironhack.CRMManager.Exceptions.CRMException;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.ScreenManager.Text.WindowObject;
-import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.User;
+import lombok.Data;
 
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.Constants.Constants.*;
-
+@Data
 public abstract class CRMScreen {
     WindowObject textObject;
-    ConsolePrinter printer;
+    User currentUser;
     java.util.ArrayList<Commands> commands;
     private String name;
-    public CRMManager crmManager;
+//    public CRMManager crmManager;
 
-    public CRMScreen(CRMManager manager, ConsolePrinter printer, String name){
-        this.printer=printer;
+    public CRMScreen(User user, String name){
         this.name=name;
-        this.crmManager=manager;
+//        this.crmManager=manager;
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
         this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
@@ -53,7 +52,7 @@ public abstract class CRMScreen {
      */
     private WindowObject generateTitle(){
         return this.textObject.setTitle(APP_NAME+BLANK_SPACE.repeat(LIMIT_X/2)
-                +"User: "+(crmManager.getCurrentUser()==null?"not logged":crmManager.getCurrentUser().getName()));
+                +"User: "+(currentUser==null?"not logged":currentUser.getName()));
     }
 
     /**Returns the Screen with title and frame set
@@ -88,9 +87,6 @@ public abstract class CRMScreen {
 
     public int getMaxWidth(){
         return this.textObject.MAX_WIDTH;
-    }
-    public ConsolePrinter getPrinter() {
-        return printer;
     }
 
     public java.util.ArrayList<Commands> getCommands() {

@@ -1,7 +1,6 @@
 package com.ironhack.CRMManager.ScreenManager;
 
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.ErrorType;
 import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.CRMManager.ScreenManager.Text.DynamicLine;
@@ -19,11 +18,9 @@ import static com.ironhack.Constants.Constants.*;
  */
 public class ConsolePrinter {
     private final ArrayList<TextObject> printQueue;
-    private final CRMManager crm;
 
     //---------------------------------------------------------------------------   CONSTRUCTOR
-    public ConsolePrinter(CRMManager crm) {
-        this.crm = crm;
+    public ConsolePrinter() {
         this.printQueue = new java.util.ArrayList<>();
     }
 

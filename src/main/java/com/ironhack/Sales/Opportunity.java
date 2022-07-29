@@ -1,5 +1,6 @@
 package com.ironhack.Sales;
 
+import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
@@ -49,8 +50,9 @@ public class Opportunity implements Printable{
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
-        //TODO return a new text object with one attribute per line
-        return new TextObject();
+
+        return new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
+                .addText(status.name()).addText(account_companyName);
     }
 
     @Override
@@ -61,19 +63,19 @@ public class Opportunity implements Printable{
     @Override
     public TextObject printFullObject() {
 
-        //TODO return a new text object with an attribute each line
-        // with attribute name formatted as follows:
-        // "ID: " + this.id;
-        // "Product: " + this.product.name();
-        // etc..
-        // ..
-        // .
-        return null;
+        return new TextObject("Id: "+id)
+                .addText("Product: "+product.toString())
+                .addText("Quantity: "+quantity)
+                .addText("Contact: "+ CRMManager.crmData.getUnknownObject(decisionMakerID).shortPrint())
+                .addText("Opp Status: "+status.name())
+                .addText("Account: "+account_companyName)
+                .addText("Proprietary: "+owner);
+
     }
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[]{"ID","Product", "Quantity", "Decision Maker", "Status", "Account Company Name", "Owner"};
+        return new String[]{"ID","Product", "Quantity", "Status", "Account Company Name"};
     }
 
 }
