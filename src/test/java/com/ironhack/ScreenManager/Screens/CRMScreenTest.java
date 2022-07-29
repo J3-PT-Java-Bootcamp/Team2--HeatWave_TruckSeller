@@ -1,8 +1,8 @@
 package com.ironhack.ScreenManager.Screens;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 
-class CRMScreenTest extends com.ironhack.ScreenManager.Text.TextObject {
+class CRMScreenTest extends TextObject {
 
     @org.junit.jupiter.api.Test
     void getName_testOK() {

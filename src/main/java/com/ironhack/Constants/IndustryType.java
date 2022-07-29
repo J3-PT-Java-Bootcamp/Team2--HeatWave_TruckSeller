@@ -1,8 +1,8 @@
 package com.ironhack.Constants;
 
-import com.ironhack.Exceptions.WrongInputException;
+import com.ironhack.CRMManager.Exceptions.WrongInputException;
 
-import static com.ironhack.Exceptions.ErrorType.INDUSTRY_NOK;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.INDUSTRY_NOK;
 
 public enum IndustryType {
     PRODUCE("Producer","PRODUCE","PRODUCER","PROD","MAKER","FABRIC","INDUSTRY"),
