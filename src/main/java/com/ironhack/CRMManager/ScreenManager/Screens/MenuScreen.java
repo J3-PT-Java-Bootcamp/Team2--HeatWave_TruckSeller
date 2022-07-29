@@ -13,15 +13,16 @@ import static com.ironhack.CRMManager.ScreenManager.Text.TextObject.Scroll;
 import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
+import static com.ironhack.Constants.Constants.MAIN_BG;
 
 public class MenuScreen extends CRMScreen {
     private final Commands[] options;
     private final User user;
 
 
-    public MenuScreen(User currentUser, String title, User user) {
+    public MenuScreen(User currentUser, String title) {
         super(currentUser, title);
-        this.user = user;
+        this.user = currentUser;
         this.options = user.isAdmin() ?
                 new Commands[]{USERS, STATS, LOAD} : new Commands[]{LEAD, ACCOUNT, OPP};
         constructScreen();
@@ -70,17 +71,17 @@ public class MenuScreen extends CRMScreen {
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
         TextObject historicObjects = new TextObject("History :", width / 4, height);
         statistics.addText(user.printFullObject());
-        for (Commands opt : options) optionsNames.addText("-" + opt.toString() + "-").addText(BLANK_SPACE);
+        for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
         for (String id : user.getRecentObjects())
             historicObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
         historicObjects.fillAllLines();
         optionsNames.alignTextCenter()
-                .setBgcolor(BgColors.CYAN).setTxtStyle(BOLD);
-        statistics.setBgcolor(BgColors.WHITE).alignTextTop(height)
+                .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
+        statistics.setBgcolor(BgColors.BLUE).alignTextTop(height)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
         historicObjects.alignTextTop(height)
-                .setBgcolor(BgColors.BRIGHT_BLACK)
+                .setBgcolor(BgColors.BLACK)
                 .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
         container.addGroupInColumns(3,
                 width,

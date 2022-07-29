@@ -27,11 +27,14 @@ public class ScreenManager {
      * @param currentUser User that is logged
      * @return Command selected by user
      */
-    public Commands menu_screen(User currentUser) {
+    public Commands menu_screen(User currentUser) throws CRMException {
         //todo
-        MenuScreen main_menu = new MenuScreen(currentUser, "Main Menu", currentUser);
+        MenuScreen main_menu = new MenuScreen(currentUser, "Main Menu");
         try {
             return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());//fixme
+        }catch (CRMException crmE){
+            throw crmE;
+
         } catch (Exception e) {
             printer.showErrorLine(COMMAND_NOK);
             return menu_screen(currentUser);

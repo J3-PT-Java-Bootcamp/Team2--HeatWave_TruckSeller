@@ -1,0 +1,7 @@
+>30/7/22 0:02:32 //-> CRMManager.appStart() : Unexpected exception.. OK
+>30/7/22 0:17:38 //-> MenuScreen.start() : Received a unexpected exception.. OK
+>30/7/22 0:19:45 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>30/7/22 0:23:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>30/7/22 0:46:40 //-> CRMManager.appStart() : Unexpected command value... USERS
+>30/7/22 1:01:14 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>30/7/22 1:08:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK

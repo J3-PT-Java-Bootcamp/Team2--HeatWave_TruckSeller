@@ -200,6 +200,10 @@ public enum InputReader {
         }
     }
 
+
+
+
+
     @Override
     public String toString() {
         return this.name();

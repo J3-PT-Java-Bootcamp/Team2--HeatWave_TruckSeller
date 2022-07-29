@@ -79,22 +79,29 @@ public class CRMManager {
      */
     private void appStart() {
         while (!exit) {
-            var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
             try {
-                switch (comm) {
-                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser);
-                    case LEAD -> screenManager.show_LeadScreen(currentUser);
-                    case ACCOUNT -> screenManager.show_AccountsScreen(false, currentUser);
+            var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
+                if(currentUser.isAdmin()) switch (comm) {
                     case USERS -> adminOpManager.manageUsers_screen(currentUser);
                     case STATS -> adminOpManager.showStats_screen(currentUser);
                     case LOAD -> adminOpManager.loadLeadData(currentUser);
+                    default -> {
+                        LogWriter.logError(getClass().getSimpleName(),
+                                "appStart",
+                                "Unexpected command value... " + comm.name());
+                    }
+                }
+                else switch (comm) {
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser);
+                    case LEAD -> screenManager.show_LeadScreen(currentUser);
+                    case ACCOUNT -> screenManager.show_AccountsScreen(false, currentUser);
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
                     default -> {
                         LogWriter.logError(getClass().getSimpleName(),
                                 "appStart",
-                                "Unexpected command value... "+comm.name());
+                                "Unexpected command value... " + comm.name());
                     }
                 }
             }catch (ExitException e){

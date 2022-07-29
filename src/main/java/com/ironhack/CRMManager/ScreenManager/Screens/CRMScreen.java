@@ -24,7 +24,7 @@ public abstract class CRMScreen {
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
         this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
-                .setFrameColor(BgColors.WHITE)
+                .setFrameColor(FRAME_BG)
                 .setTitleColor(CColors.BRIGHT_WHITE);
         this.textObject.setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
     }
