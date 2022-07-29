@@ -160,8 +160,9 @@ public class CRMData {
             case "Contact" -> contactMap.isEmpty();
             case "User" -> userList.isEmpty();
             default ->
-                    throw new RuntimeException("FFFFFFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIL"+objType.getSimpleName());
-
+                    LogWriter.logError(getClass().getSimpleName(),
+                            "isEmptyMap",
+                            "Unexpected objType class.. "+objType.getSimpleName())==null;
         };
     }
 
@@ -173,5 +174,15 @@ public class CRMData {
     public void saveData() throws Exception {
         //TODO Save crmData object to .json file in ./data
 
+    }
+
+    public User getUser(String userName) {
+        return userList.get(userName);
+    }
+    public void addUser(User user){
+        this.userList.put(user.getName(), user);
+    }
+    public void removeUser(String userName){
+        this.userList.remove(userName);
     }
 }

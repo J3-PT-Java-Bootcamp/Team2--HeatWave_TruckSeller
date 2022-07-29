@@ -78,7 +78,7 @@ public class CRMManager {
      * Main app Screens loop
      */
     private void appStart() {
-        while (!exit) {//if in any moment we enter EXIT it must turn this.exit to true so while will end
+        while (!exit) {
             var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
             try {
                 switch (comm) {
@@ -92,14 +92,19 @@ public class CRMManager {
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
                     default -> {
-
+                        LogWriter.logError(getClass().getSimpleName(),
+                                "appStart",
+                                "Unexpected command value... "+comm.name());
                     }
                 }
             }catch (ExitException e){
                 this.exit=true;
             }catch (LogoutException logout){
                 currentUser=null;
-            } catch (CRMException ignored){}
+            } catch (CRMException ignored){
+                LogWriter.logError(getClass().getSimpleName(),
+                        "appStart","Unexpected exception.. "+ignored.getClass()+" "+ignored.getErrorType());
+            }
         }
         System.exit(0);
     }
@@ -117,7 +122,7 @@ public class CRMManager {
      * @return true if user and password coincide with saved one
      */
     public boolean checkCredentials(String userName, String password) {
-        var user = crmData.getUserList().get(userName);
+        var user = crmData.getUser(userName);
         if (user != null) {
             return user.getPassword().equalsIgnoreCase(password);
         }
@@ -141,7 +146,7 @@ public class CRMManager {
         var userVal = loginScreen.getValues();
         if (userVal == null || userVal.size() < 2) return null;
         if (checkCredentials(userVal.get(0), userVal.get(1))) {
-            setCurrentUser(crmData.getUserList().get(userVal.get(0)));
+            setCurrentUser(crmData.getUser(userVal.get(0)));
             screenManager.confirming_screen(currentUser,"Welcome " + userVal.get(0) + "!", strResult, false);
         } else {
             printer.showErrorLine(WRONG_PASSWORD);

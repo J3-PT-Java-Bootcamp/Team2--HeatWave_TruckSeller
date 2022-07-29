@@ -61,7 +61,7 @@ public class InputScreen extends CRMScreen{
                     0).addText(inputNames[inputIndex]+": ").alignTextCenter());
             printer.startPrint();
             try {
-                input = inputTypes[inputIndex].getInput(this, printer);
+                input = inputTypes[inputIndex].getInput(this);
             }catch(GoBackException back) {
                 //allow to go back to correct last input
                 inputTypes[inputIndex].password = null;

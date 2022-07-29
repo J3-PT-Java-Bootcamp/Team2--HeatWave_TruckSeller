@@ -48,6 +48,8 @@ public class UserOpManager {
             strRes = newAccountScreen.start();
             if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
         } catch (CRMException e) {
+            LogWriter.logError(getClass().getSimpleName(),
+                    "createNewAccount","Received a unexpected exception.. "+e.getErrorType());
             return "";
         }
         var userVal = newAccountScreen.getValues();
@@ -105,10 +107,13 @@ public class UserOpManager {
                     try {
                         crmData.saveData();
                     } catch (Exception ignored) {
+                        LogWriter.logError(getClass().getSimpleName(),
+                                "convertLeadToOpp->saveData","Received a unexpected exception.. "+ignored.getMessage());
                     }
                     return opp.getId();
                 } catch (CRMException | NoCompleteObjectException e) {
-                    throw new RuntimeException(e);
+                    LogWriter.logError(getClass().getSimpleName(),
+                            "convertLeadToOpp","Received a unexpected exception.. "+e.getClass()+e.getMessage());
                 }
             }
 
@@ -124,7 +129,8 @@ public class UserOpManager {
             try {
                 new ViewScreen(currentUser, object.shortPrint(), object).start();
             } catch (CRMException e) {
-                throw new RuntimeException(e);
+                LogWriter.logError(getClass().getSimpleName(),
+                        "viewObject","Received a unexpected exception.. "+e.getErrorType());
             }
         }
     }

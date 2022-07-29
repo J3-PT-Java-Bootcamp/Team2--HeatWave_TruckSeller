@@ -6,6 +6,7 @@ import com.ironhack.CRMManager.ScreenManager.Text.WindowObject;
 import com.ironhack.CRMManager.User;
 import lombok.Data;
 
+import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
@@ -16,11 +17,10 @@ public abstract class CRMScreen {
     User currentUser;
     java.util.ArrayList<Commands> commands;
     private String name;
-//    public CRMManager crmManager;
 
     public CRMScreen(User user, String name){
         this.name=name;
-//        this.crmManager=manager;
+        this.currentUser= user;
         this.commands=new java.util.ArrayList<>();
         this.addCommand(EXIT).addCommand(LOGOUT).addCommand(MENU).addCommand(BACK).addCommand(HELP);
         this.textObject=new WindowObject(LIMIT_X,LIMIT_Y,2,1)
@@ -50,16 +50,16 @@ public abstract class CRMScreen {
     /**Generates the Screen top title
      * @return the main TextObject to allow chain calls
      */
-    private WindowObject generateTitle(){
-        return this.textObject.setTitle(APP_NAME+BLANK_SPACE.repeat(LIMIT_X/2)
-                +"User: "+(currentUser==null?"not logged":currentUser.getName()));
+    private WindowObject constructHeader(){
+        return textObject.setTitle(APP_NAME+BLANK_SPACE.repeat(LIMIT_X/2)
+                +"User: "+(currentUser==null?"not logged": OPEN.formatOutput(currentUser.getName())));
     }
 
     /**Returns the Screen with title and frame set
      * @return the Screen with title and frame set
      */
     WindowObject getTextObject(){
-        this.generateTitle().alignTextMiddle().alignTextCenter();
+        this.constructHeader().alignTextMiddle().alignTextCenter();
         return this.textObject;
     }
     public String getName() {

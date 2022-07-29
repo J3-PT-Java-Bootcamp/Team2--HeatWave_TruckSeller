@@ -1,6 +1,7 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.Exceptions.*;
+import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory;
@@ -14,11 +15,7 @@ import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 
 public class MenuScreen extends CRMScreen {
-
     private final Commands[] options;
-    private TextObject optionsNames;
-    private TextObject historicObjects;
-    private TextObject statistics;
     private final User user;
 
 
@@ -39,7 +36,7 @@ public class MenuScreen extends CRMScreen {
         printer.startPrint();
         String input = "";
         try {
-            return COMMAND.getInput(this, printer, commands.toArray(new Commands[0]));
+            return COMMAND.getInput(this,commands.toArray(new Commands[0]));
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException | GoBackException logout) {
@@ -48,12 +45,13 @@ public class MenuScreen extends CRMScreen {
                 throw logout;
             }
         } catch (ExitException e) {
-            //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
                throw e;
             }
         } catch (CRMException ignored) {
+            LogWriter.logError(getClass().getSimpleName(),
+                    "start","Received a unexpected exception.. "+ignored.getErrorType());
         }
         constructScreen();
         return start();
@@ -68,9 +66,9 @@ public class MenuScreen extends CRMScreen {
         container.setBgcolor(this.textObject.bgColor);
         container.setTxtColor(textObject.txtColor);
         container.setTxtStyle(textObject.txtStyle);
-        statistics = new TextObject(user.getName() + " :", width / 4, height);
-        optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
-        historicObjects = new TextObject("History :", width / 4, height);
+        TextObject statistics = new TextObject(user.getName() + " :", width / 4, height);
+        TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
+        TextObject historicObjects = new TextObject("History :", width / 4, height);
         statistics.addText(user.printFullObject());
         for (Commands opt : options) optionsNames.addText("-" + opt.toString() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
@@ -86,7 +84,7 @@ public class MenuScreen extends CRMScreen {
                 .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
         container.addGroupInColumns(3,
                 width,
-                new TextObject[]{optionsNames,statistics, historicObjects});
+                new TextObject[]{optionsNames, statistics, historicObjects});
         container.alignTextMiddle();
 
         this.textObject.addText(container).alignTextTop(height);
