@@ -47,6 +47,8 @@ public class AdminOpManager {
                 }
 
             } catch (Exception ignored) {
+                LogWriter.logError(getClass().getSimpleName(),
+                        "loadLeadData","Received a unexpected exception.. "+ignored.getMessage());
             }
 
 
@@ -129,6 +131,8 @@ public class AdminOpManager {
             createNewUser(currentUser,false);
         } catch (CRMException ignored) {
 
+            LogWriter.logError(getClass().getSimpleName(),
+                    "manageUsers_screen","Received a unexpected exception.. "+ignored.getMessage());
         }
     }
     /**
@@ -170,6 +174,8 @@ public class AdminOpManager {
                     try {
                         crmData.saveData();
                     } catch (Exception ignored) {
+                        LogWriter.logError(getClass().getSimpleName(),
+                                "createNewUser","Received a unexpected exception.. "+ignored.getMessage());
                     }
                     screenManager.confirming_screen(currentUser,"User " + userVal.get(0) + " password was properly updated.",
                             strRes,

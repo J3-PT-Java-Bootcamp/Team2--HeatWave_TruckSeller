@@ -19,10 +19,9 @@ class InputReaderTest {
 
     @BeforeEach
     void setUp() {
-        manager = new CRMManager(true);
+        manager = new CRMManager(false);
         for (InputReader reader : InputReader.values()) {
-            screen = new InputScreen(manager,
-                    manager.getPrinter(),
+            screen = new InputScreen(null,
                     "Phone Test",
                     new TextObject().addText("--  Testing phone data  --"),
                     new String[]{"Phone1"},
@@ -44,34 +43,34 @@ class InputReaderTest {
     @org.junit.jupiter.api.Test
     void COMMAND_HELP_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("HELP\n".getBytes()));
-        assertEquals(HELP.name(), COMMAND.getInput(screen, manager.getPrinter()));    }
+        assertEquals(HELP.name(), COMMAND.getInput(screen));    }
 
     @org.junit.jupiter.api.Test
     void open_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("Patatas fritas\n".getBytes()));
-        assertTrue(OPEN.getInput(screen, manager.getPrinter()).equalsIgnoreCase("Patatas fritas"));
+        assertTrue(OPEN.getInput(screen).equalsIgnoreCase("Patatas fritas"));
     }
 
     @org.junit.jupiter.api.Test
     void integer_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
-        assertEquals("2", INTEGER.getInput(screen, manager.getPrinter()));
+        assertEquals("2", INTEGER.getInput(screen));
         System.setIn(new ByteArrayInputStream("58798\n".getBytes()));
-        assertEquals("58798", INTEGER.getInput(screen, manager.getPrinter()));
+        assertEquals("58798", INTEGER.getInput(screen));
     }
 
     @org.junit.jupiter.api.Test
     void phone_test_inputOK() throws CRMException {
 
         System.setIn(new ByteArrayInputStream("600100200\n".getBytes()));
-        assertEquals("600100200", PHONE.getInput(screen, manager.getPrinter()));
+        assertEquals("600100200", PHONE.getInput(screen));
         System.setIn(new ByteArrayInputStream("93456456\n".getBytes()));
-        assertEquals("93456456", PHONE.getInput(screen, manager.getPrinter()));
+        assertEquals("93456456", PHONE.getInput(screen));
         System.setIn(new ByteArrayInputStream("933456456\n".getBytes()));
-        assertEquals("933456456", PHONE.getInput(screen, manager.getPrinter()));
+        assertEquals("933456456", PHONE.getInput(screen));
         System.setIn(new ByteArrayInputStream("+3493456456\n".getBytes()));
-        assertEquals("+3493456456", PHONE.getInput(screen, manager.getPrinter()));
+        assertEquals("+3493456456", PHONE.getInput(screen));
         System.setIn(new ByteArrayInputStream("(34)93456456\n".getBytes()));
-        assertEquals("(34)93456456",PHONE.getInput(screen,manager.getPrinter()));
+        assertEquals("(34)93456456",PHONE.getInput(screen));
     }
 }

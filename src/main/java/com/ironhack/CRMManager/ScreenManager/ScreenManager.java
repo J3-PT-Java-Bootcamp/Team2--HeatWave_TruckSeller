@@ -1,6 +1,7 @@
 package com.ironhack.CRMManager.ScreenManager;
 
 import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Screens.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
@@ -94,6 +95,8 @@ public class ScreenManager {
                     case CLOSE ->userOpManager.closeOpportunity(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
+                LogWriter.logError(getClass().getSimpleName(),
+                        "show_OpportunitiesScreen","Received a unexpected NullPointerException.. "+e.getMessage());
                 break;
             }
             list.clear();

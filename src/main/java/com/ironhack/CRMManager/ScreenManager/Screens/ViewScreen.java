@@ -1,6 +1,7 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
 import com.ironhack.CRMManager.Exceptions.*;
+import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Sales.Account;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
+import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 
 public class ViewScreen extends CRMScreen{
@@ -25,21 +27,21 @@ public class ViewScreen extends CRMScreen{
         super(currentUser, name);
         this.object=object;
         this.optionsNames=new ArrayList<>();
-        var tClass = object.getClass();
-        if (Opportunity.class.equals(tClass)) {
-            addCommand(Commands.CLOSE).addCommand(Commands.ACCOUNT).addCommand(Commands.CONTACTS);
-            optionsNames.add(Commands.CLOSE.display);
-            optionsNames.add(Commands.ACCOUNT.display);
-            optionsNames.add(Commands.CONTACTS.display);
-        } else if (Lead.class.equals(tClass)) {
-            addCommand(Commands.CONVERT).addCommand(Commands.DISCARD);
-            optionsNames.add(Commands.CONVERT.display);
-            optionsNames.add(Commands.DISCARD.display);
-        } else if (Account.class.equals(tClass)) {
-            addCommand(Commands.VIEW).addCommand(Commands.DISCARD).addCommand(Commands.OPP);
-            optionsNames.add(Commands.VIEW.display);
-            optionsNames.add(Commands.DISCARD.display);
-            optionsNames.add(Commands.OPP.display);
+        type = object.getClass();
+        if (Opportunity.class.equals(type)) {
+            addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
+            optionsNames.add(CLOSE.display);
+            optionsNames.add(ACCOUNT.display);
+            optionsNames.add(CONTACTS.display);
+        } else if (Lead.class.equals(type)) {
+            addCommand(CONVERT).addCommand(DISCARD);
+            optionsNames.add(CONVERT.display);
+            optionsNames.add(DISCARD.display);
+        } else if (Account.class.equals(type)) {
+            addCommand(VIEW).addCommand(DISCARD).addCommand(OPP);
+            optionsNames.add(VIEW.display);
+            optionsNames.add(DISCARD.display);
+            optionsNames.add(OPP.display);
         } else {
             throw new IllegalStateException("Unexpected value: " + object.getClass());
         }
@@ -53,7 +55,7 @@ public class ViewScreen extends CRMScreen{
         printer.startPrint();
         String input = "";
         try {
-            return COMMAND.getInput(this, printer, commands.toArray(new Commands[0]));
+            return COMMAND.getInput(this, commands.toArray(new Commands[0]));
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException logout) {
@@ -68,8 +70,10 @@ public class ViewScreen extends CRMScreen{
                 throw e;
             }
         } catch (GoBackException e) {
-            return Commands.EXIT.name();
+            return EXIT.name();
         } catch (CRMException ignored) {
+            LogWriter.logError(getClass().getSimpleName(),
+                    "start","Received a unexpected exception.. "+ignored.getErrorType());
         }
         constructScreen();
         return start();

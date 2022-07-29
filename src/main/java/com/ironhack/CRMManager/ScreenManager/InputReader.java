@@ -10,6 +10,7 @@ import com.ironhack.CRMManager.Exceptions.WrongInputException;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.*;
 
@@ -29,7 +30,6 @@ public enum InputReader {
     PRODUCT_TYPE("Enter a Product type: "+ Arrays.toString(Product.values()));
 
     private final String hint;
-    private ConsolePrinter printer;
     public String password;
     public String lastInput;
     InputReader(String hint) {
@@ -179,8 +179,7 @@ public enum InputReader {
 
 //---------------------------------------------------------------------------------------------------------OUTER METHODS
 
-    public String getInput(CRMScreen screen, ConsolePrinter printer, Commands... options) throws CRMException {
-        this.printer=printer;
+    public String getInput(CRMScreen screen, Commands... options) throws CRMException {
         try {
             return switch (this) {
                 case MAIL -> validateMailInput(screen);
@@ -195,48 +194,11 @@ public enum InputReader {
         }catch (CRMException e){
             if(e.getClass().equals(WrongInputException.class)){
                 printer.showErrorLine(e.getErrorType());
-                return getInput(screen,printer,options);
+                return getInput(screen,options);
             }
             else throw e;
         }
     }
-
-
-
-//    private String selectAccount(CRMScreen screen) {
-//        //TODO WHEN INDUSTRYTIPE
-//        var data= new InputScreen(screen.crmManager, printer, "New Account", new TextObject(), new String[]{
-//                "Name",
-//                "Phone Number",
-//                "e-Mail",
-//                "Company"
-//        }, OPEN,PHONE,MAIL,OPEN);
-//        try {
-//            data.start();
-//            //Returns the contact name
-//            return data.getValues().get(0);
-//        } catch (CRMException e) {
-//            //TODO
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    private String createNewContact(CRMScreen screen) {
-//        var data= new InputScreen(screen.crmManager, printer, "New Contact", new TextObject(), new String[]{
-//                "Name",
-//                "Phone Number",
-//                "e-Mail",
-//                "Company"
-//        }, OPEN,PHONE,MAIL,OPEN);
-//        try {
-//            data.start();
-//            //Returns the contact name
-//            return data.getValues().get(0);
-//        } catch (CRMException e) {
-//            //TODO
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     @Override
     public String toString() {
