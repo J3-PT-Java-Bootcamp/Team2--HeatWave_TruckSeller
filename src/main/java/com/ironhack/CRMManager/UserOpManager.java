@@ -4,6 +4,8 @@ import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Screens.ViewScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.IndustryType;
+import com.ironhack.Sales.AccountBuilder;
 import com.ironhack.Sales.ContactBuilder;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.OpportunityBuilder;
@@ -11,6 +13,8 @@ import com.ironhack.Constants.Product;
 import com.ironhack.CRMManager.Exceptions.CRMException;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
 import lombok.Data;
+
+import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
@@ -33,6 +37,45 @@ public class UserOpManager {
             manager.getCurrentUser().removeFromOpportunities(opp.getId());
 
         }
+    }
+
+    public String createNewAccount(String... importedData) {
+
+        var newAccountScreen = new InputScreen(manager,
+                printer,
+                "New Account",
+                new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
+                new String[]{"Company name", "Industry Type", "Employees", "City", "Country"},
+                OPEN, INDUSTRY_TYPE, INTEGER, OPEN, OPEN);
+        String strRes = null;
+        try {
+            strRes = newAccountScreen.start();
+            if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
+        } catch (CRMException e) {
+            return "";
+        }
+        var userVal = newAccountScreen.getValues();
+
+        if (userVal != null && !userVal.isEmpty() && userVal.size() >= 5) {
+            var account = new AccountBuilder();
+
+            account.setCompanyName(userVal.get(0));
+            account.setIndustryType(IndustryType.valueOf(userVal.get(1)));
+            account.setEmployeeCount(Integer.parseInt(userVal.get(2)));
+            account.setCity(userVal.get(3));
+            account.setCountry(userVal.get(4));
+            try {
+                var finalAccount = account.constructAccount();
+                crmData.addAccount(finalAccount);
+                manager.getScreenManager().confirming_screen("User " + userVal.get(0) + " password was properly updated.",
+                        strRes,
+                        true);
+                return finalAccount.getCompanyName();
+            } catch (NoCompleteObjectException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return createNewAccount(importedData);
     }
 
     public String convertLeadToOpp(String[] caughtInput) {

@@ -225,7 +225,7 @@ public class ScreenManager {
     public String accounts_screen(boolean selectionMode) {
         boolean stop = false;
         Commands res;
-        if (selectionMode && crmData.isEmptyMap(Account.class)) return manager.createNewAccount();
+        if (selectionMode && crmData.isEmptyMap(Account.class)) return manager.getUserOpManager().createNewAccount();
         do {
             var accountArr = new ArrayList<Account>();
             if (!crmData.isEmptyMap(Account.class)) {
@@ -239,7 +239,7 @@ public class ScreenManager {
                 case HELP -> {
                     //fixme HELP CASE must be there?
                 }
-                case CREATE -> manager.createNewAccount();
+                case CREATE -> manager.getUserOpManager().createNewAccount();
                 case VIEW -> {
                     if (selectionMode) return res.getCaughtInput()[1];
                     manager.getUserOpManager().viewObject(res.getCaughtInput());
