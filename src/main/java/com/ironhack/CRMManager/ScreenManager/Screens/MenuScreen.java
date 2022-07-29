@@ -1,13 +1,11 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.*;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory;
 
-import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.CRMManager.ScreenManager.Text.TextObject.Scroll;
@@ -24,8 +22,8 @@ public class MenuScreen extends CRMScreen {
     private final User user;
 
 
-    public MenuScreen(CRMManager manager, ConsolePrinter printer, String title, User user) {
-        super(manager, printer, title);
+    public MenuScreen(User currentUser, String title, User user) {
+        super(currentUser, title);
         this.user = user;
         this.options = user.isAdmin() ?
                 new Commands[]{USERS, STATS, LOAD} : new Commands[]{LEAD, ACCOUNT, OPP};
@@ -35,7 +33,7 @@ public class MenuScreen extends CRMScreen {
     }
 
     @Override
-    public String start() {
+    public String start() throws CRMException {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
@@ -45,17 +43,15 @@ public class MenuScreen extends CRMScreen {
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException | GoBackException logout) {
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to logout?"))) {
-                crmManager.setCurrentUser(null);
-                return LOGOUT.name();
+                throw logout;
             }
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
-                crmManager.setExit(true);
-                return EXIT.name();
+               throw e;
             }
         } catch (CRMException ignored) {
         }

@@ -1,9 +1,8 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.*;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.User;
 import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
@@ -12,6 +11,8 @@ import com.ironhack.Sales.Printable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 
@@ -20,8 +21,8 @@ public class ViewScreen extends CRMScreen{
     Printable object;
     Type type;
     ArrayList<String> optionsNames;
-    public ViewScreen(CRMManager manager, ConsolePrinter printer, String name, Printable object) {
-        super(manager, printer, name);
+    public ViewScreen(User currentUser, String name, Printable object) {
+        super(currentUser, name);
         this.object=object;
         this.optionsNames=new ArrayList<>();
         var tClass = object.getClass();
@@ -56,18 +57,15 @@ public class ViewScreen extends CRMScreen{
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException logout) {
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to logout?"))) {
-                crmManager.setCurrentUser(null);
-                return Commands.EXIT.name();
+                throw logout;
             }
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
-                crmManager.setCurrentUser(null);
-                crmManager.setExit(true);
-                return Commands.EXIT.name();
+                throw e;
             }
         } catch (GoBackException e) {
             return Commands.EXIT.name();

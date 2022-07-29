@@ -1,24 +1,25 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
-import static com.ironhack.Constants.ColorFactory.*;
+import com.ironhack.CRMManager.User;
+
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 /**
  * ConfirmationScreen is a CRMScreen that shows the results from last InputScreen during set time
  */
 public class ConfirmationScreen extends CRMScreen{
     private final int DURATION = 2000;
-    public ConfirmationScreen(CRMManager manager, ConsolePrinter printer, String name, String message, String strData) {
-        super(manager, printer, name);
+    public ConfirmationScreen(User currentUser, String name, String message, String strData) {
+        super(currentUser, name);
         this.addText(message);
         this.addText(BLANK_SPACE);
         this.addText(BLANK_SPACE);
         this.addText(strData);
     }
-    public ConfirmationScreen(CRMManager manager, ConsolePrinter printer, String name, String message) {
-        super(manager, printer, name);
+    public ConfirmationScreen(User currentUser, String name, String message) {
+        super(currentUser, name);
         this.addText(message);
     }
 

@@ -1,48 +1,44 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Screens.ViewScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.IndustryType;
+import com.ironhack.Constants.Product;
 import com.ironhack.Sales.AccountBuilder;
 import com.ironhack.Sales.ContactBuilder;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.OpportunityBuilder;
-import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
 import lombok.Data;
 
 import java.util.Objects;
 
-import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.CRMManager.*;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
 
 @Data
 public class UserOpManager {
-    private final CRMManager manager;
-    private final ConsolePrinter printer;
 
-    public void closeOpportunity(String[] caughtInput) {
+    public void closeOpportunity(User currentUser,String[] caughtInput) {
         //TODO
         if (caughtInput != null && caughtInput.length == 3
                 &&(caughtInput[1].equalsIgnoreCase("won")||caughtInput[1].equalsIgnoreCase("lost"))) {
             var opp= crmData.getOpportunity(caughtInput[2].trim().toUpperCase());
             if (opp==null) return ;//fixme
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
-            manager.getCurrentUser().removeFromOpportunities(opp.getId());
+            currentUser.removeFromOpportunities(opp.getId());
 
         }
     }
 
-    public String createNewAccount(String... importedData) {
+    public String createNewAccount(User currentUser,String... importedData) {
 
-        var newAccountScreen = new InputScreen(manager,
-                printer,
+        var newAccountScreen = new InputScreen(currentUser,
                 "New Account",
                 new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
                 new String[]{"Company name", "Industry Type", "Employees", "City", "Country"},
@@ -67,7 +63,7 @@ public class UserOpManager {
             try {
                 var finalAccount = account.constructAccount();
                 crmData.addAccount(finalAccount);
-                manager.getScreenManager().confirming_screen("User " + userVal.get(0) + " password was properly updated.",
+                screenManager.confirming_screen(currentUser,"User " + userVal.get(0) + " password was properly updated.",
                         strRes,
                         true);
                 return finalAccount.getCompanyName();
@@ -75,40 +71,39 @@ public class UserOpManager {
                 throw new RuntimeException(e);
             }
         }
-        return createNewAccount(importedData);
+        return createNewAccount(currentUser,importedData);
     }
 
-    public String convertLeadToOpp(String[] caughtInput) {
+    public String convertLeadToOpp(User currentUser,String[] caughtInput) {
         if (caughtInput != null && caughtInput.length == 2) {
             var lead = crmData.getLead(caughtInput[1]);
             if (lead != null) {
                 try {
                     var oppBuilder = new OpportunityBuilder();
-                    var firstScreen = new InputScreen(manager,
-                            printer,
+                    var firstScreen = new InputScreen(currentUser,
                             "New Opportunity",
                             new TextObject("Enter the information offered to customer:"),
-                            new String[]{"Product", "Quantity", "Decision Maker", "Account"},
+                            new String[]{"Product", "Quantity"},
                             PRODUCT_TYPE,
                             INTEGER);
                     var result = firstScreen.start();
                     if (result.equalsIgnoreCase(EXIT.name())) return EXIT.name();
 
-                    var accountName = manager.getScreenManager().accounts_screen(true);
-                    var contact = createNewContactBuilder(lead, accountName);
+                    var accountName =screenManager.show_AccountsScreen(true,currentUser);
+                    var contact = createNewContactBuilder(currentUser,lead, accountName);
 
                     var firstData = firstScreen.getValues();
 //                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
-                    oppBuilder.setOwner(manager.getCurrentUser().getName());
+                    oppBuilder.setOwner(currentUser.getName());
                     oppBuilder.setProduct(Product.valueOf(firstData.get(0)));
                     oppBuilder.setQuantity(Integer.parseInt(firstData.get(1)));
                     var opp = oppBuilder.constructOpportunity(accountName, contact);
-                    manager.getCurrentUser().addToOpportunityList(opp.getId());
-                    manager.getCurrentUser().removeFromLeadList(lead.getId());
+                    currentUser.addToOpportunityList(opp.getId());
+                    currentUser.removeFromLeadList(lead.getId());
                     crmData.addOpportunity(opp);
                     crmData.removeLead(lead.getId());
                     try {
-                        manager.saveData();
+                        crmData.saveData();
                     } catch (Exception ignored) {
                     }
                     return opp.getId();
@@ -122,12 +117,12 @@ public class UserOpManager {
         return null;
     }
 
-    public void viewObject(String[] caughtInput) {
+    public void viewObject(User currentUser,String[] caughtInput) {
         if (caughtInput != null && caughtInput.length >= 2) {
             var object = crmData.getUnknownObject(caughtInput[1]);
             if (object == null) return;
             try {
-                new ViewScreen(manager, printer, object.shortPrint(), object).start();
+                new ViewScreen(currentUser, object.shortPrint(), object).start();
             } catch (CRMException e) {
                 throw new RuntimeException(e);
             }
@@ -135,9 +130,9 @@ public class UserOpManager {
     }
 
 //------------------------------------------------------------------------------------------------------INNER METHODS
-    private ContactBuilder createNewContactBuilder(Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
+    private ContactBuilder createNewContactBuilder(User currentUser,Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
         ContactBuilder contact = new ContactBuilder();
-        if (manager.getScreenManager().modal_screen("Copy Lead Data ?",
+        if (screenManager.modal_screen(currentUser,"Copy Lead Data ?",
                 new TextObject("Do you want to create a new contact\n from the following Lead data?")
                         .addText(BLANK_SPACE).addText(lead.printFullObject())
                         .addText("-- Enter \"NO\" to enter manually a new contact information --"))) {
@@ -145,23 +140,23 @@ public class UserOpManager {
             contact.setPhoneNumber(lead.getPhoneNumber());
             contact.setMail(lead.getMail());
             contact.setCompany(accountName);
-        } else {
-            var screen = new InputScreen(manager,
-                    printer,
-                    "-- New Contact --",
-                    new TextObject("Enter the information about Contact for current Opportunity:")
-                            .addText(BLANK_SPACE).addText("Company : " + accountName),
-                    new String[]{"Name", "Phone Number", "Mail"},
-                    OPEN,
-                    PHONE,
-                    MAIL);
-            screen.start();
-            var val = screen.getValues();
-            contact.setName(val.get(0));
-            contact.setPhoneNumber(val.get(1));
-            contact.setMail(val.get(2));
-            contact.setCompany(accountName);
+            return contact;
         }
+        var screen = new InputScreen(currentUser,
+                "-- New Contact --",
+                new TextObject("Enter the information about Contact for current Opportunity:")
+                        .addText(BLANK_SPACE).addText("Company : " + accountName),
+                new String[]{"Name", "Phone Number", "Mail"},
+                OPEN,
+                PHONE,
+                MAIL);
+        screen.start();
+        var val = screen.getValues();
+        contact.setName(val.get(0));
+        contact.setPhoneNumber(val.get(1));
+        contact.setMail(val.get(2));
+        contact.setCompany(accountName);
+
         return contact;
     }
 }

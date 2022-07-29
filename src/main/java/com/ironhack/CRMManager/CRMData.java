@@ -164,4 +164,14 @@ public class CRMData {
 
         };
     }
+
+    CRMData loadData() throws Exception {
+        //TODO LOAD FULL CRMData object from json and aSsign it to crmData field
+        throw new IllegalAccessException();
+    }
+
+    public void saveData() throws Exception {
+        //TODO Save crmData object to .json file in ./data
+
+    }
 }

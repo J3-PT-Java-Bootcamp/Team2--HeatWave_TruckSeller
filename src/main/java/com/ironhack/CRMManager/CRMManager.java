@@ -1,41 +1,32 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.ScreenManager;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
-import com.ironhack.Sales.AccountBuilder;
-import com.ironhack.Sales.Lead;
-import com.ironhack.Constants.IndustryType;
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
 import com.ironhack.FakeLead;
+import com.ironhack.Sales.Lead;
 
-import java.util.Objects;
-
-import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
-import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
-import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
 
 @lombok.Data
 public class CRMManager {
     private boolean exit;
     private User currentUser;
-    private final UserOpManager userOpManager;
-    private final AdminOpManager adminOpManager;
-    private final ConsolePrinter printer;
+    public static final UserOpManager userOpManager= new UserOpManager();
+    private static final AdminOpManager adminOpManager = new AdminOpManager();
+    public static final ConsolePrinter printer = new ConsolePrinter();
     public static CRMData crmData;
-    private final ScreenManager screenManager;
+    public static final ScreenManager screenManager = new ScreenManager();
 
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public CRMManager() {
         this.exit = false;
-        this.printer = new ConsolePrinter(this);
-        userOpManager=new UserOpManager(this,printer);
-        adminOpManager=new AdminOpManager(this,printer);
-        screenManager=new ScreenManager(this,printer);
         try {
-            crmData = loadData();
+            crmData = crmData.loadData();
 
         } catch (Exception e) {
             crmData = new CRMData();
@@ -52,11 +43,7 @@ public class CRMManager {
      */
     public CRMManager(Boolean testWithScreens) {
         this.exit = false;
-        this.printer = new ConsolePrinter(this);
         crmData = new CRMData();
-        userOpManager=new UserOpManager(this,printer);
-        adminOpManager=new AdminOpManager(this,printer);
-        screenManager=new ScreenManager(this,printer);
         var leadList = FakeLead.getRawLeads(200);
 
         crmData.addToUserList(new User("ADMIN", "ADMIN", true));
@@ -80,9 +67,8 @@ public class CRMManager {
      * Method that runs only if there is not any data saved
      */
     private void runFirstConfig() {
-        //TODO METHOD THAT CREATES A ADMIN USER AND ASK FOR OTHER USERS DATA
         try {
-            screenManager.newUser_screen(true);
+            adminOpManager.createNewUser(null,true);
         } catch (CRMException e) {
             runFirstConfig();
         }
@@ -93,20 +79,27 @@ public class CRMManager {
      */
     private void appStart() {
         while (!exit) {//if in any moment we enter EXIT it must turn this.exit to true so while will end
-            var comm = screenManager.menu_screen(currentUser == null ? screenManager.login_screen() : currentUser);
-            switch (comm) {
-                case OPP -> screenManager.opportunities_screen();
-                case LEAD -> screenManager.lead_screen();
-                case ACCOUNT -> screenManager.accounts_screen(false);
-                case USERS -> adminOpManager.manageUsers_screen();
-                case STATS -> adminOpManager.showStats_screen();
-                case LOAD -> adminOpManager.loadLeadData();
-                case CLOSE -> userOpManager.closeOpportunity(comm.getCaughtInput());
-                case CONVERT -> userOpManager.convertLeadToOpp(comm.getCaughtInput());
-                case VIEW -> userOpManager.viewObject(comm.getCaughtInput());
-                default -> {
+            var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
+            try {
+                switch (comm) {
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser);
+                    case LEAD -> screenManager.show_LeadScreen(currentUser);
+                    case ACCOUNT -> screenManager.show_AccountsScreen(false, currentUser);
+                    case USERS -> adminOpManager.manageUsers_screen(currentUser);
+                    case STATS -> adminOpManager.showStats_screen(currentUser);
+                    case LOAD -> adminOpManager.loadLeadData(currentUser);
+                    case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
+                    case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
+                    case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                    default -> {
+
+                    }
                 }
-            }
+            }catch (ExitException e){
+                this.exit=true;
+            }catch (LogoutException logout){
+                currentUser=null;
+            } catch (CRMException ignored){}
         }
         System.exit(0);
     }
@@ -114,15 +107,6 @@ public class CRMManager {
 
 
     //-------------------------------------------------------------------------------------------------------PRIVATE METHODS
-    private CRMData loadData() throws Exception {
-        //TODO LOAD FULL CRMData object from json and aSsign it to crmData field
-        throw new IllegalAccessException();
-    }
-
-    public void saveData() throws Exception {
-        //TODO Save crmData object to .json file in ./data
-
-    }
 
 
     /**
@@ -138,5 +122,31 @@ public class CRMManager {
             return user.getPassword().equalsIgnoreCase(password);
         }
         return false;
+    }
+
+
+    /**
+     * Shows login screen
+     *
+     * @return the user logged
+     */
+    public User login_screen() {
+        String strResult = "";
+        var loginScreen = new InputScreen(null, "Login", new TextObject("Enter your User Name and Password:"), new String[]{"User Name", "Password"}, OPEN, PASSWORD);
+        try {
+            strResult = loginScreen.start();
+        } catch (CRMException e) {
+            setExit(true);
+        }
+        var userVal = loginScreen.getValues();
+        if (userVal == null || userVal.size() < 2) return null;
+        if (checkCredentials(userVal.get(0), userVal.get(1))) {
+            setCurrentUser(crmData.getUserList().get(userVal.get(0)));
+            screenManager.confirming_screen(currentUser,"Welcome " + userVal.get(0) + "!", strResult, false);
+        } else {
+            printer.showErrorLine(WRONG_PASSWORD);
+            login_screen();
+        }
+        return getCurrentUser();
     }
 }

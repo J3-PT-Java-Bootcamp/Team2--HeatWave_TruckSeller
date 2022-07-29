@@ -1,21 +1,18 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.Exceptions.GoBackException;
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.ExitException;
-import com.ironhack.CRMManager.Exceptions.HelpException;
-import com.ironhack.CRMManager.Exceptions.LogoutException;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
+import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.ScreenManager.InputReader;
 import com.ironhack.CRMManager.ScreenManager.Text.DynamicLine;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.User;
 
-import static com.ironhack.Constants.Constants.CLOSE_WITHOUT_SAVE;
-import static com.ironhack.Constants.Constants.LIMIT_X;
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.NEW_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
+import static com.ironhack.Constants.Constants.CLOSE_WITHOUT_SAVE;
+import static com.ironhack.Constants.Constants.LIMIT_X;
 
 
 /**
@@ -30,13 +27,12 @@ public class InputScreen extends CRMScreen{
     private int inputIndex;
     
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
-    public InputScreen(CRMManager manager,
-                       ConsolePrinter printer,
+    public InputScreen(User currentUser,
                        String name,
                        TextObject content,
                        String[] inputNames,
                        InputReader... inputTypesOrdered) {
-        super(manager,printer,name);
+        super(currentUser,name);
         this.content=content;
         this.inputTypes=inputTypesOrdered;
         this.inputNames=inputNames;
@@ -70,7 +66,7 @@ public class InputScreen extends CRMScreen{
                 //allow to go back to correct last input
                 inputTypes[inputIndex].password = null;
                 if (outValues.isEmpty()){
-                    if (crmManager.getCurrentUser() == null) {
+                    if (currentUser == null) {
                         constructScreen();
                         continue;
                     }
@@ -91,12 +87,11 @@ public class InputScreen extends CRMScreen{
                 input="";
                 continue;
             }catch (LogoutException logout) {
-                if (this.crmManager.getCurrentUser() != null){
-                    if (crmManager.getScreenManager().modal_screen("Confirmation Needed",
+                if (currentUser != null){
+                    if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                             new TextObject(CLOSE_WITHOUT_SAVE))) {
                         inputTypes[inputIndex].password = null;
-                        crmManager.setCurrentUser(null);
-                        return EXIT.name();
+                        throw logout;
                     }
                 }else{
                     inputTypes[inputIndex].password = null;
@@ -105,12 +100,10 @@ public class InputScreen extends CRMScreen{
                 }
             } catch (ExitException e){
                 //If enter EXIT it prompts user for confirmation as entered data will be lost
-                if(this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+                if(screenManager.modal_screen(currentUser,"Confirmation Needed",
                         new TextObject(CLOSE_WITHOUT_SAVE))){
                     inputTypes[inputIndex].password=null;
-                    crmManager.setCurrentUser(null);
-                    crmManager.setExit(true);
-                    return EXIT.name();
+                    throw e;
                 }
                 constructScreen();
                 input="";

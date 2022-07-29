@@ -1,10 +1,9 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Sales.Lead;
 import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Sales.Lead;
 import lombok.Data;
 
 import java.io.BufferedReader;
@@ -14,16 +13,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.CRMManager.screenManager;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
+import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.Constants.*;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.INTEGER;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
-import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 @Data
 public class AdminOpManager {
-    private final CRMManager manager;
-    private final ConsolePrinter printer;
-    void loadLeadData() {
+    void loadLeadData(User currentUser) {
         boolean stop = false;
         do {
             var txtObj = new TextObject("You can load lead data from any CSV file saved on root/import", LIMIT_X / 2, LIMIT_Y)
@@ -37,7 +34,7 @@ public class AdminOpManager {
                 leftCol.addText("-" + i + ": ");
             }
             txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH, new TextObject[]{leftCol, rightCol});
-            var inpScreen = new InputScreen(manager, printer, "Select a File: ", txtObj,
+            var inpScreen = new InputScreen(currentUser, "Select a File: ", txtObj,
                     new String[]{"File Index"}, INTEGER);
             try {
                 var resVal = inpScreen.start();
@@ -46,7 +43,7 @@ public class AdminOpManager {
                 var index = Integer.parseInt(resVal);
                 var leads = parseCSVLeads(files[index]);
                 if (!leads.isEmpty()) {
-                    assignLeadsToUser(leads);
+                    assignLeadsToUser(currentUser,leads);
                 }
 
             } catch (Exception ignored) {
@@ -55,8 +52,7 @@ public class AdminOpManager {
 
         } while (!stop);
     }
-
-    private void assignLeadsToUser(ArrayList<Lead> leadList) throws Exception {
+    private void assignLeadsToUser(User currentUser,ArrayList<Lead> leadList) throws Exception {
         TextObject txtObj;
         boolean stop = false;
         do {
@@ -72,8 +68,7 @@ public class AdminOpManager {
                         .addText("Or enter \"ALL\" to divide leads between all users")
                         .addText(BLANK_SPACE).addText(BLANK_SPACE);
             }
-            var selectUserScreen = new InputScreen(manager,
-                    printer,
+            var selectUserScreen = new InputScreen(currentUser,
                     "Select User:",
                     txtObj,
                     new String[]{"User Name"},
@@ -95,8 +90,8 @@ public class AdminOpManager {
                         }
                         counter += leadsPerUser;
                     }
-                    manager.saveData();
-                    manager.getScreenManager().confirming_screen("Whatever....","",false);
+                    crmData.saveData();
+                    screenManager.confirming_screen(currentUser,"Leads were distributed among all users.","",false);
                     stop = true;
                 } else if (crmData.getUserList().containsKey(userVal.get(0))) {
                     var user = crmData.getUserList().get(userVal.get(0));
@@ -104,8 +99,8 @@ public class AdminOpManager {
                         user.getLeadList().add(lead.getId());
                         crmData.addLead(lead);
                     }
-                    manager.saveData();
-                    manager.getScreenManager().confirming_screen("All leads assigned to: " + userVal.get(0) + " correctly",
+                    crmData.saveData();
+                    screenManager.confirming_screen(currentUser,"All leads assigned to: " + userVal.get(0) + " correctly",
                             "",
                             false);
                     stop = true;
@@ -113,7 +108,6 @@ public class AdminOpManager {
             }
         } while (!stop);
     }
-
     private ArrayList<Lead> parseCSVLeads(File file) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(file));
         ArrayList<Lead> resVal = new ArrayList<>();
@@ -123,19 +117,72 @@ public class AdminOpManager {
             Lead lead = new Lead(values[0], crmData.getNextID(Lead.class), values[1], values[2], values[3]);
             resVal.add(lead);
         }
-        manager.saveData();
+        crmData.saveData();
         return resVal;
     }
-
-    void showStats_screen() {
+    void showStats_screen(User currentUser) {
         //TODO
     }
-
-    void manageUsers_screen() {
+    void manageUsers_screen(User currentUser) {
+        //TODO
         try {
-            manager.getScreenManager().newUser_screen(false);
+            createNewUser(currentUser,false);
         } catch (CRMException ignored) {
 
         }
     }
+    /**
+     * Creates the newUser screen to create a new user,
+     * if there is not previous user it makes admin user by default
+     *
+     * @param isAdmin true if must create an admin
+     * @throws CRMException if Back/Exit/Logout/Menu commands are read
+     */
+    public void createNewUser(User currentUser,boolean isAdmin) throws CRMException {
+        TextObject txtObj;
+        if (crmData.getUserList().isEmpty()) {
+            txtObj = new TextObject("Enter a Name and Password to create a New Admin")
+                    .addText(BLANK_SPACE).addText(BLANK_SPACE);
+        } else {
+            txtObj = new TextObject("-- USERS --");
+            for (User user : crmData.getUserList().values()) {
+                txtObj.addText(user.getName());
+            }
+            txtObj.addText(BLANK_SPACE)
+                    .addText("Enter a new user name and password to create new user.")
+                    .addText("Or enter an existing user name and a new Password to change it. ")
+                    .addText(BLANK_SPACE).addText(BLANK_SPACE);
+        }
+        var newUserScreen = new InputScreen(currentUser,
+                "New User",
+                txtObj,
+                new String[]{"User Name", "Password", "Repeat Password"},
+                OPEN,
+                NEW_PASSWORD,
+                NEW_PASSWORD);
+        var strRes = newUserScreen.start();
+        var userVal = newUserScreen.getValues();
+
+        if (userVal != null && !userVal.isEmpty()) {
+            if (crmData.getUserList().containsKey(userVal.get(0))) {
+                if (userVal.get(1).equalsIgnoreCase(userVal.get(2))) {
+                    crmData.getUserList().get(userVal.get(0)).setPassword(userVal.get(1));
+                    try {
+                        crmData.saveData();
+                    } catch (Exception ignored) {
+                    }
+                    screenManager.confirming_screen(currentUser,"User " + userVal.get(0) + " password was properly updated.",
+                            strRes,
+                            true);
+                }
+            } else {
+                if (userVal.size() == 3 && crmData.addToUserList(new User(userVal.get(0), userVal.get(1), isAdmin))) {
+                   screenManager.confirming_screen(currentUser,"User " + userVal.get(0) + " was properly saved.",
+                            strRes,
+                            true);
+                }
+            }
+        }
+    }
+
 }

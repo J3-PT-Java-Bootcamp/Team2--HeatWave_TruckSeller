@@ -1,19 +1,20 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.User;
 
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
+import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.NO;
+import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.YES;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
-import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 
 public class ModalScreen extends CRMScreen{
     TextObject message;
 
-    public ModalScreen(CRMManager manager, ConsolePrinter printer, String name, TextObject message) {
-        super(manager, printer, name);
+    public ModalScreen(User currentUser, String name, TextObject message) {
+        super(currentUser, name);
         this.message=message;
         this.commands= new java.util.ArrayList<>();
         this.addCommand(YES).addCommand(NO);

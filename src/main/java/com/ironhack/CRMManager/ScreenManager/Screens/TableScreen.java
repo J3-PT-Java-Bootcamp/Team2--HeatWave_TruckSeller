@@ -1,50 +1,53 @@
 package com.ironhack.CRMManager.ScreenManager.Screens;
 
-import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.User;
+import com.ironhack.Constants.ColorFactory;
+import com.ironhack.Constants.ColorFactory.BgColors;
 import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
 import com.ironhack.Sales.Printable;
-import com.ironhack.Constants.ColorFactory;
-import com.ironhack.Constants.ColorFactory.BgColors;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 
 public class TableScreen extends CRMScreen {
-    int pages, currentPage;
-    Class<? extends Printable> type;
+    private int pages, currentPage;
+    private final Class<? extends Printable> type;
     ArrayList<List<? extends Printable>> masterArr;
     private boolean hasContent;
 
-    public TableScreen(CRMManager manager, String name, ArrayList<? extends Printable> data) {
-        super(manager, manager.getPrinter(), name);
+    public TableScreen(User currentUser, String name, ArrayList<? extends Printable> data) {
+        super(currentUser, name);
         addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
         if (data == null || data.isEmpty()) {
             hasContent = false;
+            type=null;
         } else {
             hasContent = true;
             masterArr = getLists(data);
-            if (!data.isEmpty()) {
-                var tClass = data.get(0).getClass();
-                if (Opportunity.class.equals(tClass)) {
+            type = data.get(0).getClass();
+                if (Opportunity.class.equals(type)) {
                     addCommand(CLOSE).addCommand(VIEW);
-                } else if (Lead.class.equals(tClass)) {
+                } else if (Lead.class.equals(type)) {
                     addCommand(CONVERT).addCommand(DISCARD).addCommand(VIEW);
-                } else if (Account.class.equals(tClass)) {
+                } else if (Account.class.equals(type)) {
                     addCommand(VIEW).addCommand(DISCARD);
                 } else {
                     throw new IllegalStateException("Unexpected value: " + data.get(0).getClass());
                 }
-            }
+
         }
+
         constructScreen();
     }
 
@@ -157,7 +160,7 @@ public class TableScreen extends CRMScreen {
 
     //----------------------------------------------------------------------------------------------------PUBLIC METHODS
     @Override
-    public String start() {
+    public String start() throws CRMException {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
@@ -184,26 +187,23 @@ public class TableScreen extends CRMScreen {
             //TODO SHOW ALL POSIBLE COMMANDS DEPENDING ON T TYPE
             printer.showHintLine("Available commands : ", commands.toArray(new Commands[0]));
         } catch (LogoutException logout) {
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to logout?"))) {
-                crmManager.setCurrentUser(null);
-                return LOGOUT.name();
+                throw logout;
             }
         } catch (ExitException exit) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (this.crmManager.getScreenManager().modal_screen("Confirmation Needed",
+            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
-                crmManager.setCurrentUser(null);
-                crmManager.setExit(true);
-                return EXIT.name();
+                throw exit;
             }
         } catch (GoBackException back) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             if (currentPage > 0) currentPage--;
-            else return MENU.name();
-        } catch (GoToMenuException back) {
+            else throw back;
+        } catch (GoToMenuException menu) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            return MENU.name();
+            throw menu;
         } catch (CRMException ignored) {
         }
         constructScreen();
