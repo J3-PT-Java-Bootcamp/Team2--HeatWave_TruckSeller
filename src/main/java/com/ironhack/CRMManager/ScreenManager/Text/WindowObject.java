@@ -3,6 +3,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_WHITE;
+import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 
 public class WindowObject extends TextObject {
     final java.awt.Point borderSize;
@@ -66,13 +68,13 @@ public class WindowObject extends TextObject {
                     int fillLeft= windowWidth-(margin.x*2)-title.length();
                     int fillRight= ((fillLeft % 2) == 0) ? (fillLeft / 2) : ((fillLeft / 2) + 1);
                     fillLeft/=2;
-                    sb.append(pattern[i].repeat(fillLeft)).append(titleColor!=null?titleColor:"").append(TextStyle.BOLD).append(title).append(TextStyle.RESET)
+                    sb.append(pattern[i].repeat(fillLeft)).append(titleColor!=null?titleColor:"").append(BOLD).append(title).append(TextStyle.RESET)
                             .append(frameColor!=null?frameColor:"").append(pattern[i].repeat(fillRight));
                 }else {
                     sb.append(pattern[starts ? i : borderSize.y - i-1]
                             .repeat(!starts&&i==borderSize.y-1?windowWidth-(margin.x*2)- borderSize.y-5:windowWidth-(margin.x*2)));
                     if(!starts&&i==borderSize.y-1){
-                        sb.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                        sb.append(BOLD+ BRIGHT_WHITE.toString()+LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
                         sb.append(BLANK_SPACE.repeat(borderSize.y));
                     }
                 }
