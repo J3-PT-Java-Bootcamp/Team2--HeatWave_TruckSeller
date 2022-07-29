@@ -111,52 +111,6 @@ public class CRMManager {
         System.exit(0);
     }
 
-    //----------------------------------------------------------------------------------------------ADMIN SCREEN OPTIONS
-
-
-    //---------------------------------------------------------------------------------------------------COMMAND ACTIONS
-
-    //-----------------------------------------------------------------------------------------------------------SCREENS
-
-
-    public String createNewAccount(String... importedData) {
-
-        var newAccountScreen = new InputScreen(this,
-                printer,
-                "New Account",
-                new TextObject("Enter data for the new Account: ").addText(BLANK_SPACE),
-                new String[]{"Company name", "Industry Type", "Employees", "City", "Country"},
-                OPEN, INDUSTRY_TYPE, INTEGER, OPEN, OPEN);
-        String strRes = null;
-        try {
-            strRes = newAccountScreen.start();
-            if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
-        } catch (CRMException e) {
-            return "";
-        }
-        var userVal = newAccountScreen.getValues();
-
-        if (userVal != null && !userVal.isEmpty() && userVal.size() >= 5) {
-            var account = new AccountBuilder();
-
-            account.setCompanyName(userVal.get(0));
-            account.setIndustryType(IndustryType.valueOf(userVal.get(1)));
-            account.setEmployeeCount(Integer.parseInt(userVal.get(2)));
-            account.setCity(userVal.get(3));
-            account.setCountry(userVal.get(4));
-            try {
-                var finalAccount = account.constructAccount();
-                crmData.addAccount(finalAccount);
-                screenManager.confirming_screen("User " + userVal.get(0) + " password was properly updated.",
-                        strRes,
-                        true);
-                return finalAccount.getCompanyName();
-            } catch (NoCompleteObjectException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return createNewAccount(importedData);
-    }
 
 
     //-------------------------------------------------------------------------------------------------------PRIVATE METHODS
