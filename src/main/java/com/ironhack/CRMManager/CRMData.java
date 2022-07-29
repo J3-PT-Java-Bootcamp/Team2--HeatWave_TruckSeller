@@ -1,6 +1,6 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.*;
+import com.ironhack.Sales.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,10 +49,10 @@ public class CRMData {
 
 
     }
-      HashMap<String, User> getUserList() {
+      public HashMap<String, User> getUserList() {
         return userList;
     } 
-     boolean addToUserList(User newUser){
+     public boolean addToUserList(User newUser){
         return userList.putIfAbsent(newUser.getName(), newUser)==null;
 
     }

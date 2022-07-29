@@ -1,16 +1,16 @@
 package com.ironhack.ScreenManager;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Exceptions.CRMException;
-import com.ironhack.ScreenManager.Screens.Commands;
-import com.ironhack.ScreenManager.Screens.InputScreen;
-import com.ironhack.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.ScreenManager.InputReader;
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.ByteArrayInputStream;
 
-import static com.ironhack.ScreenManager.InputReader.*;
-import static com.ironhack.ScreenManager.Screens.Commands.HELP;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
+import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.HELP;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InputReaderTest {
@@ -49,7 +49,7 @@ class InputReaderTest {
     @org.junit.jupiter.api.Test
     void open_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("Patatas fritas\n".getBytes()));
-        assertEquals(true, OPEN.getInput(screen, manager.getPrinter()).equalsIgnoreCase("Patatas fritas"));
+        assertTrue(OPEN.getInput(screen, manager.getPrinter()).equalsIgnoreCase("Patatas fritas"));
     }
 
     @org.junit.jupiter.api.Test

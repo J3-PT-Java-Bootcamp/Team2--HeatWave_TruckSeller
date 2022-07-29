@@ -1,8 +1,8 @@
 package com.ironhack.Constants;
 
-import com.ironhack.Exceptions.WrongInputException;
+import com.ironhack.CRMManager.Exceptions.WrongInputException;
 
-import static com.ironhack.Exceptions.ErrorType.PRODUCT_NOK;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.PRODUCT_NOK;
 
 public enum Product {
     HYBRID("Hybrid", "HYBRID TRUCK", "HYBT", "HYBRID"),

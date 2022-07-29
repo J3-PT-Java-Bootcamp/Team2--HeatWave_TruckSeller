@@ -1,7 +1,7 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Account;
-import com.ironhack.Commercial.Opportunity;
+import com.ironhack.Sales.Account;
+import com.ironhack.Sales.Opportunity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

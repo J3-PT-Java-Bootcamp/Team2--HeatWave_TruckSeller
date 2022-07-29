@@ -1,8 +1,9 @@
 package com.ironhack.ScreenManager.Text;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+
 //TODO ALL TESTS
-class TextObjectTest extends com.ironhack.ScreenManager.Text.TextObject {
+class TextObjectTest extends TextObject {
 
     @org.junit.jupiter.api.Test
     void testAddText_test() {

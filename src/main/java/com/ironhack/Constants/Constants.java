@@ -3,6 +3,9 @@ package com.ironhack.Constants;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 public class Constants {
+
+    public static final ColorFactory.BgColors MAIN_BG = ColorFactory.BgColors.CYAN;
+    public static final ColorFactory.CColors MAIN_TXT_COLOR = ColorFactory.CColors.BLACK;
     public static final int LIMIT_X = 120;
 
     public static final int LIMIT_Y = 25;

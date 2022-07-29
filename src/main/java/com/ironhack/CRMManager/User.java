@@ -1,10 +1,10 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.Commercial.Lead;
-import com.ironhack.Commercial.Opportunity;
-import com.ironhack.Commercial.Printable;
+import com.ironhack.Sales.Lead;
+import com.ironhack.Sales.Opportunity;
+import com.ironhack.Sales.Printable;
 import com.ironhack.Constants.ColorFactory;
-import com.ironhack.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 
 import java.text.DecimalFormat;
