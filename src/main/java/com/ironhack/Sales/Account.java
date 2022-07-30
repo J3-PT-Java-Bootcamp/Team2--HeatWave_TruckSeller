@@ -33,8 +33,8 @@ public class Account implements Printable{
     //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject(this.companyName).addText("Provisional account")
-                .addText(" DELETE ME!").addText("ONLY FOR TESTS").addText("????");
+        return new TextObject(this.companyName).addText(String.valueOf(industryType))
+                .addText(String.valueOf(employeeCount)).addText(city).addText(country);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Account implements Printable{
 
     @Override
     public TextObject printFullObject() {
-        return new TextObject("Provisional account").addText(this.companyName+" DELETE ME!").addText("ONLY FOR TESTS");
+        return new TextObject().addText("Company name: "+this.companyName).addText("Industry: "+this.industryType).addText("Employees: "+this.employeeCount).addText("City: "+this.city).addText("Country: "+this.country);
     }
 
     @Override
