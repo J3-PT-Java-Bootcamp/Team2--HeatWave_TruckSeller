@@ -1,28 +1,34 @@
 package com.ironhack.Sales;
 
 import com.ironhack.CRMManager.CRMData;
+import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.OpportunityStatus;
+import com.ironhack.Constants.Product;
+import org.junit.jupiter.api.Test;
 
+import static com.ironhack.CRMManager.CRMManager.printer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OpportunityTest extends TextObject {
     static CRMData crm;
     @org.junit.jupiter.api.BeforeAll
     static void setUp() {
-         crm = new CRMData();
+        var crm=new CRMManager(false);
+    }
+
+    @Test
+    void getId_test() {
+        var opp= new Opportunity(Product.FLATBED,45,"Antonio","dsgfsf","me");
+        assertEquals("OPFFE",opp.getId());
     }
 
     @org.junit.jupiter.api.Test
-    void getId_test() {
-        String nextID = crm.getNextID(Opportunity.class);
-        var opp= new Opportunity(nextID,null,1,null,null,null,null);
-        System.out.println(opp.getId());
-        assertEquals("OPFFE",opp.getId());
-    }
-    @org.junit.jupiter.api.Test
-    void dummy() {
-        var str="patata";
-        System.out.println(str.contains(""));
+    void testprintable() {
+        var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
+
+        printer.sendToQueue(op);
+        printer.startPrint();
     }
 
 }

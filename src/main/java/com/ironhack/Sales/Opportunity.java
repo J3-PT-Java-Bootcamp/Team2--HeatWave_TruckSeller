@@ -8,6 +8,8 @@ import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.ironhack.Constants.OpportunityStatus.OPEN;
+
 @NoArgsConstructor
 @Data
 public class Opportunity implements Printable{
@@ -22,22 +24,15 @@ public class Opportunity implements Printable{
     /*
      *Constructor used only for tests
      */
-    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner,String companyName) {
-        setId(id);
-        setProduct(product);
-        setQuantity(quantity);
-        setDecisionMakerID(decisionMaker.getId());
-        setStatus(status);
-        setOwner(owner.getName());
-    }
-    public Opportunity( Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner, String companyName) {
+
+    public Opportunity( Product product, int quantity, String decisionMaker, String owner, String companyName) {
         setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
-        setStatus(status);
         setOwner(owner);
-        setAccount_companyName(account_companyName);
+        setStatus(OPEN);
+        setAccount_companyName(companyName);
     }
 
 
@@ -45,14 +40,19 @@ public class Opportunity implements Printable{
 
     public void close(Boolean won){
         //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
+// TODO BEA
+
+
     }
 
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
+        var opp= new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
+        .addText(status.name()).addText(account_companyName);
 
-        return new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
-                .addText(status.name()).addText(account_companyName);
+       return opp;
+
     }
 
     @Override
