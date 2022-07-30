@@ -1,8 +1,7 @@
 package com.ironhack.Sales;
 
-import com.ironhack.Constants.OpportunityStatus;
-import com.ironhack.Constants.Product;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.Constants.Product;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +21,7 @@ public class OpportunityBuilder {
         var account = crmData.getAccount(accountName);
         contactBuilder.setCompany(account.getCompanyName());
         var contact= contactBuilder.constructContact();
-        Opportunity opportunity = new Opportunity(product,quantity, contact.getId(), OpportunityStatus.OPEN,owner,accountName);//TODO pasar parametres
+        Opportunity opportunity = new Opportunity(product,quantity, contact.getId(), owner,accountName);//TODO pasar parametres
         crmData.addOpportunity(opportunity);
         account.getOpportunities().add(opportunity.getId());
         return opportunity;

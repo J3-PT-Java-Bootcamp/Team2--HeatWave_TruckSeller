@@ -1,12 +1,13 @@
 package com.ironhack.Sales;
 
-import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.User;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.Constants.OpportunityStatus.OPEN;
 
 @NoArgsConstructor
 @Data
@@ -22,22 +23,15 @@ public class Opportunity implements Printable{
     /*
      *Constructor used only for tests
      */
-    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner,String companyName) {
-        setId(id);
-        setProduct(product);
-        setQuantity(quantity);
-        setDecisionMakerID(decisionMaker.getId());
-        setStatus(status);
-        setOwner(owner.getName());
-    }
-    public Opportunity( Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner, String companyName) {
-        setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
+
+    public Opportunity( Product product, int quantity, String decisionMaker, String owner, String companyName) {
+        setId(crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
-        setStatus(status);
+        setStatus(OPEN);
         setOwner(owner);
-        setAccount_companyName(account_companyName);
+        setAccount_companyName(companyName);
     }
 
 
@@ -66,7 +60,7 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ CRMManager.crmData.getUnknownObject(decisionMakerID).shortPrint())
+                .addText("Contact: "+ crmData.getUnknownObject(decisionMakerID).shortPrint())
                 .addText("Opp Status: "+status.name())
                 .addText("Account: "+account_companyName)
                 .addText("Proprietary: "+owner);
