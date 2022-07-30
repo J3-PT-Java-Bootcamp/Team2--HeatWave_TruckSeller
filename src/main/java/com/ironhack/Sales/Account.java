@@ -17,7 +17,7 @@ public class Account implements Printable{
 
 
 
-    protected Account(IndustryType industryType, int employeeCount, String city, String country, String companyName) {
+    public Account(IndustryType industryType, int employeeCount, String city, String country, String companyName) {
         setIndustryType(industryType);
         setEmployeeCount(employeeCount);
         setCity(city);

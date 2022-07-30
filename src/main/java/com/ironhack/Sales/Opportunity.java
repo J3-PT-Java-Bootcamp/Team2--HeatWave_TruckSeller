@@ -1,13 +1,13 @@
 package com.ironhack.Sales;
 
-import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.User;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.PRODUCT_TYPE;
 import static com.ironhack.Constants.OpportunityStatus.OPEN;
 
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class Opportunity implements Printable{
      */
 
     public Opportunity( Product product, int quantity, String decisionMaker, String owner, String companyName) {
-        setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
+        setId(crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
@@ -48,8 +48,8 @@ public class Opportunity implements Printable{
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
-        var opp= new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
-        .addText(status.name()).addText(account_companyName);
+        var opp= new TextObject(id).addText(PRODUCT_TYPE.formatOutput(product.name())).addText(String.valueOf(quantity))
+        .addText(status.name()).addText(account_companyName).addText(crmData.getContact(decisionMakerID).shortPrint());
 
        return opp;
 
@@ -66,7 +66,7 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ CRMManager.crmData.getUnknownObject(decisionMakerID).shortPrint())
+                .addText("Contact: "+ crmData.getUnknownObject(decisionMakerID).shortPrint())
                 .addText("Opp Status: "+status.name())
                 .addText("Account: "+account_companyName)
                 .addText("Proprietary: "+owner);
@@ -75,7 +75,7 @@ public class Opportunity implements Printable{
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[]{"ID","Product", "Quantity", "Status", "Account Company Name"};
+        return new String[]{"ID","Product", "Quantity", "Status", "Company","Contact"};
     }
 
 }

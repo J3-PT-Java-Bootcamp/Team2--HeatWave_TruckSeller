@@ -3,6 +3,8 @@ package com.ironhack.Sales;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
+
 @Data
 public class Contact implements Printable{
     private String  name;
@@ -11,9 +13,9 @@ public class Contact implements Printable{
     private String mail;
     private String company;
 
-    public Contact(String name, String id, String phoneNumber, String mail,String company) {
+    public Contact(String name, String phoneNumber, String mail,String company) {
         setName(name);
-        setId(id);
+        setId(crmData.getNextID(getClass()));
         setPhoneNumber(phoneNumber);
         setMail(mail);
         setCompany(company);

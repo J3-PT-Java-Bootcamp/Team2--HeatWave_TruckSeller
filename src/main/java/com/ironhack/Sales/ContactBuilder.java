@@ -19,7 +19,7 @@ public class ContactBuilder {
     public Contact constructContact() throws NoCompleteObjectException {
 
         if(name==null || phoneNumber==null || mail==null|| company==null) throw new NoCompleteObjectException();
-        Contact contact = new Contact(name, crmData.getNextID(Contact.class), phoneNumber, mail, company);
+        Contact contact = new Contact(name, phoneNumber, mail, company);
         crmData.addContact(contact);
 
         return contact;
