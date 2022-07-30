@@ -4,6 +4,7 @@ import com.ironhack.Sales.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
 public class CRMData {
@@ -37,7 +38,7 @@ public class CRMData {
         var sb= new StringBuilder();
         if (Opportunity.class.equals(objClass)) {
             opportunityCounter++;
-            sb.append("OP").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - opportunityCounter));
+            sb.append("P").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - opportunityCounter));
         } else if (Lead.class.equals(objClass)) {
             leadCounter++;
             sb.append("L").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - leadCounter));
@@ -113,8 +114,9 @@ public class CRMData {
         return this;
     }
 
-    public ArrayList<User> getUsers(boolean includeAdmin) {
-        if(includeAdmin)return (ArrayList<User>) this.getUserList().values();
+    public List<User> getUsers(boolean includeAdmin) {
+        if(includeAdmin) return getUserList().values().stream().toList();
+
         var resArr= new ArrayList<User>();
         for (User user:userList.values()) {
             if (!user.isAdmin())resArr.add(user);
@@ -122,20 +124,20 @@ public class CRMData {
         return resArr;
     }
     public CRMData removeContact(String id){
-        this.leadMap.remove(id);
+        this.contactMap.remove(id);
         return this;}
 
 
     //----------------------------------------------------------------------------------------------------UNKNOWN OBJECT
     public Printable getUnknownObject(String id) {
         if(id.startsWith("L")) return leadMap.get(id);
-        else if (id.startsWith("O")) return opportunityMap.get(id);
+        else if (id.startsWith("P")) return opportunityMap.get(id);
         else if (id.startsWith("C")) return contactMap.get(id);
         return accountMap.get(id);
     }
     public CRMData removeUnknownObject(String id){
         if(id.startsWith("L")) return removeLead(id);
-        else if (id.startsWith("O")) return removeOpportunity(id);
+        else if (id.startsWith("P")) return removeOpportunity(id);
         else if (id.startsWith("C")) return removeContact(id);
         return removeAccount(id);
     }
@@ -148,7 +150,7 @@ public class CRMData {
     }
     public boolean existsObject(String id){
         if(id.startsWith("L")) return leadMap.containsKey(id);
-        else if (id.startsWith("O")) return opportunityMap.containsKey(id);
+        else if (id.startsWith("P")) return opportunityMap.containsKey(id);
         else if (id.startsWith("C")) return contactMap.containsKey(id);
         return accountMap.containsKey(id)||userList.containsKey(id);
     }

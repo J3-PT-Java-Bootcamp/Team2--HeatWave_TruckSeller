@@ -1,12 +1,19 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.CRMManager.Exceptions.*;
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.ExitException;
+import com.ironhack.CRMManager.Exceptions.LogoutException;
 import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.ScreenManager;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.IndustryType;
+import com.ironhack.Constants.Product;
 import com.ironhack.FakeLead;
+import com.ironhack.Sales.Account;
+import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Lead;
+import com.ironhack.Sales.Opportunity;
 
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
@@ -59,6 +66,16 @@ public class CRMManager {
                 throw new RuntimeException(e);
             }
         }
+        crmData.addAccount(new Account(IndustryType.MEDICAL,9889,"Oklahoma","India","ACC"));
+        crmData.addAccount(new Account(IndustryType.PRODUCE,12450,"Martorell","Chile","Coca-Cola"));
+        var cont= new Contact("Antonio","93456456","antonio@cocacola.es","Coca-Cola");
+        var opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","Coca-Cola");
+        crmData.addContact(cont);
+
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+
+
         if (testWithScreens) appStart();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
