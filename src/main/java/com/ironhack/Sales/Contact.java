@@ -22,17 +22,19 @@ public class Contact implements Printable{
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject();
+        return new TextObject(this.id).addText(String.valueOf(this.name))
+                .addText(String.valueOf(this.phoneNumber)).addText(this.mail).addText(this.company);
     }
 
     @Override
     public String shortPrint() {
-        return null;
+        return this.name;
     }
 
     @Override
     public TextObject printFullObject() {
-        return null;
+
+         return new TextObject("Provisional account").addText("ID: "+this.id).addText("Name: "+this.name).addText("Phone: "+this.phoneNumber).addText("Email: "+this.mail).addText("Company: "+this.company);
     }
 
     @Override

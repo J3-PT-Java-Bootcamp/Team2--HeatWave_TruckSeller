@@ -1,12 +1,13 @@
 package com.ironhack.Sales;
 
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.CRMManager.CRMManager;
+import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.Constants.OpportunityStatus.OPEN;
 
 @NoArgsConstructor
@@ -25,12 +26,12 @@ public class Opportunity implements Printable{
      */
 
     public Opportunity( Product product, int quantity, String decisionMaker, String owner, String companyName) {
-        setId(crmData.getNextID(getClass()));
+        setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
-        setStatus(OPEN);
         setOwner(owner);
+        setStatus(OPEN);
         setAccount_companyName(companyName);
     }
 
@@ -39,14 +40,19 @@ public class Opportunity implements Printable{
 
     public void close(Boolean won){
         //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
+// TODO BEA
+
+
     }
 
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
+        var opp= new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
+        .addText(status.name()).addText(account_companyName);
 
-        return new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
-                .addText(status.name()).addText(account_companyName);
+       return opp;
+
     }
 
     @Override
@@ -60,7 +66,7 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ crmData.getUnknownObject(decisionMakerID).shortPrint())
+                .addText("Contact: "+ CRMManager.crmData.getUnknownObject(decisionMakerID).shortPrint())
                 .addText("Opp Status: "+status.name())
                 .addText("Account: "+account_companyName)
                 .addText("Proprietary: "+owner);
