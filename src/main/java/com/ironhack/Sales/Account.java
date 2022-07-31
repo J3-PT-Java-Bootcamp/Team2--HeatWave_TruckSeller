@@ -28,7 +28,10 @@ public class Account implements Printable{
     }
 
 
-
+    @Override
+    public String getId() {
+        return companyName;
+    }
 
     //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override

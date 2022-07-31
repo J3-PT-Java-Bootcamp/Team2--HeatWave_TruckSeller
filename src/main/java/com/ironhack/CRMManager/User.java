@@ -80,6 +80,11 @@ public class User implements Printable {
     }
 
     @Override
+    public String getId() {
+        return this.name;
+    }
+
+    @Override
     public TextObject toTextObject() {
         //TODO
         return null;

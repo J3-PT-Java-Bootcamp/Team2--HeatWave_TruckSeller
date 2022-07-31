@@ -15,6 +15,8 @@ import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
 
+import java.util.ArrayList;
+
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
@@ -67,14 +69,21 @@ public class CRMManager {
             }
         }
         crmData.addAccount(new Account(IndustryType.MEDICAL,9889,"Oklahoma","India","ACC"));
-        crmData.addAccount(new Account(IndustryType.PRODUCE,12450,"Martorell","Chile","Coca-Cola"));
-        var cont= new Contact("Antonio","93456456","antonio@cocacola.es","Coca-Cola");
-        var opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","Coca-Cola");
+        crmData.addAccount(new Account(IndustryType.PRODUCE,12450,"Martorell","Chile","COCACOLA"));
+        var cont= new Contact("Antonio","93456456","antonio@cocacola.es","COCACOLA");
         crmData.addContact(cont);
-
+        var opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
         crmData.addOpportunity(opp);
         crmData.getUser("USER").addToOpportunityList(opp.getId());
-
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
 
         if (testWithScreens) appStart();
     }
@@ -109,7 +118,7 @@ public class CRMManager {
                     }
                 }
                 else switch (comm) {
-                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser);
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser,new ArrayList<>());
                     case LEAD -> screenManager.show_LeadScreen(currentUser);
                     case ACCOUNT -> screenManager.show_AccountsScreen(false, currentUser);
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
