@@ -92,7 +92,6 @@ public class User implements Printable {
 
     @Override
     public String shortPrint() {
-        //TODO
         return getName();
     }
 
@@ -101,8 +100,7 @@ public class User implements Printable {
         var userStats = new TextObject();
         this.updateTotals();
         DecimalFormat df = new DecimalFormat("###.##");
-        userStats.addText("User Name: " + getName())
-                .addText("")
+        userStats.addText(BLANK_SPACE)
                 .addText("- LEADS- ")
                 .addText("Pending: " + getLeadListSize())
                 .addText("Closed: " +BOLD+ leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + SMART_RESET)
@@ -158,5 +156,14 @@ public class User implements Printable {
     public void removeFromOpportunities(String id) {
         opportunityList.remove(id);
         this.setClosedLeads(+1);
+    }
+
+    public void removeUnknown(String id) {
+        if(id.startsWith("L")) {
+            removeFromLeadList(id);
+        }
+        else if (id.startsWith("P")) {
+            removeFromOpportunities(id);
+        }
     }
 }

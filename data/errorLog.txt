@@ -14,3 +14,28 @@
 >31/7/22 2:03:57 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
 >31/7/22 2:07:17 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
 >31/7/22 2:18:57 //-> ViewScreen.start() : Received a unexpected exception.. No enum constant com.ironhack.CRMManager.ScreenManager.Screens.Commands.BACL
+>31/7/22 10:42:46 //-> ViewScreen.start() : Received a unexpected exception.. Index 1 out of bounds for length 1
+>31/7/22 10:44:01 //-> ViewScreen.start() : Received a unexpected exception.. Index 1 out of bounds for length 1
+>31/7/22 10:44:51 //-> ViewScreen.start() : Received a unexpected exception.. Index 1 out of bounds for length 1
+>31/7/22 10:47:26 //-> ViewScreen.start() : Received a unexpected exception.. Index 1 out of bounds for length 1
+>31/7/22 10:47:43 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull
+>31/7/22 10:51:27 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull
+>31/7/22 10:58:12 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:01:44 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:06:45 //-> CRMManager.appStart() : Unexpected command value... DISCARD
+>31/7/22 11:09:36 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:23:26 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:27:00 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:32:05 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.UnsupportedOperationExceptionnull
+>31/7/22 11:32:40 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.UnsupportedOperationExceptionnull
+>31/7/22 11:38:31 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IndexOutOfBoundsExceptionIndex 3 out of bounds for length 3
+>31/7/22 11:45:47 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>31/7/22 11:46:27 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 11:49:44 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>31/7/22 11:58:38 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>31/7/22 12:00:02 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>31/7/22 12:03:10 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>31/7/22 12:04:19 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>31/7/22 12:05:11 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>31/7/22 12:08:48 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>31/7/22 12:09:58 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull

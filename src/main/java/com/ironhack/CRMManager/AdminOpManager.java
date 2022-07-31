@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
@@ -20,36 +21,40 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.Constants.*;
 @Data
 public class AdminOpManager {
-    void loadLeadData(User currentUser) {
+    void loadLeadData(User currentUser) throws Exception {
         boolean stop = false;
         do {
             var txtObj = new TextObject("You can load lead data from any CSV file saved on root/import", LIMIT_X / 2, LIMIT_Y)
                     .addText(BLANK_SPACE).setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
             var rightCol = new TextObject("File names:");
             var leftCol = new TextObject("INDEX: ");
-            var files = new File("import").listFiles();
-            for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
-                File file = files[i];
+            var files = new ArrayList<>(List.of(Objects.requireNonNull(new File("import").listFiles())));
+            for (int i = 0; i < Objects.requireNonNull(files).size(); i++) {
+                File file = files.get(i);
                 rightCol.addText(file.getName());
                 leftCol.addText("-" + i + ": ");
             }
             txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH, new TextObject[]{leftCol, rightCol});
             var inpScreen = new InputScreen(currentUser, "Select a File: ", txtObj,
                     new String[]{"File Index"}, INTEGER);
-            try {
-                var resVal = inpScreen.start();
-                if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
-                if (resVal.equals(EXIT.name())) stop = true;
-                var index = Integer.parseInt(resVal);
-                var leads = parseCSVLeads(files[index]);
-                if (!leads.isEmpty()) {
-                    assignLeadsToUser(currentUser,leads);
-                }
-
-            } catch (Exception ignored) {
-                LogWriter.logError(getClass().getSimpleName(),
-                        "loadLeadData","Received a unexpected exception.. "+ignored.getMessage());
+            var resVal = inpScreen.start();
+            if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
+            if (resVal.equals(EXIT.name())) stop = true;
+            var index = Integer.parseInt(resVal);
+            var leads = parseCSVLeads(files.get(index));
+            if (!leads.isEmpty()) {
+                assignLeadsToUser(currentUser,leads);
             }
+            var toDelete = new File(files.remove(index).getAbsolutePath());//FIXME
+            try{
+                if(!toDelete.delete())
+                    throw new RuntimeException("Delete=false!");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+
+            stop=true;
+
 
 
         } while (!stop);

@@ -55,32 +55,8 @@ public class ViewScreen extends CRMScreen{
             printer.startPrint();
             String input = "";
             try {
-                var res = COMMAND.getInput(this, commands.toArray(new Commands[0]));
-                switch (Commands.valueOf(res)) {
+                return COMMAND.getInput(this, commands.toArray(new Commands[0]));
 
-                    case CONVERT -> {
-                        userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
-                    }
-                    case CLOSE -> {
-                        userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
-                    }
-                    case OPP -> {
-                        screenManager.show_OpportunitiesScreen(currentUser,
-                                crmData.getAccount(object.getId()).getOpportunities());
-                    }
-                    case ACCOUNT -> {
-                        userOpManager.viewObject(currentUser, new String[]{ACCOUNT.name(), object.getId()});
-                    }
-                    case CONTACTS -> {
-                        userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), object.getId()});
-                    }
-
-                    case HELP -> {
-                    }
-                    case DISCARD -> {
-                        //TODO
-                    }
-                }
             } catch (HelpException help) {
                 printer.showHintLine(help.hint, help.commands);
             } catch (LogoutException logout) {

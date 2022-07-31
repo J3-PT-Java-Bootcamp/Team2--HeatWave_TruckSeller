@@ -37,7 +37,7 @@ public class Lead implements Printable{
 
     @Override
     public String shortPrint() {
-        return null;
+        return "Lead: "+getId();
     }
 
     @Override
