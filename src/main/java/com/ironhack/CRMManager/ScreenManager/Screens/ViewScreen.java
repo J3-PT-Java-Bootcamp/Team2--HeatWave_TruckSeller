@@ -12,8 +12,7 @@ import com.ironhack.Sales.Printable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.ironhack.CRMManager.CRMManager.printer;
-import static com.ironhack.CRMManager.CRMManager.screenManager;
+import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
@@ -38,9 +37,8 @@ public class ViewScreen extends CRMScreen{
             optionsNames.add(CONVERT.display);
             optionsNames.add(DISCARD.display);
         } else if (Account.class.equals(type)) {
-            addCommand(VIEW).addCommand(DISCARD).addCommand(OPP);
+            addCommand(VIEW).addCommand(OPP);
             optionsNames.add(VIEW.display);
-            optionsNames.add(DISCARD.display);
             optionsNames.add(OPP.display);
         } else {
             throw new IllegalStateException("Unexpected value: " + object.getClass());
@@ -50,32 +48,60 @@ public class ViewScreen extends CRMScreen{
 
     @Override
     public String start() throws CRMException {
-        printer.clearScreen();
-        printer.sendToQueue(getTextObject());
-        printer.startPrint();
-        String input = "";
-        try {
-            return COMMAND.getInput(this, commands.toArray(new Commands[0]));
-        } catch (HelpException help) {
-            printer.showHintLine(help.hint, help.commands);
-        } catch (LogoutException logout) {
-            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
-                    new TextObject("Do you want to logout?"))) {
-                throw logout;
+        boolean stop = false;
+        do {
+            printer.clearScreen();
+            printer.sendToQueue(getTextObject());
+            printer.startPrint();
+            String input = "";
+            try {
+                var res = COMMAND.getInput(this, commands.toArray(new Commands[0]));
+                switch (Commands.valueOf(res)) {
+
+                    case CONVERT -> {
+                        userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
+                    }
+                    case CLOSE -> {
+                        userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
+                    }
+                    case OPP -> {
+                        screenManager.show_OpportunitiesScreen(currentUser,
+                                crmData.getAccount(object.getId()).getOpportunities());
+                    }
+                    case ACCOUNT -> {
+                        userOpManager.viewObject(currentUser, new String[]{ACCOUNT.name(), object.getId()});
+                    }
+                    case CONTACTS -> {
+                        userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), object.getId()});
+                    }
+
+                    case HELP -> {
+                    }
+                    case DISCARD -> {
+                        //TODO
+                    }
+                }
+            } catch (HelpException help) {
+                printer.showHintLine(help.hint, help.commands);
+            } catch (LogoutException logout) {
+                if (screenManager.modal_screen(currentUser, "Confirmation Needed",
+                        new TextObject("Do you want to logout?"))) {
+                    throw logout;
+                }
+            } catch (ExitException e) {
+                //If enter EXIT it prompts user for confirmation as entered data will be lost
+                if (screenManager.modal_screen(currentUser, "Confirmation Needed",
+                        new TextObject("Do you want to close app?"))) {
+                    throw e;
+                }
+            } catch (GoBackException e) {
+                return EXIT.name();
+            } catch (Exception ignored) {
+                LogWriter.logError(getClass().getSimpleName(),
+                        "start", "Received a unexpected exception.. " + ignored.getMessage());
             }
-        } catch (ExitException e) {
-            //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
-                    new TextObject("Do you want to close app?"))) {
-                throw e;
-            }
-        } catch (GoBackException e) {
-            return EXIT.name();
-        } catch (CRMException ignored) {
-            LogWriter.logError(getClass().getSimpleName(),
-                    "start","Received a unexpected exception.. "+ignored.getErrorType());
-        }
-        constructScreen();
+            constructScreen();
+        }while (!stop);
         return start();
     }
 

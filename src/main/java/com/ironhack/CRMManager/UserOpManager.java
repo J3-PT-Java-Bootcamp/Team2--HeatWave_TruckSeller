@@ -1,7 +1,6 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Screens.ViewScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
@@ -17,6 +16,7 @@ import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.ID_NOK;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
@@ -36,7 +36,7 @@ public class UserOpManager {
         }
     }
 
-    public String createNewAccount(User currentUser,String... importedData) {
+    public String createNewAccount(User currentUser,String... importedData) throws CRMException {
 
         var newAccountScreen = new InputScreen(currentUser,
                 "New Account",
@@ -47,6 +47,8 @@ public class UserOpManager {
         try {
             strRes = newAccountScreen.start();
             if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
+        }catch (GoBackException | GoToMenuException|LogoutException | ExitException exit){
+            throw exit;
         } catch (CRMException e) {
             LogWriter.logError(getClass().getSimpleName(),
                     "createNewAccount","Received a unexpected exception.. "+e.getErrorType());
@@ -122,15 +124,17 @@ public class UserOpManager {
         return null;
     }
 
-    public void viewObject(User currentUser,String[] caughtInput) {
+    public void viewObject(User currentUser,String[] caughtInput) throws CRMException {
         if (caughtInput != null && caughtInput.length >= 2) {
             var object = crmData.getUnknownObject(caughtInput[1]);
-            if (object == null) return;
+            if (object == null) {
+                printer.showErrorLine(ID_NOK);
+                return;
+            }
             try {
                 new ViewScreen(currentUser, object.shortPrint(), object).start();
-            } catch (CRMException e) {
-                LogWriter.logError(getClass().getSimpleName(),
-                        "viewObject","Received a unexpected exception.. "+e.getErrorType());
+
+            }catch (GoBackException ignored){
             }
         }
     }

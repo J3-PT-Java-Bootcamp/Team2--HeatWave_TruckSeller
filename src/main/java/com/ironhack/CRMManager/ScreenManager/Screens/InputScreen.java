@@ -10,7 +10,6 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.NEW_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
-import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.Constants.CLOSE_WITHOUT_SAVE;
 import static com.ironhack.Constants.Constants.LIMIT_X;
 
@@ -74,7 +73,7 @@ public class InputScreen extends CRMScreen{
                     //TODO RETURN TO Table Screen
                 }
                 if (inputIndex > 0) inputIndex--;
-                else return EXIT.name();
+                else throw back;
                 if(!outValues.isEmpty()){
                 outValues.remove(outValues.size() - 1);
                 }

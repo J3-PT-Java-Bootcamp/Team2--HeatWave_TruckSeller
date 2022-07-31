@@ -64,7 +64,9 @@ public enum Commands {
             case BACK -> throw new GoBackException(screen);
             case HELP -> throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
             case VIEW, DISCARD, CLOSE, CONVERT -> {
-                if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
+                if(caughtInput.length!=2){
+                    if(! (screen instanceof ViewScreen))throw new WrongInputException(ErrorType.COMMAND_NOK);
+                }
                 var inputId= caughtInput[1].trim().toUpperCase();
                 char identifier= inputId.toCharArray()[0];
                 if(identifier=='L'){
