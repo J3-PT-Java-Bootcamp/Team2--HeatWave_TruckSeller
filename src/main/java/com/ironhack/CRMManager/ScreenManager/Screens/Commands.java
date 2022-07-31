@@ -66,17 +66,18 @@ public enum Commands {
             case VIEW, DISCARD, CLOSE, CONVERT -> {
                 if(caughtInput.length!=2){
                     if(! (screen instanceof ViewScreen))throw new WrongInputException(ErrorType.COMMAND_NOK);
-                }
-                var inputId= caughtInput[1].trim().toUpperCase();
-                char identifier= inputId.toCharArray()[0];
-                if(identifier=='L'){
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else if(identifier=='O') {
-                    if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else if(identifier=='C'){
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else{
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                }else {
+                    var inputId = caughtInput[1].trim().toUpperCase();
+                    char identifier = inputId.toCharArray()[0];
+                    if (identifier == 'L') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else if (identifier == 'O') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else if (identifier == 'C') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    }
                 }
                 return true;
             }

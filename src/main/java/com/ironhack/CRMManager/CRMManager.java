@@ -137,6 +137,11 @@ public class CRMManager {
             } catch (CRMException ignored){
                 LogWriter.logError(getClass().getSimpleName(),
                         "appStart","Unexpected exception.. "+ignored.getClass()+" "+ignored.getErrorType());
+            } catch (Exception e) {
+
+                LogWriter.logError(getClass().getSimpleName(),
+                        "appStart",
+                        "Unexpected exception ... " + e.getClass()+e.getMessage());
             }
         }
         System.exit(0);

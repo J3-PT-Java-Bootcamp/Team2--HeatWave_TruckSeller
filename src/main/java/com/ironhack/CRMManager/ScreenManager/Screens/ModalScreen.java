@@ -29,7 +29,7 @@ public class ModalScreen extends CRMScreen{
         printer.sendToQueue(this.getTextObject());
         printer.startPrint();
         try {
-            return COMMAND.getInput(this);
+            return COMMAND.getInput(this,commands.toArray(new Commands[0]));
         }catch (CRMException e){
             return NO.name();
         }
