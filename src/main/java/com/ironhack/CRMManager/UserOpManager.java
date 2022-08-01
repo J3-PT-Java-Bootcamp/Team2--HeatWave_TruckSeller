@@ -7,10 +7,7 @@ import com.ironhack.CRMManager.ScreenManager.Screens.ViewScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.Constants.Product;
-import com.ironhack.Sales.AccountBuilder;
-import com.ironhack.Sales.ContactBuilder;
-import com.ironhack.Sales.Lead;
-import com.ironhack.Sales.OpportunityBuilder;
+import com.ironhack.Sales.*;
 import lombok.Data;
 
 import java.util.Objects;
@@ -98,7 +95,6 @@ public class UserOpManager {
                     var contact = createNewContactBuilder(currentUser, lead, accountName);
 
                     var firstData = firstScreen.getValues();
-//                    var opp = new Opportunity(Product.valueOf(firstData.get(0)), Integer.parseInt(firstData.get(1)), contact, OpportunityStatus.OPEN, currentUser.getName());
                     oppBuilder.setOwner(currentUser.getName());
                     oppBuilder.setProduct(Product.valueOf(firstData.get(0)));
                     oppBuilder.setQuantity(Integer.parseInt(firstData.get(1)));
@@ -113,6 +109,11 @@ public class UserOpManager {
                         LogWriter.logError(getClass().getSimpleName(),
                                 "convertLeadToOpp->saveData", "Received a unexpected exception.. " + ignored.getMessage());
                     }
+
+                    screenManager.confirming_screen(currentUser,
+                            "Lead %s was properly converted to Opportunity: ".formatted(lead.getId()),
+                            opp.printFullObject().toString(),
+                            true);
                     return opp.getId();
                 } catch (CRMException | NoCompleteObjectException e) {
                     LogWriter.logError(getClass().getSimpleName(),
@@ -139,6 +140,7 @@ public class UserOpManager {
 
                     case CONVERT -> {
                         userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
+                        stop=true;
                     }
                     case CLOSE -> {
                         userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
@@ -148,10 +150,14 @@ public class UserOpManager {
                                 crmData.getAccount(object.getId()).getOpportunities());
                     }
                     case ACCOUNT -> {
-                        userOpManager.viewObject(currentUser, new String[]{ACCOUNT.name(), object.getId()});
+                        var id = "";
+                        if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName();
+                        userOpManager.viewObject(currentUser, new String[]{ACCOUNT.name(), id});
                     }
                     case CONTACTS -> {
-                        userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), object.getId()});
+                        var id = "";
+                        if(object instanceof Opportunity)id= ((Opportunity) object).getDecisionMakerID();
+                        userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), id});
                     }
 
                     case HELP -> {
@@ -163,7 +169,12 @@ public class UserOpManager {
                                         .addText(BLANK_SPACE).addText(object.printFullObject()))){
                             currentUser.removeUnknown(object.getId());
                             crmData.removeUnknownObject(object.getId());
+                            screenManager.confirming_screen(currentUser,
+                                    "Lead %s was deleted!".formatted(object.getId()),
+                                    object.printFullObject().toString(),
+                                    true);
                             stop=true;
+
                         }
                     }
                 }

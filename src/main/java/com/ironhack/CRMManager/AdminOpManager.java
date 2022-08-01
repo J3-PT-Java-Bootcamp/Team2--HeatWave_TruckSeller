@@ -41,13 +41,14 @@ public class AdminOpManager {
             if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
             if (resVal.equals(EXIT.name())) stop = true;
             var index = Integer.parseInt(resVal);
-            var leads = parseCSVLeads(files.get(index));
+            var currentFile=files.get(index);
+            var leads = parseCSVLeads(currentFile);
             if (!leads.isEmpty()) {
                 assignLeadsToUser(currentUser,leads);
             }
-            var toDelete = new File(files.remove(index).getAbsolutePath());//FIXME
+//            var toDelete = new File(files.remove(index).getAbsolutePath());//FIXME
             try{
-                if(!toDelete.delete())
+                if(!currentFile.delete())
                     throw new RuntimeException("Delete=false!");
             } catch (Exception e) {
                 throw new RuntimeException();
