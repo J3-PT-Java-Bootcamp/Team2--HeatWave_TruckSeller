@@ -50,3 +50,5 @@
 >1/8/22 18:00:09 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
 >1/8/22 18:09:29 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
 >1/8/22 18:10:29 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
+>1/8/22 18:14:04 //-> ScreenManager.show_OpportunitiesScreen() : Received a unexpected NullPointerException.. Cannot invoke "com.ironhack.Sales.Account.getOpportunities()" because the return value of "com.ironhack.CRMManager.CRMData.getAccount(String)" is null
+>1/8/22 18:42:59 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull

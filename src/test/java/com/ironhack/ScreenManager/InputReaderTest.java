@@ -1,17 +1,19 @@
 package com.ironhack.ScreenManager;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.ScreenManager.InputReader;
 import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.ScreenManager.InputReader;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.HELP;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InputReaderTest {
     CRMManager manager;
@@ -19,39 +21,41 @@ class InputReaderTest {
 
     @BeforeEach
     void setUp() {
-        manager = new CRMManager(false);
-        for (InputReader reader : InputReader.values()) {
-            screen = new InputScreen(null,
-                    "Phone Test",
-                    new TextObject().addText("--  Testing phone data  --"),
-                    new String[]{"Phone1"},
-                    InputReader.PHONE);
-        }
 
+        manager = new CRMManager(false);
+
+        screen = new InputScreen(null,
+                "Phone Test",
+                new TextObject().addText("--  Testing phone data  --"),
+                new String[]{"Phone1"},
+                InputReader.PHONE);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void mail_test_inputOK() {
         //TODO
     }
 
-    @org.junit.jupiter.api.Test
-    void command_test_inputOK() {
-        //TODO
+    @Test
+    void command_test_inputOK() throws CRMException {
+
+        System.setIn(new ByteArrayInputStream("CONVERT LFFE\n".getBytes()));
+        assertEquals("CONVERT",screen.start());
+
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void COMMAND_HELP_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("HELP\n".getBytes()));
         assertEquals(HELP.name(), COMMAND.getInput(screen));    }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void open_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("Patatas fritas\n".getBytes()));
         assertTrue(OPEN.getInput(screen).equalsIgnoreCase("Patatas fritas"));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void integer_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
         assertEquals("2", INTEGER.getInput(screen));
@@ -59,9 +63,13 @@ class InputReaderTest {
         assertEquals("58798", INTEGER.getInput(screen));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void phone_test_inputOK() throws CRMException {
-
+//        screen = new InputScreen(null,
+//                "Phone Test",
+//                new TextObject().addText("--  Testing phone data  --"),
+//                new String[]{"Phone1"},
+//                InputReader.PHONE);
         System.setIn(new ByteArrayInputStream("600100200\n".getBytes()));
         assertEquals("600100200", PHONE.getInput(screen));
         System.setIn(new ByteArrayInputStream("93456456\n".getBytes()));

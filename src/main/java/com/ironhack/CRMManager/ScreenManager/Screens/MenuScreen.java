@@ -67,10 +67,17 @@ public class MenuScreen extends CRMScreen {
         container.setBgcolor(this.textObject.bgColor);
         container.setTxtColor(textObject.txtColor);
         container.setTxtStyle(textObject.txtStyle);
-        TextObject statistics = new TextObject(user.getName() + " :", width / 4, height);
+        TextObject statistics;
+        if(user.isAdmin()){
+            statistics= new TextObject("App stats: ",width/4,height);
+            statistics.addText(crmData.printFullObject());
+        }else {
+            statistics = new TextObject(user.getName() + " :", width / 4, height);
+            statistics.addText(user.printFullObject());
+        }
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
         TextObject historicObjects = new TextObject("History :", width / 4, height);
-        statistics.addText(user.printFullObject());
+
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
         for (String id : user.getRecentObjects())
@@ -78,7 +85,7 @@ public class MenuScreen extends CRMScreen {
         historicObjects.fillAllLines();
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
-        statistics.setBgcolor(BgColors.BLUE).alignTextTop(height)
+        statistics.setBgcolor(BgColors.BRIGHT_BLUE).alignTextTop(height)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
         historicObjects.alignTextTop(height)
                 .setBgcolor(BgColors.BLACK)
