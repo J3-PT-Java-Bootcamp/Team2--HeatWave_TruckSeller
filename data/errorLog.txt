@@ -5,3 +5,7 @@
 >30/7/22 0:46:40 //-> CRMManager.appStart() : Unexpected command value... USERS
 >30/7/22 1:01:14 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
 >30/7/22 1:08:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 21:53:34 //-> AdminOpManager.loadLeadData() : Received a unexpected exception.. For input string: "EXIT"
+>1/8/22 22:16:34 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 22:35:02 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 22:42:07 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
