@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PRODUCT_TYPE;
-import static com.ironhack.Constants.OpportunityStatus.OPEN;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
+import static com.ironhack.Constants.OpportunityStatus.*;
 
 @NoArgsConstructor
 @Data
@@ -39,6 +40,7 @@ public class Opportunity implements Printable{
 
 
     public void close(Boolean won){
+        this.status=won?CLOSE_WON:CLOSE_LOST;
         //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
 // TODO BEA
 
@@ -49,7 +51,8 @@ public class Opportunity implements Printable{
     @Override
     public TextObject toTextObject(){
         var opp= new TextObject(id).addText(PRODUCT_TYPE.formatOutput(product.name())).addText(String.valueOf(quantity))
-        .addText(status.name()).addText(account_companyName).addText(crmData.getContact(decisionMakerID).shortPrint());
+        .addText(toCamelCase(status.name())).addText(toCamelCase(account_companyName))
+                .addText(toCamelCase(crmData.getContact(decisionMakerID).shortPrint()));
 
        return opp;
 
@@ -66,10 +69,10 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ crmData.getUnknownObject(decisionMakerID).shortPrint())
-                .addText("Opp Status: "+status.name())
-                .addText("Account: "+account_companyName)
-                .addText("Proprietary: "+owner);
+                .addText("Contact: "+ toCamelCase(crmData.getUnknownObject(decisionMakerID).shortPrint()))
+                .addText("Opp Status: "+toCamelCase(status.name()))
+                .addText("Account: "+toCamelCase(account_companyName))
+                .addText("Proprietary: "+toCamelCase(owner));
 
     }
 

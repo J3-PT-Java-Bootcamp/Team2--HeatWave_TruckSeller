@@ -3,6 +3,9 @@ package com.ironhack.Sales;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 
+import static com.ironhack.CRMManager.ScreenManager.InputReader.MAIL;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
+
 @Data
 public class Lead implements Printable{
 
@@ -29,10 +32,10 @@ public class Lead implements Printable{
     public TextObject toTextObject() {
         return new TextObject()
                 .addText(getId())
-                .addText(getName())
+                .addText(toCamelCase(getName()))
                 .addText(getPhoneNumber())
-                .addText(getMail())
-                .addText(getCompanyName());
+                .addText(MAIL.formatOutput(getMail()))
+                .addText(toCamelCase(getCompanyName()));
     }
 
     @Override
@@ -44,10 +47,10 @@ public class Lead implements Printable{
     public TextObject printFullObject() {
         return new TextObject()
                 .addText("- Lead ID: "+getId())
-                .addText("- Name: "+getName())
+                .addText("- Name: "+toCamelCase(getName()))
                 .addText("- Phone Number: "+getPhoneNumber())
-                .addText("- Mail : "+getMail())
-                .addText("- Company: "+getCompanyName());
+                .addText("- Mail : "+MAIL.formatOutput(getMail()))
+                .addText("- Company: "+toCamelCase(getCompanyName()));
     }
 
     @Override

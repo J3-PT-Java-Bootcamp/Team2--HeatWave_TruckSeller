@@ -52,3 +52,13 @@
 >1/8/22 18:10:29 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
 >1/8/22 18:14:04 //-> ScreenManager.show_OpportunitiesScreen() : Received a unexpected NullPointerException.. Cannot invoke "com.ironhack.Sales.Account.getOpportunities()" because the return value of "com.ironhack.CRMManager.CRMData.getAccount(String)" is null
 >1/8/22 18:42:59 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>1/8/22 19:11:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 19:18:15 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 19:50:53 //-> ScreenManager.show_OpportunitiesScreen() : Received a unexpected NullPointerException.. Cannot invoke "com.ironhack.Sales.Account.getOpportunities()" because the return value of "com.ironhack.CRMManager.CRMData.getAccount(String)" is null
+>1/8/22 20:47:03 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull
+>1/8/22 20:50:18 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull
+>1/8/22 20:52:57 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 20:53:34 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 20:57:07 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 21:04:05 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 21:13:51 //-> ScreenManager.show_OpportunitiesScreen() : Received a unexpected NullPointerException.. Cannot invoke "com.ironhack.Sales.Account.getOpportunities()" because the return value of "com.ironhack.CRMManager.CRMData.getAccount(String)" is null
