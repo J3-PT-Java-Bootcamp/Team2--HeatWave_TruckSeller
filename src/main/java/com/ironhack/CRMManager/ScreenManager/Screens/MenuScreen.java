@@ -104,7 +104,7 @@ public class MenuScreen extends CRMScreen {
 
     @Override
     protected String getHintLine(){
-        return super.getHintLine()+ List.of(options).toString();
+        return super.getHintLine()+ List.of(options);
     }
 }
 

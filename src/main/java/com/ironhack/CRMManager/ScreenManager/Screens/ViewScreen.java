@@ -35,8 +35,8 @@ public class ViewScreen extends CRMScreen{
             optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
         } else if (Lead.class.equals(type)) {
             addCommand(CONVERT).addCommand(DISCARD);
-            optionsNames.add(CONVERT.display);
-            optionsNames.add(DISCARD.display);
+            optionsNames.add(CONVERT.getDisplay());
+            optionsNames.add(DISCARD.getDisplay());
         } else if (Account.class.equals(type)) {
             addCommand(OPP);
             optionsNames.add("View related"+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
@@ -50,7 +50,6 @@ public class ViewScreen extends CRMScreen{
         }
         constructScreen();
     }
-
     @Override
     public String start() throws CRMException {
         boolean stop = false;
@@ -75,7 +74,7 @@ public class ViewScreen extends CRMScreen{
                         new TextObject("Do you want to close app?"))) {
                     throw e;
                 }
-            } catch (GoBackException e) {
+            } catch (GoBackException|GoToMenuException e) {
                 throw e;
             } catch (Exception ignored) {
                 LogWriter.logError(getClass().getSimpleName(),
