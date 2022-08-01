@@ -80,7 +80,9 @@ public class ScreenManager {
         Commands comm = null;
         do {
             try {
-                var oppList= opportunitiesId.isEmpty()?currentUser.getOpportunityList():opportunitiesId;
+                ArrayList<String> oppList;
+                if (opportunitiesId.isEmpty()) oppList = currentUser.getOpportunityList();
+                else oppList = opportunitiesId;
                 for (String id : oppList ) {
                     var opp = crmData.getOpportunity(id);
                     if (opp.getStatus().equals(OpportunityStatus.OPEN)) list.add(opp);
@@ -94,16 +96,25 @@ public class ScreenManager {
                     }
                     case DISCARD -> {
                         var opp = crmData.getOpportunity(comm.getCaughtInput()[1]);
-                        if (modal_screen(currentUser, "Delete Opportunity ?", new TextObject("Do yo want to delete %s Opportunity?".formatted(opp.getId())).addText(opp.printFullObject()))) {
+                        if (modal_screen(currentUser,
+                                "Delete Opportunity ?",
+                                new TextObject("Do yo want to delete %s Opportunity?".formatted(opp.getId()))
+                                        .addText(opp.printFullObject()))) {
                             currentUser.removeFromOpportunities(opp.getId());
                             crmData.removeOpportunity(opp.getId());
                             crmData.removeContact(opp.getDecisionMakerID());
+                            screenManager.confirming_screen(currentUser,
+                                    "Opportunity %s removed from system".formatted(opp.getId()),
+                                    opp.printFullObject().toString(),
+                                    true);
                         }
                     }
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
-                LogWriter.logError(getClass().getSimpleName(), "show_OpportunitiesScreen", "Received a unexpected NullPointerException.. " + e.getMessage());
+                LogWriter.logError(getClass().getSimpleName(),
+                        "show_OpportunitiesScreen",
+                        "Received a unexpected NullPointerException.. " + e.getMessage());
                 break;
             }
             list.clear();

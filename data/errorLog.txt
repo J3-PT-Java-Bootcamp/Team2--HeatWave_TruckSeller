@@ -48,3 +48,5 @@
 >1/8/22 17:46:20 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IllegalStateExceptionUnexpected value: class com.ironhack.Sales.Contact
 >1/8/22 17:47:11 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
 >1/8/22 18:00:09 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 18:09:29 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
+>1/8/22 18:10:29 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
