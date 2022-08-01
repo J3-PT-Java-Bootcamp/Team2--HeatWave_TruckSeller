@@ -20,7 +20,7 @@ public enum Commands {
     CONTACTS("View CONTacts","CONT","CONTACT","CONTACTS", "VIEW CONTACTS", "VIEW CONTACT"),
     USERS("View USERs","MANAGE USERS","USERS","USER"),
     LOAD("LOAD Leads Data","LOAD LEADS","LOAD DATA","LOAD"),
-    STATS("View STATistics","STATS","STATISTICS","VIEW STATS","VIEW STATISTICS"),
+    STATS("View STATistics","STAT","STATISTICS","VIEW STATS","VIEW STATISTICS"),
     YES("Confirm","YES","OK","CONFIRM","Y"),
     NO("Cancel","NO","CANCEL","N"),
     BACK("Go BACK","BACK"),
