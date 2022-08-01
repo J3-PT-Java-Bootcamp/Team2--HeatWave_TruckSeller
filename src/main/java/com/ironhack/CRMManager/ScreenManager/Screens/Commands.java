@@ -30,8 +30,8 @@ public enum Commands {
     VIEW("SELECT/VIEW","VIEW","CHECK","SEE","SELECT"),
     DISCARD("Discard..","DISCARD","DELETE","REMOVE");
 
-    final String[] keyWords;
-    final String display;
+    private final String[] keyWords;
+    private final String display;
 
     String[] caughtInput;
     Commands(String display,String... keyWords){
@@ -46,9 +46,6 @@ public enum Commands {
             }
         }
         return false;
-    }
-    public String[] getCaughtInput(){
-        return caughtInput;
     }
     private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){

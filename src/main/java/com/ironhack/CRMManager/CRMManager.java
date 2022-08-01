@@ -173,7 +173,7 @@ public class CRMManager {
      *
      * @return the user logged
      */
-    public User login_screen() {
+    private User login_screen() {
         String strResult = "";
         var loginScreen = new InputScreen(null, "Login", new TextObject("Enter your User Name and Password:"), new String[]{"User Name", "Password"}, OPEN, PASSWORD);
         try {

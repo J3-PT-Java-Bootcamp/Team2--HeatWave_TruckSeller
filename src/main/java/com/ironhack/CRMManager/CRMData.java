@@ -10,12 +10,12 @@ import java.util.List;
 import static com.ironhack.Constants.Constants.MAX_ID;
 public class CRMData implements Printable{
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
-    private HashMap<String, Lead> leadMap;
-    private HashMap<String, Opportunity> opportunityMap;
-    private HashMap<String, Account> accountMap;
+    private final HashMap<String, Lead> leadMap;
+    private final HashMap<String, Opportunity> opportunityMap;
+    private final HashMap<String, Account> accountMap;
 
-    private HashMap<String, Contact> contactMap;
-    private HashMap<String, User> userList;
+    private final HashMap<String, Contact> contactMap;
+    private final HashMap<String, User> userList;
     
     public CRMData(){
         leadCounter=0;

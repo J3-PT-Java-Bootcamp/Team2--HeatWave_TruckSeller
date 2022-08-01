@@ -12,7 +12,7 @@ public enum IndustryType {
     OTHER("Other Industries","OTHER","NO");
 
     private final String[] keywords;
-    private String printName;
+    private final String printName;
 
     IndustryType(String printName, String... keywords){
         this.printName=printName;
