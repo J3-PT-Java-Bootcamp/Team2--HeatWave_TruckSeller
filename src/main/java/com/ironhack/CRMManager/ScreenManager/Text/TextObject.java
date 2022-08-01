@@ -725,5 +725,4 @@ public class TextObject {
         }
         return this;
     }
-
 }

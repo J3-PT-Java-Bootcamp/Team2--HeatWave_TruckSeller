@@ -4,17 +4,17 @@ import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
-import com.ironhack.Sales.Account;
-import com.ironhack.Sales.Lead;
-import com.ironhack.Sales.Opportunity;
-import com.ironhack.Sales.Printable;
+import com.ironhack.Sales.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static com.ironhack.CRMManager.CRMManager.*;
+import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
+import static com.ironhack.Constants.ColorFactory.SMART_RESET;
+import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 
 public class ViewScreen extends CRMScreen{
@@ -30,8 +30,8 @@ public class ViewScreen extends CRMScreen{
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
             optionsNames.add(CLOSE.display);
-            optionsNames.add(ACCOUNT.display);
-            optionsNames.add(CONTACTS.display);
+            optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
+            optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
         } else if (Lead.class.equals(type)) {
             addCommand(CONVERT).addCommand(DISCARD);
             optionsNames.add(CONVERT.display);
@@ -39,8 +39,13 @@ public class ViewScreen extends CRMScreen{
         } else if (Account.class.equals(type)) {
             addCommand(VIEW).addCommand(OPP);
             optionsNames.add(VIEW.display);
-            optionsNames.add(OPP.display);
-        } else {
+            optionsNames.add("View related"+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
+        } else if (Contact.class.equals(type)) {
+            addCommand(ACCOUNT).addCommand(OPP);
+            optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
+            optionsNames.add("View "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITY");
+
+    } else {
             throw new IllegalStateException("Unexpected value: " + object.getClass());
         }
         constructScreen();
@@ -71,7 +76,7 @@ public class ViewScreen extends CRMScreen{
                     throw e;
                 }
             } catch (GoBackException e) {
-                return EXIT.name();
+                throw e;
             } catch (Exception ignored) {
                 LogWriter.logError(getClass().getSimpleName(),
                         "start", "Received a unexpected exception.. " + ignored.getMessage());
