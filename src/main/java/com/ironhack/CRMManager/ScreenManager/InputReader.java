@@ -223,7 +223,7 @@ public enum InputReader {
             default -> output;
         };
     }
-    private String toCamelCase(String output){
+    public static String toCamelCase(String output){
         var outChArr= output.trim().toLowerCase().toCharArray();
         outChArr[0]=Character.toUpperCase(outChArr[0]);
         for (int i = 0; i < outChArr.length; i++) {

@@ -8,7 +8,7 @@ import lombok.Getter;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.OK;
 @Getter
 public enum Commands {
-    EXIT("Exit App","EXIT"),
+    EXIT("Exit App","EXIT","BYE","TURNOFF"),
     MENU("Go to Menu","MENU"),
     LOGOUT("Log Out","LOGOUT","LOG OUT"),
     CREATE("Create New...","CREATE","NEW","CREATE NEW"),

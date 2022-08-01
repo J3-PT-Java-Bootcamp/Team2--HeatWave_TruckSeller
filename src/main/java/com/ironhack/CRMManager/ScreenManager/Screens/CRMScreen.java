@@ -4,17 +4,21 @@ import com.ironhack.CRMManager.Exceptions.CRMException;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.ScreenManager.Text.WindowObject;
 import com.ironhack.CRMManager.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
-import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
+import static com.ironhack.Constants.ColorFactory.CColors;
 import static com.ironhack.Constants.ColorFactory.TextStyle.*;
 import static com.ironhack.Constants.Constants.*;
-@Data
+@Getter
+@Setter
 public abstract class CRMScreen {
     WindowObject textObject;
     User currentUser;
+    String hintLine;
     java.util.ArrayList<Commands> commands;
     private String name;
 
@@ -30,7 +34,7 @@ public abstract class CRMScreen {
     }
 
     void constructTitle(String name) {
-        this.addText(BLANK_SPACE).addText(BOLD+UNDERLINE.toString()+ "---- "+name+" ----" +RESET+textObject.getTextModifications()).alignTextCenter().addText(BLANK_SPACE);
+        this.addText(BLANK_SPACE).addText(BOLD+UNDERLINE.toString()+ "---- "+name.toUpperCase()+" ----" +RESET+textObject.getTextModifications()).alignTextCenter().addText(BLANK_SPACE);
     }
 
     /**Adds new text to main TextObject
@@ -91,5 +95,14 @@ public abstract class CRMScreen {
 
     public java.util.ArrayList<Commands> getCommands() {
         return commands;
+    }
+
+    protected String getHintLine() {
+        if (hintLine == null || hintLine == "") {
+
+            StringBuilder sb = new StringBuilder(String.valueOf(this.commands.toString()));
+            return sb.toString();
+        }
+        return hintLine;
     }
 }

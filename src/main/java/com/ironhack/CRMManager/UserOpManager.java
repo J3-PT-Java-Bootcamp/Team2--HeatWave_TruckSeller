@@ -22,16 +22,18 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 @Data
 public class UserOpManager {
 
-    public void closeOpportunity(User currentUser, String[] caughtInput) {
+    public Opportunity closeOpportunity(User currentUser, String[] caughtInput) {
         //TODO
         if (caughtInput != null && caughtInput.length == 3
                 && (caughtInput[1].equalsIgnoreCase("won") || caughtInput[1].equalsIgnoreCase("lost"))) {
             var opp = crmData.getOpportunity(caughtInput[2].trim().toUpperCase());
-            if (opp == null) return;//fixme
+            if (opp == null) return null;//fixme
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
+            screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
             currentUser.removeFromOpportunities(opp.getId());
-
+            return opp;
         }
+        return null;
     }
 
     public String createNewAccount(User currentUser, String... importedData) throws CRMException {
@@ -105,9 +107,9 @@ public class UserOpManager {
                     crmData.removeLead(lead.getId());
                     try {
                         crmData.saveData();
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
                         LogWriter.logError(getClass().getSimpleName(),
-                                "convertLeadToOpp->saveData", "Received a unexpected exception.. " + ignored.getMessage());
+                                "convertLeadToOpp->saveData", "Received a unexpected exception.. " + e.getMessage());
                     }
 
                     screenManager.confirming_screen(currentUser,
@@ -118,6 +120,7 @@ public class UserOpManager {
                 } catch (CRMException | NoCompleteObjectException e) {
                     LogWriter.logError(getClass().getSimpleName(),
                             "convertLeadToOpp", "Received a unexpected exception.. " + e.getClass() + e.getMessage());
+                    return null;
                 }
             }
 
@@ -144,11 +147,10 @@ public class UserOpManager {
                     }
                     case CLOSE -> {
                         userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
+                        viewObject(currentUser,caughtInput);
                     }
-                    case OPP -> {
-                        screenManager.show_OpportunitiesScreen(currentUser,
-                                crmData.getAccount(object.getId()).getOpportunities());
-                    }
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser,
+                            crmData.getAccount(object.getId()).getOpportunities());
                     case ACCOUNT -> {
                         var id = "";
                         if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName();
@@ -158,9 +160,6 @@ public class UserOpManager {
                         var id = "";
                         if(object instanceof Opportunity)id= ((Opportunity) object).getDecisionMakerID();
                         userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), id});
-                    }
-
-                    case HELP -> {
                     }
                     case DISCARD -> {
                         if(screenManager.modal_screen(currentUser,

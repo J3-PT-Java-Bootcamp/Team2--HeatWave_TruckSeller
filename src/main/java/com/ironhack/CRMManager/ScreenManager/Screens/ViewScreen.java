@@ -29,7 +29,8 @@ public class ViewScreen extends CRMScreen{
         type = object.getClass();
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
-            optionsNames.add(CLOSE.display);
+            optionsNames.add("CLOSE WON +id ");
+            optionsNames.add("CLOSE LOST +id ");
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
         } else if (Lead.class.equals(type)) {
@@ -37,8 +38,7 @@ public class ViewScreen extends CRMScreen{
             optionsNames.add(CONVERT.display);
             optionsNames.add(DISCARD.display);
         } else if (Account.class.equals(type)) {
-            addCommand(VIEW).addCommand(OPP);
-            optionsNames.add(VIEW.display);
+            addCommand(OPP);
             optionsNames.add("View related"+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
         } else if (Contact.class.equals(type)) {
             addCommand(ACCOUNT).addCommand(OPP);
