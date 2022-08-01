@@ -1,5 +1,6 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Sales.*;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
-public class CRMData {
+public class CRMData implements Printable{
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
     private HashMap<String, Lead> leadMap;
     private HashMap<String, Opportunity> opportunityMap;
@@ -186,5 +187,30 @@ public class CRMData {
     }
     public void removeUser(String userName){
         this.userList.remove(userName);
+    }
+
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject("Global");//TODO
+    }
+
+    @Override
+    public String shortPrint() {
+        return "Global";
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return new TextObject("Global Stats.");//TODO
+    }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[]{"Name"};
     }
 }
