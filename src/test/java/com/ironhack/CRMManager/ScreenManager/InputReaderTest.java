@@ -1,8 +1,7 @@
-package com.ironhack.ScreenManager;
+package com.ironhack.CRMManager.ScreenManager;
 
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.ScreenManager.InputReader;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import org.junit.jupiter.api.BeforeAll;
