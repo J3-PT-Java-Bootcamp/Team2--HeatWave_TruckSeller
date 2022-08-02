@@ -3,4 +3,7 @@
 >2/8/22 14:00:57 //-> ERR.ERR() : $&&$
 >2/8/22 14:02:20 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >2/8/22 14:02:55 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 21:37:02 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >2/8/22 21:47:11 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.ExitExceptionnull
+>2/8/22 23:22:50 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
+>2/8/22 23:28:07 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
