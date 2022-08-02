@@ -6,7 +6,6 @@ import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.Product;
 import org.junit.jupiter.api.Test;
 
-import static com.ironhack.CRMManager.CRMManager.printer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OpportunityTest extends TextObject {
@@ -19,15 +18,15 @@ class OpportunityTest extends TextObject {
     @Test
     void getId_test() {
         var opp= new Opportunity(Product.FLATBED,45,"Antonio","dsgfsf","me");
-        assertEquals("PFFD",opp.getId());
+        assertEquals("PFFA",opp.getId());
     }
 
-    @org.junit.jupiter.api.Test
-    void testprintable() {
-        var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
-
-        printer.sendToQueue(op);
-        printer.startPrint();
-    }
+//    @org.junit.jupiter.api.Test
+//    void testprintable() {
+//        var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
+//
+//        printer.sendToQueue(op);
+//        printer.startPrint();
+//    }
 
 }

@@ -66,3 +66,10 @@
 >1/8/22 22:34:31 //-> ViewScreen.start() : Received a unexpected exception.. null
 >1/8/22 22:34:47 //-> ViewScreen.start() : Received a unexpected exception.. null
 >1/8/22 22:42:32 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>1/8/22 22:47:37 //-> ERR.ERR() : $&&$
+>1/8/22 22:48:39 //-> ERR.ERR() : $&&$
+>1/8/22 22:53:45 //-> ERR.ERR() : $&&$
+>1/8/22 22:56:03 //-> ERR.ERR() : $&&$
+>1/8/22 22:56:24 //-> ERR.ERR() : $&&$
+>1/8/22 22:57:37 //-> ERR.ERR() : $&&$
+>1/8/22 22:59:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK

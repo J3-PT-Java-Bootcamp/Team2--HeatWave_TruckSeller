@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -21,6 +22,6 @@ class CRMManagerTest {
 
     @Test
     void checkCredentials_test_nok() {
-        assertTrue(crm.checkCredentials("USER","2345"));
+        assertFalse(crm.checkCredentials("USER","2345"));
     }
 }

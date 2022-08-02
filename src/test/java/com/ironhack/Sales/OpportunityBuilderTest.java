@@ -1,8 +1,8 @@
 package com.ironhack.Sales;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Constants.Product;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.Constants.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +16,13 @@ class OpportunityBuilderTest {
         var opportunityOne = new OpportunityBuilder();
         opportunityOne.setProduct(Product.FLATBED);
         opportunityOne.setQuantity(232);
-        opportunityOne.setOwner("Yep");
-
-        var finalopportunity= opportunityOne.constructOpportunity("TEST",new ContactBuilder());
-        assertEquals("12345FP",finalopportunity.getId()); //TODO TEST INDUSTRYTYPE no lagafa
+        opportunityOne.setOwner("USER");
+        var contBuilder= new ContactBuilder();
+        contBuilder.setMail("sadf@sdf.sadf");
+        contBuilder.setName("GILBERTO");
+        contBuilder.setPhoneNumber("93456456");
+        var finalOpportunity= opportunityOne.constructOpportunity("ACC",contBuilder);
+        assertEquals("USER",finalOpportunity.getOwner()); //TODO TEST INDUSTRYTYPE no lagafa
 
     }
 }
