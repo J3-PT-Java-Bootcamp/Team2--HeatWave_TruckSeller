@@ -31,7 +31,7 @@ class CRMDataTest {
 
     @Test
     void test_getNextID_ok() {
-        assertEquals("PFFD",crmData.getNextID(Opportunity.class));
+        assertEquals("PFFA",crmData.getNextID(Opportunity.class));
     }
 
 
