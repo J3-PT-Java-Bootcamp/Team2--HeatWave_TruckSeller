@@ -3,3 +3,4 @@
 >2/8/22 14:00:57 //-> ERR.ERR() : $&&$
 >2/8/22 14:02:20 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >2/8/22 14:02:55 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 21:47:11 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.ExitExceptionnull

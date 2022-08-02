@@ -1,13 +1,22 @@
 package com.ironhack.CRMManager;
 
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.google.gson.Gson;
 import com.ironhack.Sales.*;
 
+
+
+import java.io.FileWriter;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
+
+
 public class CRMData implements Printable{
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
     private final HashMap<String, Lead> leadMap;
@@ -27,6 +36,8 @@ public class CRMData implements Printable{
 
         userList=new HashMap<>();
     }
+
+
     public static CRMData loadCRMData(String rawData){
         com.google.gson.Gson gson=new com.google.gson.Gson();
         return gson.fromJson(rawData,CRMData.class);
@@ -183,11 +194,20 @@ public class CRMData implements Printable{
     }
 
     CRMData loadData() throws Exception {
+        Gson sessionGson = new Gson();
+        Reader reader = Files.newBufferedReader(Paths.get("data/SessionData.json"));
+        CRMData crmData = sessionGson.fromJson(reader, CRMData.class);
+
+        return crmData;
+
         //TODO LOAD FULL CRMData object from json and aSsign it to crmData field
-        throw new IllegalAccessException();
+
     }
 
     public void saveData() throws Exception {
+        //var crmDataToSave = new CRMData(this.accountCounter,)
+        Gson sessionGson = new Gson();
+        sessionGson.toJson(this , new FileWriter("data/SessionData.json", true));
         //TODO Save crmData object to .json file in ./data
 
     }
