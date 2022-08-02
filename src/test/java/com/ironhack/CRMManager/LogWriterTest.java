@@ -2,7 +2,6 @@ package com.ironhack.CRMManager;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -15,9 +14,9 @@ class LogWriterTest {
     void logError() throws FileNotFoundException {
         LogWriter.logError("ERR","ERR","$&&$");
         Scanner reader;
-        reader = new Scanner(new FileReader(new File("data/errorLog.txt")));
-        String res="";
-        while (reader.hasNextLine())res=reader.nextLine();
-        assertTrue(res.contains("$&&$"));
+        reader = new Scanner(new FileReader("data/errorLog.txt"));
+        var res=new StringBuilder();
+        while (reader.hasNextLine())res.append(reader.nextLine());
+        assertTrue(res.toString().contains("$&&$"));
     }
 }
