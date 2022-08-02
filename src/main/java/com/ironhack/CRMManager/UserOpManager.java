@@ -153,7 +153,7 @@ public class UserOpManager {
                             crmData.getAccount(object.getId()).getOpportunities());
                     case ACCOUNT -> {
                         var id = "";
-                        if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName();
+                        if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName().toUpperCase();
                         userOpManager.viewObject(currentUser, new String[]{ACCOUNT.name(), id});
                     }
                     case CONTACTS -> {

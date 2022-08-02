@@ -131,16 +131,28 @@ public class CRMData implements Printable{
 
     //----------------------------------------------------------------------------------------------------UNKNOWN OBJECT
     public Printable getUnknownObject(String id) {
-        if(id.startsWith("L")) return leadMap.get(id);
-        else if (id.startsWith("P")) return opportunityMap.get(id);
-        else if (id.startsWith("C")) return contactMap.get(id);
+        Printable val=null;
+        if(id.startsWith("L")) {
+            val= leadMap.get(id);
+        } else if (id.startsWith("P")) {
+            val= opportunityMap.get(id);
+        } else if (id.startsWith("C")) {
+            val= contactMap.get(id);
+        }
+        if (val!=null)return val;
         return accountMap.get(id);
     }
-    public CRMData removeUnknownObject(String id){
-        if(id.startsWith("L")) return removeLead(id);
-        else if (id.startsWith("P")) return removeOpportunity(id);
-        else if (id.startsWith("C")) return removeContact(id);
-        return removeAccount(id);
+    public void removeUnknownObject(String id){
+        Printable val=null;
+        if(id.startsWith("L")) {
+           val= leadMap.remove(id);
+        } else if (id.startsWith("P")) {
+            val= opportunityMap.remove(id);
+        } else if (id.startsWith("C")) {
+            val= contactMap.remove(id);
+        }
+        if (val==null) accountMap.remove(id);
+        removeAccount(id);
     }
     public CRMData addUnknownObject(Printable obj){
         if(obj instanceof Lead) return addLead((Lead)obj);
@@ -150,10 +162,11 @@ public class CRMData implements Printable{
         return null;
     }
     public boolean existsObject(String id){
-        if(id.startsWith("L")) return leadMap.containsKey(id);
-        else if (id.startsWith("P")) return opportunityMap.containsKey(id);
-        else if (id.startsWith("C")) return contactMap.containsKey(id);
-        return accountMap.containsKey(id)||userList.containsKey(id);
+        boolean firstCheck = false;
+        if(id.startsWith("L")) firstCheck= leadMap.containsKey(id);
+        else if (id.startsWith("P")) firstCheck= opportunityMap.containsKey(id);
+        else if (id.startsWith("C")) firstCheck= contactMap.containsKey(id);
+        return firstCheck||accountMap.containsKey(id)||userList.containsKey(id);
     }
     public boolean isEmptyMap(Class<? extends Printable> objType){
         return switch (objType.getSimpleName()){
