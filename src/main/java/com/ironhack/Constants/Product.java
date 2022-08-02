@@ -6,8 +6,8 @@ import static com.ironhack.CRMManager.Exceptions.ErrorType.PRODUCT_NOK;
 
 public enum Product {
     HYBRID("Hybrid", "HYBRID TRUCK", "HYBT", "HYBRID"),
-    FLATBED("Flatbed", "FLATBED", "FLBT", "FLAT"),
-    BOX("Box","BOXED", "BOXT", "BOX");
+    FLATBED("Flatbed", "FLATBED", "FLBT", "FLAT", "FLATBED TRUCK"),
+    BOX("Box","BOXED", "BOXT", "BOX", "BOX TRUCK");
 
     private final String[] keywords;
     private final String printName;

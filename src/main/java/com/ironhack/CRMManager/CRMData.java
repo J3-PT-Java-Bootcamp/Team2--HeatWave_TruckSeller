@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.ironhack.Sales.*;
 
 
+
 import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
+
+
 public class CRMData implements Printable{
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
     private final HashMap<String, Lead> leadMap;
@@ -34,15 +37,7 @@ public class CRMData implements Printable{
         userList=new HashMap<>();
     }
 
-    public CRMData(CRMData savedData){
-        leadCounter= savedData.getLeadCounter();
-        opportunityCounter=savedData.getOpportunityCounter();
-        leadMap =savedData.getLeadMap();
-        opportunityMap =savedData.getOpportunityMap();
-        contactMap=savedData.getContactMap();
-        accountMap=savedData.getAccountMap();
-        userList=savedData.getUserList();
-    }
+
     public static CRMData loadCRMData(String rawData){
         com.google.gson.Gson gson=new com.google.gson.Gson();
         return gson.fromJson(rawData,CRMData.class);

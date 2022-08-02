@@ -95,8 +95,11 @@ public class CRMManager {
     private void runFirstConfig() {
         try {
             adminOpManager.createNewUser(null,true);
+            crmData.saveData();
         } catch (CRMException e) {
             runFirstConfig();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
