@@ -30,7 +30,7 @@ public class ConsolePrinter {
      * Shows the Team Logo after calibrating console size
     * @deprecated
      */
-    public void splashScreen() {
+    private void splashScreen() {
         try {
             calibrateScreen();
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class ConsolePrinter {
      * Shows Square with the screen size to allow User to resize console,
      * waits until user confirm
      */
-    public void calibrateScreen() throws Exception {
+    private void calibrateScreen() throws Exception {
         sendToQueue(new WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1)
                 .setFrameColor(BgColors.BRIGHT_BLACK).setBgcolor(BgColors.CYAN)
                 .setTxtColor(CColors.BRIGHT_WHITE)
@@ -56,7 +56,7 @@ public class ConsolePrinter {
         startPrint();
     }
     //---------------------------------------------------------------------------   CONSOLE MANAGER
-    public TextObject smartReplaceReset(TextObject obj) {
+    private TextObject smartReplaceReset(TextObject obj) {
 
         for (int i = 0; i < obj.getText().size(); i++) {
             String line = obj.getText().get(i);

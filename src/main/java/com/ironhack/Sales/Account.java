@@ -1,10 +1,13 @@
 package com.ironhack.Sales;
 
-import com.ironhack.Constants.IndustryType;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.IndustryType;
 import lombok.Data;
 
 import java.util.ArrayList;
+
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
+
 @Data
 
 public class Account implements Printable{
@@ -17,7 +20,7 @@ public class Account implements Printable{
 
 
 
-    protected Account(IndustryType industryType, int employeeCount, String city, String country, String companyName) {
+    public Account(IndustryType industryType, int employeeCount, String city, String country, String companyName) {
         setIndustryType(industryType);
         setEmployeeCount(employeeCount);
         setCity(city);
@@ -28,23 +31,29 @@ public class Account implements Printable{
     }
 
 
-
+    @Override
+    public String getId() {
+        return companyName;
+    }
 
     //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject(this.companyName).addText("Provisional account")
-                .addText(" DELETE ME!").addText("ONLY FOR TESTS").addText("????");
+        return new TextObject(toCamelCase(this.companyName)).addText(industryType.toString())
+                .addText(String.valueOf(employeeCount)).addText(toCamelCase(city)).addText(toCamelCase(country));
     }
 
     @Override
     public String shortPrint() {
-        return this.companyName;
+        return toCamelCase(this.companyName);
     }
 
     @Override
     public TextObject printFullObject() {
-        return new TextObject("Provisional account").addText(this.companyName+" DELETE ME!").addText("ONLY FOR TESTS");
+        return new TextObject().addText("Company name: "+toCamelCase(this.companyName))
+                .addText("Industry: "+this.industryType.toString()).addText("Employees: "+this.employeeCount)
+                .addText("City: "+toCamelCase(this.city))
+                .addText("Country: "+toCamelCase(this.country));
     }
 
     @Override

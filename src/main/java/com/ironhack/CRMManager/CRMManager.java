@@ -1,12 +1,21 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.CRMManager.Exceptions.*;
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.ExitException;
+import com.ironhack.CRMManager.Exceptions.LogoutException;
 import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.ScreenManager;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.IndustryType;
+import com.ironhack.Constants.Product;
 import com.ironhack.FakeLead;
+import com.ironhack.Sales.Account;
+import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Lead;
+import com.ironhack.Sales.Opportunity;
+
+import java.util.ArrayList;
 
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
@@ -59,6 +68,23 @@ public class CRMManager {
                 throw new RuntimeException(e);
             }
         }
+        crmData.addAccount(new Account(IndustryType.MEDICAL,9889,"Oklahoma","India","ACC"));
+        crmData.addAccount(new Account(IndustryType.PRODUCE,12450,"Martorell","Chile","COCACOLA"));
+        var cont= new Contact("Antonio","93456456","antonio@cocacola.es","COCACOLA");
+        crmData.addContact(cont);
+        var opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+        opp = new Opportunity(Product.BOX,1, cont.getId(),"USER","COCACOLA");
+        crmData.addOpportunity(opp);
+        crmData.getUser("USER").addToOpportunityList(opp.getId());
+
         if (testWithScreens) appStart();
     }
     //---------------------------------------------------------------------------------------------------------MAIN FLOW
@@ -92,7 +118,7 @@ public class CRMManager {
                     }
                 }
                 else switch (comm) {
-                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser);
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser,new ArrayList<>());
                     case LEAD -> screenManager.show_LeadScreen(currentUser);
                     case ACCOUNT -> screenManager.show_AccountsScreen(false, currentUser);
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
@@ -111,6 +137,11 @@ public class CRMManager {
             } catch (CRMException ignored){
                 LogWriter.logError(getClass().getSimpleName(),
                         "appStart","Unexpected exception.. "+ignored.getClass()+" "+ignored.getErrorType());
+            } catch (Exception e) {
+
+                LogWriter.logError(getClass().getSimpleName(),
+                        "appStart",
+                        "Unexpected exception ... " + e.getClass()+e.getMessage());
             }
         }
         System.exit(0);
@@ -142,7 +173,7 @@ public class CRMManager {
      *
      * @return the user logged
      */
-    public User login_screen() {
+    private User login_screen() {
         String strResult = "";
         var loginScreen = new InputScreen(null, "Login", new TextObject("Enter your User Name and Password:"), new String[]{"User Name", "Password"}, OPEN, PASSWORD);
         try {

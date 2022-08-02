@@ -8,30 +8,30 @@ import lombok.Getter;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.OK;
 @Getter
 public enum Commands {
-    EXIT("Exit App","EXIT"),
+    EXIT("Exit App","EXIT","BYE","TURNOFF"),
     MENU("Go to Menu","MENU"),
     LOGOUT("Log Out","LOGOUT","LOG OUT"),
     CREATE("Create New...","CREATE","NEW","CREATE NEW"),
-    CONVERT("Convert to Opportunity","CONVERT", "CONVERT LEAD"),
-    CLOSE("Close Opportunity","CLOSE","CLOSE OPP", "CLOSE OPPORTUNITY"),
-    OPP("View Opportunities","OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
-    LEAD("View Leads","LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
-    ACCOUNT("View Accounts","ACC","ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
-    CONTACTS("View Contacts","CONT","CONTACT","CONTACTS", "VIEW CONTACTS", "VIEW CONTACT"),
-    USERS("View Users","MANAGE USERS","USERS","USER"),
-    LOAD("Load Leads Data","LOAD LEADS","LOAD DATA","LOAD"),
-    STATS("View Statistics","STATS","STATISTICS","VIEW STATS","VIEW STATISTICS"),
+    CONVERT("CONVERT to Opportunity","CONVERT", "CONVERT LEAD"),
+    CLOSE("CLOSE Opportunity","CLOSE","CLOSE OPP", "CLOSE OPPORTUNITY"),
+    OPP("View OPPortunities","OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
+    LEAD("View LEADs","LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
+    ACCOUNT("View ACCounts","ACC","ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
+    CONTACTS("View CONTacts","CONT","CONTACT","CONTACTS", "VIEW CONTACTS", "VIEW CONTACT"),
+    USERS("View USERs","MANAGE USERS","USERS","USER"),
+    LOAD("LOAD Leads Data","LOAD LEADS","LOAD DATA","LOAD"),
+    STATS("View STATistics","STAT","STATISTICS","VIEW STATS","VIEW STATISTICS"),
     YES("Confirm","YES","OK","CONFIRM","Y"),
     NO("Cancel","NO","CANCEL","N"),
-    BACK("Go Back","BACK"),
-    NEXT("Next","NEXT"),
-    PREVIOUS("Previous","PREV","PREVIOUS"),
-    HELP("Help","HELP"),
-    VIEW("View object...","VIEW","CHECK","SEE","SELECT"),
-    DISCARD("Discard object...","DISCARD","DELETE","REMOVE");
+    BACK("Go BACK","BACK"),
+    NEXT("NEXT","NEXT"),
+    PREVIOUS("PREVious","PREV","PREVIOUS"),
+    HELP("HELP","HELP"),
+    VIEW("SELECT/VIEW","VIEW","CHECK","SEE","SELECT"),
+    DISCARD("Discard..","DISCARD","DELETE","REMOVE");
 
-    final String[] keyWords;
-    final String display;
+    private final String[] keyWords;
+    private final String display;
 
     String[] caughtInput;
     Commands(String display,String... keyWords){
@@ -47,9 +47,6 @@ public enum Commands {
         }
         return false;
     }
-    public String[] getCaughtInput(){
-        return caughtInput;
-    }
     private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){
             case EXIT -> throw new ExitException(false);
@@ -64,17 +61,20 @@ public enum Commands {
             case BACK -> throw new GoBackException(screen);
             case HELP -> throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
             case VIEW, DISCARD, CLOSE, CONVERT -> {
-                if(caughtInput.length!=2)throw new WrongInputException(ErrorType.COMMAND_NOK);
-                var inputId= caughtInput[1].trim().toUpperCase();
-                char identifier= inputId.toCharArray()[0];
-                if(identifier=='L'){
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else if(identifier=='O') {
-                    if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else if(identifier=='C'){
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
-                }else{
-                    if(!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                if(caughtInput.length!=2){
+                    if(! (screen instanceof ViewScreen))throw new WrongInputException(ErrorType.COMMAND_NOK);
+                }else {
+                    var inputId = caughtInput[1].trim().toUpperCase();
+                    char identifier = inputId.toCharArray()[0];
+                    if (identifier == 'L') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else if (identifier == 'O') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else if (identifier == 'C') {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    } else {
+                        if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
+                    }
                 }
                 return true;
             }

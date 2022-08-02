@@ -1,12 +1,15 @@
 package com.ironhack.Sales;
 
-import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.User;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.PRODUCT_TYPE;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
+import static com.ironhack.Constants.OpportunityStatus.*;
 
 @NoArgsConstructor
 @Data
@@ -22,37 +25,37 @@ public class Opportunity implements Printable{
     /*
      *Constructor used only for tests
      */
-    public Opportunity(String id, Product product, int quantity, Contact decisionMaker, OpportunityStatus status, User owner,String companyName) {
-        setId(id);
-        setProduct(product);
-        setQuantity(quantity);
-        setDecisionMakerID(decisionMaker.getId());
-        setStatus(status);
-        setOwner(owner.getName());
-    }
-    public Opportunity( Product product, int quantity, String decisionMaker, OpportunityStatus status, String owner, String companyName) {
-        setId(com.ironhack.CRMManager.CRMManager.crmData.getNextID(getClass()));
+
+    public Opportunity( Product product, int quantity, String decisionMaker, String owner, String companyName) {
+        setId(crmData.getNextID(getClass()));
         setProduct(product);
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
-        setStatus(status);
         setOwner(owner);
-        setAccount_companyName(account_companyName);
+        setStatus(OPEN);
+        setAccount_companyName(companyName);
     }
 
 
 
 
     public void close(Boolean won){
+        this.status=won?CLOSE_WON:CLOSE_LOST;
         //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
+// TODO BEA
+
+
     }
 
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
+        var opp= new TextObject(id).addText(PRODUCT_TYPE.formatOutput(product.name())).addText(String.valueOf(quantity))
+        .addText(toCamelCase(status.name())).addText(toCamelCase(account_companyName))
+                .addText(toCamelCase(crmData.getContact(decisionMakerID).shortPrint()));
 
-        return new TextObject(id).addText(product.name()).addText(String.valueOf(quantity))
-                .addText(status.name()).addText(account_companyName);
+       return opp;
+
     }
 
     @Override
@@ -66,16 +69,16 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ CRMManager.crmData.getUnknownObject(decisionMakerID).shortPrint())
-                .addText("Opp Status: "+status.name())
-                .addText("Account: "+account_companyName)
-                .addText("Proprietary: "+owner);
+                .addText("Contact: "+ toCamelCase(crmData.getUnknownObject(decisionMakerID).shortPrint()))
+                .addText("Opp Status: "+toCamelCase(status.name()))
+                .addText("Account: "+toCamelCase(account_companyName))
+                .addText("Proprietary: "+toCamelCase(owner));
 
     }
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[]{"ID","Product", "Quantity", "Status", "Account Company Name"};
+        return new String[]{"ID","Product", "Quantity", "Status", "Company","Contact"};
     }
 
 }

@@ -1,8 +1,8 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.google.gson.Gson;
 import com.ironhack.Sales.*;
-import lombok.Data;
 
 
 import java.io.FileWriter;
@@ -11,18 +11,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.ironhack.Constants.Constants.MAX_ID;
-
-@Data
-public class CRMData {
+public class CRMData implements Printable{
     private int leadCounter,opportunityCounter,accountCounter,contactCounter;
-    private HashMap<String, Lead> leadMap;
-    private HashMap<String, Opportunity> opportunityMap;
-    private HashMap<String, Account> accountMap;
+    private final HashMap<String, Lead> leadMap;
+    private final HashMap<String, Opportunity> opportunityMap;
+    private final HashMap<String, Account> accountMap;
 
-    private HashMap<String, Contact> contactMap;
-    private HashMap<String, User> userList;
+    private final HashMap<String, Contact> contactMap;
+    private final HashMap<String, User> userList;
     
     public CRMData(){
         leadCounter=0;
@@ -56,7 +55,7 @@ public class CRMData {
         var sb= new StringBuilder();
         if (Opportunity.class.equals(objClass)) {
             opportunityCounter++;
-            sb.append("OP").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - opportunityCounter));
+            sb.append("P").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - opportunityCounter));
         } else if (Lead.class.equals(objClass)) {
             leadCounter++;
             sb.append("L").append(Integer.toHexString(Integer.parseInt(MAX_ID, 16) - leadCounter));
@@ -132,8 +131,9 @@ public class CRMData {
         return this;
     }
 
-    public ArrayList<User> getUsers(boolean includeAdmin) {
-        if(includeAdmin)return (ArrayList<User>) this.getUserList().values();
+    public List<User> getUsers(boolean includeAdmin) {
+        if(includeAdmin) return getUserList().values().stream().toList();
+
         var resArr= new ArrayList<User>();
         for (User user:userList.values()) {
             if (!user.isAdmin())resArr.add(user);
@@ -141,22 +141,34 @@ public class CRMData {
         return resArr;
     }
     public CRMData removeContact(String id){
-        this.leadMap.remove(id);
+        this.contactMap.remove(id);
         return this;}
 
 
     //----------------------------------------------------------------------------------------------------UNKNOWN OBJECT
     public Printable getUnknownObject(String id) {
-        if(id.startsWith("L")) return leadMap.get(id);
-        else if (id.startsWith("O")) return opportunityMap.get(id);
-        else if (id.startsWith("C")) return contactMap.get(id);
+        Printable val=null;
+        if(id.startsWith("L")) {
+            val= leadMap.get(id);
+        } else if (id.startsWith("P")) {
+            val= opportunityMap.get(id);
+        } else if (id.startsWith("C")) {
+            val= contactMap.get(id);
+        }
+        if (val!=null)return val;
         return accountMap.get(id);
     }
-    public CRMData removeUnknownObject(String id){
-        if(id.startsWith("L")) return removeLead(id);
-        else if (id.startsWith("O")) return removeOpportunity(id);
-        else if (id.startsWith("C")) return removeContact(id);
-        return removeAccount(id);
+    public void removeUnknownObject(String id){
+        Printable val=null;
+        if(id.startsWith("L")) {
+           val= leadMap.remove(id);
+        } else if (id.startsWith("P")) {
+            val= opportunityMap.remove(id);
+        } else if (id.startsWith("C")) {
+            val= contactMap.remove(id);
+        }
+        if (val==null) accountMap.remove(id);
+        removeAccount(id);
     }
     public CRMData addUnknownObject(Printable obj){
         if(obj instanceof Lead) return addLead((Lead)obj);
@@ -166,10 +178,11 @@ public class CRMData {
         return null;
     }
     public boolean existsObject(String id){
-        if(id.startsWith("L")) return leadMap.containsKey(id);
-        else if (id.startsWith("O")) return opportunityMap.containsKey(id);
-        else if (id.startsWith("C")) return contactMap.containsKey(id);
-        return accountMap.containsKey(id)||userList.containsKey(id);
+        boolean firstCheck = false;
+        if(id.startsWith("L")) firstCheck= leadMap.containsKey(id);
+        else if (id.startsWith("P")) firstCheck= opportunityMap.containsKey(id);
+        else if (id.startsWith("C")) firstCheck= contactMap.containsKey(id);
+        return firstCheck||accountMap.containsKey(id)||userList.containsKey(id);
     }
     public boolean isEmptyMap(Class<? extends Printable> objType){
         return switch (objType.getSimpleName()){
@@ -212,5 +225,30 @@ public class CRMData {
     }
     public void removeUser(String userName){
         this.userList.remove(userName);
+    }
+
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject("Global");//TODO
+    }
+
+    @Override
+    public String shortPrint() {
+        return "Global";
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return new TextObject("Global Stats.");//TODO
+    }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[]{"Name"};
     }
 }

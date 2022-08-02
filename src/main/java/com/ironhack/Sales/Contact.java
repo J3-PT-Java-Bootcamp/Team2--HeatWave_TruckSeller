@@ -1,7 +1,11 @@
 package com.ironhack.Sales;
 
+import com.ironhack.CRMManager.ScreenManager.InputReader;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
+
+import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
 
 @Data
 public class Contact implements Printable{
@@ -11,9 +15,9 @@ public class Contact implements Printable{
     private String mail;
     private String company;
 
-    public Contact(String name, String id, String phoneNumber, String mail,String company) {
+    public Contact(String name, String phoneNumber, String mail,String company) {
         setName(name);
-        setId(id);
+        setId(crmData.getNextID(getClass()));
         setPhoneNumber(phoneNumber);
         setMail(mail);
         setCompany(company);
@@ -22,17 +26,22 @@ public class Contact implements Printable{
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject() {
-        return new TextObject();
+        return new TextObject(this.id).addText(toCamelCase(String.valueOf(this.name) ))
+                .addText(String.valueOf(this.phoneNumber)).addText(InputReader.MAIL.formatOutput(this.mail)).addText(toCamelCase(this.company));
     }
 
     @Override
     public String shortPrint() {
-        return null;
+        return this.name;
     }
 
     @Override
     public TextObject printFullObject() {
-        return null;
+
+         return new TextObject("Provisional account").addText("ID: "+this.id)
+                 .addText("Name: "+toCamelCase(this.name)).addText("Phone: "+this.phoneNumber)
+                 .addText("Email: "+InputReader.MAIL.formatOutput(this.mail))
+                 .addText("Company: "+toCamelCase(this.company));
     }
 
     @Override

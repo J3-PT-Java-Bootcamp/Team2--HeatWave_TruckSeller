@@ -6,11 +6,14 @@ import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory;
 
+import java.util.List;
+
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.CRMManager.ScreenManager.Text.TextObject.Scroll;
 import static com.ironhack.Constants.ColorFactory.*;
+import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_BLACK;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.Constants.Constants.MAIN_BG;
@@ -67,10 +70,17 @@ public class MenuScreen extends CRMScreen {
         container.setBgcolor(this.textObject.bgColor);
         container.setTxtColor(textObject.txtColor);
         container.setTxtStyle(textObject.txtStyle);
-        TextObject statistics = new TextObject(user.getName() + " :", width / 4, height);
+        TextObject statistics;
+        if(user.isAdmin()){
+            statistics= new TextObject("App stats: ",width/4,height);
+            statistics.addText(crmData.printFullObject());
+        }else {
+            statistics = new TextObject(user.getName() + " :", width / 4, height);
+            statistics.addText(user.printFullObject());
+        }
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
         TextObject historicObjects = new TextObject("History :", width / 4, height);
-        statistics.addText(user.printFullObject());
+
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
         for (String id : user.getRecentObjects())
@@ -78,7 +88,7 @@ public class MenuScreen extends CRMScreen {
         historicObjects.fillAllLines();
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
-        statistics.setBgcolor(BgColors.BLUE).alignTextTop(height)
+        statistics.setBgcolor(BgColors.CYAN).alignTextTop(height)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
         historicObjects.alignTextTop(height)
                 .setBgcolor(BgColors.BLACK)
@@ -86,10 +96,15 @@ public class MenuScreen extends CRMScreen {
         container.addGroupInColumns(3,
                 width,
                 new TextObject[]{optionsNames, statistics, historicObjects});
+        container.addText(BRIGHT_BLACK+this.getHintLine()+SMART_RESET);
         container.alignTextMiddle();
 
         this.textObject.addText(container).alignTextTop(height);
+    }
 
+    @Override
+    protected String getHintLine(){
+        return super.getHintLine()+ List.of(options);
     }
 }
 

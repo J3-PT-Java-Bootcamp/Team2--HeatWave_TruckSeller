@@ -114,7 +114,7 @@ public class TextObject {
         return this;
     }
 
-    CColors getTxtColor() {
+    private CColors getTxtColor() {
         return txtColor;
     }
 
@@ -123,7 +123,7 @@ public class TextObject {
         return this;
     }
 
-    TextStyle getTxtStyle() {
+    private TextStyle getTxtStyle() {
         return txtStyle;
     }
 
@@ -379,7 +379,7 @@ public class TextObject {
      *
      * @return resulting String
      */
-    public String fillLine(String line, int width) {
+    private String fillLine(String line, int width) {
         return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
     }
 
@@ -412,7 +412,7 @@ public class TextObject {
      *
      * @return resulting String
      */
-    public String centerLine(String line, int width) {
+    private String centerLine(String line, int width) {
         int leftSpace, rightSpace, remainSpace;
         remainSpace = width - countValidCharacters(line);
         leftSpace = remainSpace / 2;
@@ -427,7 +427,7 @@ public class TextObject {
         return (BLANK_SPACE.repeat(leftSpace)) + line + (BLANK_SPACE.repeat(rightSpace));
     }
 
-    public String centerLine(String line) {
+    private String centerLine(String line) {
         return centerLine(line, MAX_WIDTH);
     }
 
@@ -507,7 +507,7 @@ public class TextObject {
      * @return new TextObject
      *
      */
-    public TextObject getResizedText(int newWidth, int newHeight) {
+    private TextObject getResizedText(int newWidth, int newHeight) {
         return new TextObject(this, scroll, newWidth, newHeight);
     }
 
@@ -557,7 +557,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    public TextObject alignTextRight() {
+    private TextObject alignTextRight() {
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, lineToRight(text.get(i)));
         }
@@ -590,7 +590,7 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public TextObject colorizeAllText(CColors... colors) {
+    private TextObject colorizeAllText(CColors... colors) {
         switch (colors.length) {
             case 0 -> {
                 for (int i = 0; i < totalHeight; i++) {
@@ -624,7 +624,7 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public TextObject stylizeAllText(TextStyle style) {
+    private TextObject stylizeAllText(TextStyle style) {
         this.txtStyle=style;
         for (int i = 0; i <getTotalHeight(); i++) {
             this.text.set(i,style+text.get(i)+ RESET);
@@ -642,14 +642,14 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    public TextObject setAllTextBackground(BgColors bg) {
+    private TextObject setAllTextBackground(BgColors bg) {
         this.bgColor =bg;
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, setLineBackground(text.get(i), bg));
         }
         return this;
     }
-    public TextObject setAllTextColor(CColors color) {
+    private TextObject setAllTextColor(CColors color) {
         this.txtColor=color;
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, color+text.get(i)+ RESET);
@@ -657,13 +657,13 @@ public class TextObject {
         return this;
     }
 
-    public TextObject trimAllText(){
+    private TextObject trimAllText(){
         for (int i = 0; i <getTotalHeight(); i++) {
             text.set(i,removeStyleAndColorLine(text.get(i)).trim());
         }
         return this;
     }
-    public TextObject applyAllTextColors(Boolean mustFill){
+    private TextObject applyAllTextColors(Boolean mustFill){
         for (int i = 0; i <getTotalHeight(); i++) {
             text.set(i,
                     (bgColor !=null? bgColor.toString():"")
@@ -675,7 +675,7 @@ public class TextObject {
         }
         return this;
     }
-    public String applyTextColorsToLine(String line){
+    private String applyTextColorsToLine(String line){
             return (bgColor !=null? bgColor.toString():"")
                     +(txtColor!=null?txtColor.toString():"")
                     +(txtStyle!=null?txtStyle.toString():"")
@@ -700,8 +700,9 @@ public class TextObject {
     }
 
     public TextObject fillAllLines() {
-        for (String line : text) {
-            fillLine(line);
+        for (int i = 0; i < text.size(); i++) {
+            String line = text.get(i);
+            text.set(i,fillLine(line));
         }
         return this;
     }
@@ -725,5 +726,4 @@ public class TextObject {
         }
         return this;
     }
-
 }

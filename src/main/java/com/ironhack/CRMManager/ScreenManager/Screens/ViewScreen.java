@@ -4,10 +4,7 @@ import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
-import com.ironhack.Sales.Account;
-import com.ironhack.Sales.Lead;
-import com.ironhack.Sales.Opportunity;
-import com.ironhack.Sales.Printable;
+import com.ironhack.Sales.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -16,6 +13,8 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
+import static com.ironhack.Constants.ColorFactory.SMART_RESET;
+import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 import static com.ironhack.Constants.Constants.LIMIT_Y;
 
 public class ViewScreen extends CRMScreen{
@@ -30,50 +29,55 @@ public class ViewScreen extends CRMScreen{
         type = object.getClass();
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
-            optionsNames.add(CLOSE.display);
-            optionsNames.add(ACCOUNT.display);
-            optionsNames.add(CONTACTS.display);
+            optionsNames.add("CLOSE WON +id ");
+            optionsNames.add("CLOSE LOST +id ");
+            optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
+            optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
         } else if (Lead.class.equals(type)) {
             addCommand(CONVERT).addCommand(DISCARD);
-            optionsNames.add(CONVERT.display);
-            optionsNames.add(DISCARD.display);
+            optionsNames.add(CONVERT.getDisplay());
+            optionsNames.add(DISCARD.getDisplay());
         } else if (Account.class.equals(type)) {
-            addCommand(VIEW).addCommand(DISCARD).addCommand(OPP);
-            optionsNames.add(VIEW.display);
-            optionsNames.add(DISCARD.display);
-            optionsNames.add(OPP.display);
-        } else {
+            addCommand(OPP);
+            optionsNames.add("View related "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
+        } else if (Contact.class.equals(type)) {
+            addCommand(ACCOUNT).addCommand(OPP);
+            optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
+            optionsNames.add("View "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITY");
+
+    } else {
             throw new IllegalStateException("Unexpected value: " + object.getClass());
         }
         constructScreen();
     }
-
     @Override
     public String start() throws CRMException {
+        boolean stop = false;
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
         String input = "";
         try {
             return COMMAND.getInput(this, commands.toArray(new Commands[0]));
+
         } catch (HelpException help) {
             printer.showHintLine(help.hint, help.commands);
         } catch (LogoutException logout) {
-            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
+            if (screenManager.modal_screen(currentUser, "Confirmation Needed",
                     new TextObject("Do you want to logout?"))) {
                 throw logout;
             }
         } catch (ExitException e) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
-            if (screenManager.modal_screen(currentUser,"Confirmation Needed",
+            if (screenManager.modal_screen(currentUser, "Confirmation Needed",
                     new TextObject("Do you want to close app?"))) {
                 throw e;
             }
-        } catch (GoBackException e) {
-            return EXIT.name();
-        } catch (CRMException ignored) {
+        } catch (GoBackException|GoToMenuException e) {
+            throw e;
+        } catch (Exception ignored) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start","Received a unexpected exception.. "+ignored.getErrorType());
+                    "start", "Received a unexpected exception.. " + ignored.getMessage());
         }
         constructScreen();
         return start();

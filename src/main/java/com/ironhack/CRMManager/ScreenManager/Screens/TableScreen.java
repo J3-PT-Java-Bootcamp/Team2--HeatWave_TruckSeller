@@ -6,7 +6,6 @@ import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Constants.ColorFactory.BgColors;
-import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
 import com.ironhack.Sales.Printable;
@@ -18,6 +17,8 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
+import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_BLACK;
+import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 
@@ -26,7 +27,6 @@ public class TableScreen extends CRMScreen {
     private final Class<? extends Printable> type;
     ArrayList<List<? extends Printable>> masterArr;
     private final boolean hasContent;
-
     public TableScreen(User currentUser, String name, ArrayList<? extends Printable> data) {
         super(currentUser, name);
         addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
@@ -38,20 +38,13 @@ public class TableScreen extends CRMScreen {
             masterArr = getLists(data);
             type = data.get(0).getClass();
             if (Opportunity.class.equals(type)) {
-                addCommand(CLOSE).addCommand(VIEW);
+                addCommand(CLOSE);
             } else if (Lead.class.equals(type)) {
-                addCommand(CONVERT).addCommand(DISCARD).addCommand(VIEW);
-            } else if (Account.class.equals(type)) {
-                addCommand(VIEW).addCommand(DISCARD);
-            } else {
-                throw new IllegalStateException("Unexpected value: " + data.get(0).getClass());
+                addCommand(CONVERT);
             }
-
         }
-
         constructScreen();
     }
-
     //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
         constructTitle(getName());
@@ -59,14 +52,8 @@ public class TableScreen extends CRMScreen {
             try {
                 constructTable(getMaxWidth(), masterArr.get(currentPage), getColumnTitles(), ColorFactory.BgColors.BLUE, ColorFactory.BgColors.PURPLE);
                 constructLastLine();
-
-            } catch (Exception ignored) {
-
-            }
-        } else {
-            addText("_EMPTY_");
-        }
-
+            } catch (Exception ignored) {           }
+        } else addText("_EMPTY_");
     }
 
     private String[] getColumnTitles() {
@@ -74,8 +61,17 @@ public class TableScreen extends CRMScreen {
     }
 
     private void constructLastLine() {
-        textObject.addText(new TextObject(textObject.MAX_WIDTH, textObject.MAX_HEIGHT).setTxtColor(textObject.txtColor).setBgcolor(textObject.bgColor).addGroupInColumns(4, textObject.MAX_WIDTH, new TextObject[]{new TextObject(), new TextObject(currentPage > 0 ? "[ PREVIOUS ]" : "", getMaxWidth() / 4, 1), new TextObject((currentPage + 1) + "/" + pages, getMaxWidth() / 4, 1), new TextObject(currentPage + 1 < pages ? "[ NEXT ]" : "", getMaxWidth() / 4, 1)}));
+        textObject.addText(new TextObject(textObject.MAX_WIDTH,
+                textObject.MAX_HEIGHT).setTxtColor(textObject.txtColor).setBgcolor(textObject.bgColor)
+                .addGroupInColumns(4,
+                        textObject.MAX_WIDTH,
+                        new TextObject[]{new TextObject(),
+                                new TextObject(currentPage > 0 ? "[ PREVIOUS ]" : "",getMaxWidth() / 4, 1),
+                                new TextObject((currentPage + 1) + "/" + pages,getMaxWidth() / 4, 1),
+                                new TextObject(currentPage + 1 < pages ? "[ NEXT ]" : "", getMaxWidth() / 4, 1)}));
+        textObject.addText(BRIGHT_BLACK+getHintLine()+SMART_RESET);
     }
+
 
     private ArrayList<List<? extends Printable>> getLists(ArrayList<? extends Printable> data) {
         ArrayList<List<? extends Printable>> masterArr = new java.util.ArrayList<>();
@@ -88,7 +84,7 @@ public class TableScreen extends CRMScreen {
         return masterArr;
     }
 
-    public void constructTable(int totalSize, List<? extends Printable> tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
+    private  void constructTable(int totalSize, List<? extends Printable> tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
         //Calculate min size for each column and total lenght for each line
         int[] totalLineSize = new int[tableEntries.size()];
         int[] columnsMinSize = new int[columnTitles.length];

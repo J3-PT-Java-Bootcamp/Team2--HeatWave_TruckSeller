@@ -1,11 +1,5 @@
->30/7/22 0:02:32 //-> CRMManager.appStart() : Unexpected exception.. OK
->30/7/22 0:17:38 //-> MenuScreen.start() : Received a unexpected exception.. OK
->30/7/22 0:19:45 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->30/7/22 0:23:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->30/7/22 0:46:40 //-> CRMManager.appStart() : Unexpected command value... USERS
->30/7/22 1:01:14 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->30/7/22 1:08:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->1/8/22 21:53:34 //-> AdminOpManager.loadLeadData() : Received a unexpected exception.. For input string: "EXIT"
->1/8/22 22:16:34 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->1/8/22 22:35:02 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
->1/8/22 22:42:07 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>2/8/22 13:58:55 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 14:00:02 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 14:00:57 //-> ERR.ERR() : $&&$
+>2/8/22 14:02:20 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 14:02:55 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
