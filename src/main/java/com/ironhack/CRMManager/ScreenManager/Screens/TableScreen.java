@@ -84,7 +84,7 @@ public class TableScreen extends CRMScreen {
         return masterArr;
     }
 
-    public void constructTable(int totalSize, List<? extends Printable> tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
+    private  void constructTable(int totalSize, List<? extends Printable> tableEntries, String[] columnTitles, BgColors... colors) throws Exception {
         //Calculate min size for each column and total lenght for each line
         int[] totalLineSize = new int[tableEntries.size()];
         int[] columnsMinSize = new int[columnTitles.length];

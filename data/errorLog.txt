@@ -73,3 +73,4 @@
 >1/8/22 22:56:24 //-> ERR.ERR() : $&&$
 >1/8/22 22:57:37 //-> ERR.ERR() : $&&$
 >1/8/22 22:59:39 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
+>2/8/22 12:53:42 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException OK
