@@ -26,7 +26,14 @@ class CRMDataTest {
     }
 
     @Test
-    void loadCRMData() {
+    void loadData_test() throws Exception {
+        var data= CRMData.loadData();
+        assertFalse(data.isEmptyMap(User.class));
+    }
+    @Test
+    void saveData_test() throws Exception {
+        CRMData.saveData();
+//        assertFalse(data.isEmptyMap(User.class));
     }
 
     @Test

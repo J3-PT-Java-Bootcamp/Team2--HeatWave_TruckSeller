@@ -1,10 +1,8 @@
 package com.ironhack.CRMManager;
 
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.google.gson.Gson;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Sales.*;
-
-
 
 import java.io.FileWriter;
 import java.io.Reader;
@@ -193,7 +191,7 @@ public class CRMData implements Printable{
         };
     }
 
-    CRMData loadData() throws Exception {
+    public static CRMData loadData() throws Exception {
         Gson sessionGson = new Gson();
         Reader reader = Files.newBufferedReader(Paths.get("data/SessionData.json"));
         CRMData crmData = sessionGson.fromJson(reader, CRMData.class);
@@ -204,10 +202,12 @@ public class CRMData implements Printable{
 
     }
 
-    public void saveData() throws Exception {
+    public static void saveData() throws Exception {
         //var crmDataToSave = new CRMData(this.accountCounter,)
         Gson sessionGson = new Gson();
-        sessionGson.toJson(this , new FileWriter("data/SessionData.json", true));
+        var writer= new FileWriter("data/SessionData.json", false);
+        writer.write(sessionGson.toJson(CRMManager.crmData));
+        writer.close();
         //TODO Save crmData object to .json file in ./data
 
     }
