@@ -39,7 +39,7 @@ public class ViewScreen extends CRMScreen{
             optionsNames.add(DISCARD.getDisplay());
         } else if (Account.class.equals(type)) {
             addCommand(OPP);
-            optionsNames.add("View related"+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
+            optionsNames.add("View related "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
         } else if (Contact.class.equals(type)) {
             addCommand(ACCOUNT).addCommand(OPP);
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
@@ -53,35 +53,33 @@ public class ViewScreen extends CRMScreen{
     @Override
     public String start() throws CRMException {
         boolean stop = false;
-        do {
-            printer.clearScreen();
-            printer.sendToQueue(getTextObject());
-            printer.startPrint();
-            String input = "";
-            try {
-                return COMMAND.getInput(this, commands.toArray(new Commands[0]));
+        printer.clearScreen();
+        printer.sendToQueue(getTextObject());
+        printer.startPrint();
+        String input = "";
+        try {
+            return COMMAND.getInput(this, commands.toArray(new Commands[0]));
 
-            } catch (HelpException help) {
-                printer.showHintLine(help.hint, help.commands);
-            } catch (LogoutException logout) {
-                if (screenManager.modal_screen(currentUser, "Confirmation Needed",
-                        new TextObject("Do you want to logout?"))) {
-                    throw logout;
-                }
-            } catch (ExitException e) {
-                //If enter EXIT it prompts user for confirmation as entered data will be lost
-                if (screenManager.modal_screen(currentUser, "Confirmation Needed",
-                        new TextObject("Do you want to close app?"))) {
-                    throw e;
-                }
-            } catch (GoBackException|GoToMenuException e) {
-                throw e;
-            } catch (Exception ignored) {
-                LogWriter.logError(getClass().getSimpleName(),
-                        "start", "Received a unexpected exception.. " + ignored.getMessage());
+        } catch (HelpException help) {
+            printer.showHintLine(help.hint, help.commands);
+        } catch (LogoutException logout) {
+            if (screenManager.modal_screen(currentUser, "Confirmation Needed",
+                    new TextObject("Do you want to logout?"))) {
+                throw logout;
             }
-            constructScreen();
-        }while (!stop);
+        } catch (ExitException e) {
+            //If enter EXIT it prompts user for confirmation as entered data will be lost
+            if (screenManager.modal_screen(currentUser, "Confirmation Needed",
+                    new TextObject("Do you want to close app?"))) {
+                throw e;
+            }
+        } catch (GoBackException|GoToMenuException e) {
+            throw e;
+        } catch (Exception ignored) {
+            LogWriter.logError(getClass().getSimpleName(),
+                    "start", "Received a unexpected exception.. " + ignored.getMessage());
+        }
+        constructScreen();
         return start();
     }
 
