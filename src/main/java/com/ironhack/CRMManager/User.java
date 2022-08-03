@@ -1,15 +1,16 @@
 package com.ironhack.CRMManager;
 
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
 import com.ironhack.Sales.Printable;
-import com.ironhack.Constants.ColorFactory;
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import lombok.Data;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
@@ -86,13 +87,17 @@ public class User implements Printable {
 
     @Override
     public TextObject toTextObject() {
-        //TODO
-        return null;
+        DecimalFormat df = new DecimalFormat("###.##");
+        return new TextObject(getName()).addText(String.valueOf(getLeadListSize()))
+                .addText(String.valueOf(getOpportunityListSize()))
+                .addText(df.format(getSuccessfulOppRatio()) + " %" )
+                .addText( df.format(getTotalProductivity()) + " %" );
+
     }
 
     @Override
     public String shortPrint() {
-        return getName();
+        return OPEN.formatOutput(getName());
     }
 
     @Override
@@ -118,8 +123,7 @@ public class User implements Printable {
 
     @Override
     public String[] getPrintableAttributes() {
-        //TODO RETURN COLUMN TITLES
-        return new String[0];
+        return new String[]{"Subj.","Leads","Opp.","Success","Productivity"};
     }
 
 

@@ -140,6 +140,7 @@ public class CRMData implements Printable{
             val= contactMap.get(id);
         }
         if (val!=null)return val;
+        if(userList.containsKey(id))return getUser(id);
         return accountMap.get(id);
     }
     public void removeUnknownObject(String id){
@@ -186,7 +187,7 @@ public class CRMData implements Printable{
         Gson sessionGson = new Gson();
         Reader reader = Files.newBufferedReader(Paths.get("data/SessionData.json"));
         CRMData crmData = sessionGson.fromJson(reader, CRMData.class);
-
+        if (crmData==null) throw new Exception();
         return crmData;
 
         //TODO LOAD FULL CRMData object from json and aSsign it to crmData field

@@ -45,7 +45,9 @@ public class ViewScreen extends CRMScreen{
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add("View "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITY");
 
-    } else {
+        } else if (User.class.equals(type)) {
+
+        } else {
             throw new IllegalStateException("Unexpected value: " + object.getClass());
         }
         constructScreen();
@@ -87,10 +89,12 @@ public class ViewScreen extends CRMScreen{
     public void constructScreen() {
         constructTitle(getName());
         textObject.addText(object.printFullObject()).alignTextTop(LIMIT_Y/2);
-        TextObject[] arr= new TextObject[optionsNames.size()];
-        for (int i = 0; i < optionsNames.size(); i++) arr[i] = new TextObject("[ "+optionsNames.get(i)+" ]");
-        textObject.addText(new TextObject(textObject.MAX_WIDTH, 2)
-                .addGroupInColumns(optionsNames.size(), textObject.MAX_WIDTH,arr));
+        if (!optionsNames.isEmpty()){
+            TextObject[] arr = new TextObject[optionsNames.size()];
+            for (int i = 0; i < optionsNames.size(); i++) arr[i] = new TextObject("[ " + optionsNames.get(i) + " ]");
+            textObject.addText(new TextObject(textObject.MAX_WIDTH, 2)
+                    .addGroupInColumns(optionsNames.size(), textObject.MAX_WIDTH, arr));
+        }
 
     }
 }
