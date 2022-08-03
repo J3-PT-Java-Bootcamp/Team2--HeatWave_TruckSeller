@@ -23,9 +23,9 @@ public enum InputReader {
     PHONE("Expects phone number format, only numbers and +() signs"),
     INTEGER("Expects an integer value"),
     NEW_PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
-    PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
-    OPEN("Expects a String value, special characters not allowed"),
-    COMMAND("Available commands are: "),
+    PASSWORD("Use a alphanumeric value."),
+    OPEN("Expects a String value(min 2 characters), special characters not allowed"),
+    COMMAND("Available Commands: "),
     INDUSTRY_TYPE("Enter a Industry type: "+ Arrays.toString(IndustryType.values())),
     PRODUCT_TYPE("Enter a Product type: "+ Arrays.toString(Product.values()));
 
