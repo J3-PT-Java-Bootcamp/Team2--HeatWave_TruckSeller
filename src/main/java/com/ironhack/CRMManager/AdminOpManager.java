@@ -1,7 +1,9 @@
 package com.ironhack.CRMManager;
 
 import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
+import com.ironhack.CRMManager.ScreenManager.Screens.TableScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Sales.Lead;
 import lombok.Data;
@@ -14,8 +16,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMData.saveData;
-import static com.ironhack.CRMManager.CRMManager.crmData;
-import static com.ironhack.CRMManager.CRMManager.screenManager;
+import static com.ironhack.CRMManager.CRMManager.*;
+import static com.ironhack.CRMManager.CRMManager.userOpManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
@@ -130,10 +132,30 @@ public class AdminOpManager {
         return resVal;
     }
     void showStats_screen(User currentUser) {
-        //TODO
+        var list = new java.util.ArrayList<User>();
+        boolean stop = false;
+        Commands comm = null;
+        do {
+            try {
+                for (User user : crmData.getUserList().values()) {
+                    list.add(user);
+                }
+                comm = Commands.valueOf(new TableScreen(currentUser, "Users statistics:", list).start());
+
+                switch (comm) {
+                    case MENU, BACK, LOGOUT -> stop = true;
+                    case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                }
+            } catch (NullPointerException e) {
+                break;
+            } catch (CRMException e) {
+                throw new RuntimeException(e);
+            }
+            list.clear();
+        } while (!stop);
+
     }
     void manageUsers_screen(User currentUser) {
-        //TODO
         try {
             createNewUser(currentUser,false);
         } catch (CRMException ignored) {
