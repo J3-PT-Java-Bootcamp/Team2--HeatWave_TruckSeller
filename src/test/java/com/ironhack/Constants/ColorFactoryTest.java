@@ -30,6 +30,6 @@ class ColorFactoryTest {
     }
     @Test
     void containsSpecialCharacters_test_nok() {
-        assertTrue(containsSpecialCharacters("PATATA"));
+        assertFalse(containsSpecialCharacters("PATATA"));
     }
 }

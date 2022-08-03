@@ -15,7 +15,8 @@ import static com.ironhack.Constants.Constants.LIMIT_X;
 
 
 /**
- * InputScreen is a CRMScreen that prompts 1..* inputs provided by inputTypes/inputNames
+ * InputScreen is a CRMScreen that prompts 1
+ * inputs provided by inputTypes/inputNames
  * results are stored in "outValues"
  */
 public class InputScreen extends CRMScreen{

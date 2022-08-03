@@ -19,7 +19,7 @@ class DynamicLineTest {
     void poll_test_sizeOk() {
         var size=txtObj.getTotalHeight();
         txtObj.poll();
-        assertTrue(size-1==txtObj.getTotalHeight());
+        assertEquals(size - 1, txtObj.getTotalHeight());
     }
     @Test
     void print_test_ok() {

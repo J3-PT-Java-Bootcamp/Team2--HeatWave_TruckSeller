@@ -24,17 +24,16 @@ import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 
 public class TableScreen extends CRMScreen {
     private int pages, currentPage;
-    private final Class<? extends Printable> type;
     ArrayList<List<? extends Printable>> masterArr;
     private final boolean hasContent;
-    private  ArrayList<? extends Printable> data;
+    private final ArrayList<? extends Printable> data;
     public TableScreen(User currentUser, String name, ArrayList<? extends Printable> data) {
         super(currentUser, name);
         this.data=data;
         addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
+        Class<? extends Printable> type;
         if (data == null || data.isEmpty()) {
             hasContent = false;
-            type = null;
         } else {
             hasContent = true;
             masterArr = getLists(data);
@@ -155,7 +154,6 @@ public class TableScreen extends CRMScreen {
         String comm = "";
         try {
             comm = COMMAND.getInput(this, commands.toArray(new Commands[0]));
-            Commands command;
             if (Commands.valueOf(comm) == NEXT) {
                 if (currentPage + 1 < pages) currentPage++;
 

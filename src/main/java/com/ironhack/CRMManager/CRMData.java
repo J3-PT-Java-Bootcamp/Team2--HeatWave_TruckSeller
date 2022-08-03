@@ -63,9 +63,8 @@ public class CRMData implements Printable{
         this.leadMap.put(lead.getId(),lead);
         return this;
     }
-     public CRMData removeLead(String id){
+     public void removeLead(String id){
         this.leadMap.remove(id);
-        return this;
      }
      public Lead getLead(String id) {
         return leadMap.get(id);
@@ -86,9 +85,8 @@ public class CRMData implements Printable{
         this.opportunityMap.put(opp.getId(),opp);
         return this;
     }
-    public CRMData removeOpportunity(String id){
+    public void removeOpportunity(String id){
         this.opportunityMap.remove(id);
-        return this;
     }
     //----------------------------------------ACCOUNT
      public Account getAccount(String id) {
@@ -102,9 +100,8 @@ public class CRMData implements Printable{
         return this;
     }
 
-    public CRMData removeAccount(String id) {
+    public void removeAccount(String id) {
         this.accountMap.remove(id);
-        return this;
     }
     //----------------------------------------CONTACT
      public Contact getContact(String id) {
@@ -124,9 +121,9 @@ public class CRMData implements Printable{
         }
         return resArr;
     }
-    public CRMData removeContact(String id){
+    public void removeContact(String id){
         this.contactMap.remove(id);
-        return this;}
+    }
 
 
     //----------------------------------------------------------------------------------------------------UNKNOWN OBJECT
@@ -155,12 +152,16 @@ public class CRMData implements Printable{
         if (val==null) accountMap.remove(id);
         removeAccount(id);
     }
-    public CRMData addUnknownObject(Printable obj){
-        if(obj instanceof Lead) return addLead((Lead)obj);
-        else if (obj instanceof Opportunity) return addOpportunity((Opportunity) obj);
-        else if (obj instanceof Contact) return addContact((Contact) obj);
-        else if(obj instanceof Account) return addAccount((Account) obj);
-        return null;
+    public void addUnknownObject(Printable obj){
+        if(obj instanceof Lead) {
+            addLead((Lead) obj);
+        } else if (obj instanceof Opportunity) {
+            addOpportunity((Opportunity) obj);
+        } else if (obj instanceof Contact) {
+            addContact((Contact) obj);
+        } else if(obj instanceof Account) {
+            addAccount((Account) obj);
+        }
     }
     public boolean existsObject(String id){
         boolean firstCheck = false;

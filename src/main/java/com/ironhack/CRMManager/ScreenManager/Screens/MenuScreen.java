@@ -37,7 +37,7 @@ public class MenuScreen extends CRMScreen {
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
-        String input = "";
+
         try {
             return COMMAND.getInput(this,commands.toArray(new Commands[0]));
         } catch (HelpException help) {
@@ -99,11 +99,6 @@ public class MenuScreen extends CRMScreen {
 
         this.textObject.addText(container).alignTextTop(height);
     }
-//
-//    @Override
-//    protected String getHintLine(){
-//        return super.getHintLine()+ List.of(options);
-//    }
 }
 
 

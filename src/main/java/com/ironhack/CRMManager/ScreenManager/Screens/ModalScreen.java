@@ -11,7 +11,7 @@ import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.YES;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 public class ModalScreen extends CRMScreen{
-    TextObject message;
+    private final TextObject message;
 
     public ModalScreen(User currentUser, String name, TextObject message) {
         super(currentUser, name);
@@ -23,7 +23,6 @@ public class ModalScreen extends CRMScreen{
 
     @Override
     public String start()  {
-        String input="";
         printer.clearScreen();
         getTextObject().alignTextCenter();
         printer.sendToQueue(this.getTextObject());

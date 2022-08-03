@@ -21,7 +21,7 @@ public class LogWriter {
         try {
             writer.write(getDateTime()+" //-> "+className+"."+methodName+"() : "+notes+"\n");
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return null;
     }

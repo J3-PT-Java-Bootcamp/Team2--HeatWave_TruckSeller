@@ -1,6 +1,5 @@
 package com.ironhack.Sales;
 
-import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Constants.Product;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
 import lombok.Data;

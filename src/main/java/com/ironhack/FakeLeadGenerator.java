@@ -14,14 +14,10 @@ public class FakeLeadGenerator {
             var sb = new StringBuilder();
             for (int i = 0; i < 200; i++) {
                 var company = Math.random() * 10 > 5 ? faker.company().name().trim().split(",")[0] : faker.commerce().brand();
-                sb.append(faker.name().fullName());
-                sb.append(",");
-                sb.append(faker.phoneNumber().cellPhone().replace(" ", ""));
-                sb.append(",");
-                sb.append(faker.name().username() + "@" + company.replace(" ", "_").replace("'", "") + ".com");
-                sb.append(",");
-                sb.append(company);
-                sb.append("\n");
+                sb.append(faker.name().fullName()).append(",")
+                        .append(faker.phoneNumber().cellPhone().replace(" ", ""))
+                        .append(",").append(faker.name().username()).append("@").append(company.replace(" ", "_").
+                                replace("'", "")).append(".com").append(",").append(company).append("\n");
             }
             try {
                 writer.write(sb.toString());
