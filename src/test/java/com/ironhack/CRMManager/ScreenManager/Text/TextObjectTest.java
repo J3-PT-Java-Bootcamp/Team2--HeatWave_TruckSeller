@@ -22,7 +22,7 @@ class TextObjectTest {
     void poll_test_sizeOk() {
         var size=txtObj.getTotalHeight();
         txtObj.poll();
-        assertTrue(size-1==txtObj.getTotalHeight());
+        assertEquals(size - 1, txtObj.getTotalHeight());
     }
     @Test
     void poll_test_elementOk() {
@@ -32,17 +32,18 @@ class TextObjectTest {
     @Test
     void addText_test_sizeOk() {
         var size=txtObj.getTotalHeight();
-        assertTrue(size+1==txtObj.addText(BLANK_SPACE).getTotalHeight());
+        assertEquals(size + 1, txtObj.addText(BLANK_SPACE).getTotalHeight());
     }
 
     @Test
     void addGroupInColumns() {
+        //todo
     }
 
     @Test
     void countValidCharacters_test_ok() {
-        assertEquals(8,txtObj.countValidCharacters(new StringBuilder().append(RED).append(BRIGHT_BLACK).append(UNDERLINE).append(" patata ")
-                .append(SMART_RESET).append(RESET).toString()));
+        assertEquals(8,txtObj.countValidCharacters(String.valueOf(RED) + BRIGHT_BLACK + UNDERLINE + " patata " +
+                SMART_RESET + RESET));
     }
 
     @Test
@@ -74,7 +75,11 @@ class TextObjectTest {
     void alignTextCenter_test_ok() {
         txtObj.alignTextCenter();
         boolean fail = false;
-        for(String line:txtObj.text)if(line.length()!= txtObj.MAX_WIDTH)fail=true;
+        for(String line:txtObj.text)
+            if (line.length() != txtObj.MAX_WIDTH) {
+                fail = true;
+                break;
+            }
         assertFalse(fail);
     }
 
