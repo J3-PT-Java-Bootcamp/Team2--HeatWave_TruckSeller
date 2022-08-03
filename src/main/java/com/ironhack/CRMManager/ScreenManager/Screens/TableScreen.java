@@ -27,8 +27,10 @@ public class TableScreen extends CRMScreen {
     private final Class<? extends Printable> type;
     ArrayList<List<? extends Printable>> masterArr;
     private final boolean hasContent;
+    private  ArrayList<? extends Printable> data;
     public TableScreen(User currentUser, String name, ArrayList<? extends Printable> data) {
         super(currentUser, name);
+        this.data=data;
         addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
         if (data == null || data.isEmpty()) {
             hasContent = false;
@@ -49,6 +51,7 @@ public class TableScreen extends CRMScreen {
     public void constructScreen() {
         constructTitle(getName());
         if (hasContent) {
+            masterArr = getLists(data);
             try {
                 constructTable(getMaxWidth(), masterArr.get(currentPage), getColumnTitles(), ColorFactory.BgColors.BLUE, ColorFactory.BgColors.PURPLE);
                 constructLastLine();

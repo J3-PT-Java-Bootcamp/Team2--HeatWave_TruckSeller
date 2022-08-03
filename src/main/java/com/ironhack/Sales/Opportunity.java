@@ -41,10 +41,6 @@ public class Opportunity implements Printable{
 
     public void close(Boolean won){
         this.status=won?CLOSE_WON:CLOSE_LOST;
-        //TODO change state from OPEN to CLOSED_WON or CLOSED_LOST depending on the "won" param
-// TODO BEA
-
-
     }
 
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
