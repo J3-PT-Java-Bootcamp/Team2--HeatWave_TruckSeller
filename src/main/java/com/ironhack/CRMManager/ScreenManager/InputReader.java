@@ -68,11 +68,12 @@ public enum InputReader {
     }
     private String validateOpenInput(CRMScreen screen) throws CRMException {
         String input =validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
-        if (input.trim().length() < 3 || !isValidString(input.trim())) {
+        String finalInput= input.trim().replace(" ","_");
+        if (finalInput.length() < 2 || !isValidString(finalInput)) {
             printer.showErrorLine(FORMAT_NOK);
             return validateOpenInput(screen);
         }
-        return input.trim();
+        return finalInput;
     }
 
     private int validateIntegerInput(int min, int max, CRMScreen screen) throws CRMException {
@@ -217,7 +218,7 @@ public enum InputReader {
         return switch (this) {
             case MAIL->output.toLowerCase();
             case NEW_PASSWORD, PASSWORD ->"*".repeat(output.length());
-            case OPEN->toCamelCase(output);
+            case OPEN->toCamelCase(output).replace("_", " ");
             case INDUSTRY_TYPE-> IndustryType.valueOf(output).toString();
             case PRODUCT_TYPE-> Product.valueOf(output).toString();
             default -> output;

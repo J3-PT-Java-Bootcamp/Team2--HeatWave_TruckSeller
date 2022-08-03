@@ -132,9 +132,7 @@ public class InputScreen extends CRMScreen{
     }
     @Override
     protected String getHintLine() {
-//        if(inputIndex>0&&inputIndex<inputTypes.length-1)
             return inputTypes[Math.min(inputTypes.length-1,outValues.size())].getHint();
-//        return inputTypes[inputIndex].getHint();
     }
 
 
