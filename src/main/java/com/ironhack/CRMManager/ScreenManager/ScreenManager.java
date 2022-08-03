@@ -7,7 +7,6 @@ import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Screens.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
-import com.ironhack.Constants.OpportunityStatus;
 import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
@@ -85,7 +84,8 @@ public class ScreenManager {
                 else oppList = opportunitiesId;
                 for (String id : oppList ) {
                     var opp = crmData.getOpportunity(id);
-                    if (opp.getStatus().equals(OpportunityStatus.OPEN)) list.add(opp);
+//                    if (opp.getStatus().equals(OpportunityStatus.OPEN)) list.add(opp);
+                    list.add(opp);
                 }
                 comm = Commands.valueOf(new TableScreen(currentUser, "Opportunities", list).start());
 
