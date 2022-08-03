@@ -36,7 +36,6 @@ public abstract class CRMScreen {
     void constructTitle(String name) {
         this.addText(BLANK_SPACE).addText(BOLD+UNDERLINE.toString()+ "---- "+name.toUpperCase()+" ----" +RESET+textObject.getTextModifications()).alignTextCenter().addText(BLANK_SPACE);
     }
-
     /**Adds new text to main TextObject
      * @param str text to be added
      *

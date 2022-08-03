@@ -28,3 +28,17 @@
 >3/8/22 15:01:55 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "com.ironhack.CRMManager.CRMData.getUser(String)" because "com.ironhack.CRMManager.CRMManager.crmData" is null
 >3/8/22 15:02:41 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "com.ironhack.CRMManager.CRMData.getUser(String)" because "com.ironhack.CRMManager.CRMManager.crmData" is null
 >3/8/22 15:06:06 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptioncom.ironhack.CRMManager.Exceptions.GoBackException
+>3/8/22 19:36:03 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 19:40:14 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:41:05 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:43:15 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 19:44:54 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:52:04 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:54:49 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:55:55 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 19:58:42 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 20:01:33 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>3/8/22 20:03:25 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 20:05:17 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 20:09:39 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArrayIndexOutOfBoundsExceptionIndex 2 out of bounds for length 2
+>3/8/22 20:14:31 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
