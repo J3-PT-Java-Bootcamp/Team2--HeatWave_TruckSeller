@@ -118,7 +118,7 @@ public class InputScreen extends CRMScreen{
 
     @Override
     public void constructScreen() {
-        int maxHeight= textObject.MAX_HEIGHT-2;
+        int maxHeight= textObject.MAX_HEIGHT-4;
         constructTitle(getName());
         var container= new TextObject(textObject.MAX_WIDTH,maxHeight)
                 .addText(content).addText("-".repeat((textObject.MAX_WIDTH/3)*2)).setBgcolor(textObject.bgColor).setTxtColor(textObject.txtColor);
