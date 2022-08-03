@@ -30,11 +30,6 @@ class CRMDataTest {
         var data= CRMData.loadData();
         assertFalse(data.isEmptyMap(User.class));
     }
-    @Test
-    void saveData_test() throws Exception {
-        CRMData.saveData();
-//        assertFalse(data.isEmptyMap(User.class));
-    }
 
     @Test
     void test_getNextID_ok() {
