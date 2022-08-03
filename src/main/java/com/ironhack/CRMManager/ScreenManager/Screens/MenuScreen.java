@@ -6,8 +6,6 @@ import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.CRMManager.User;
 import com.ironhack.Constants.ColorFactory;
 
-import java.util.List;
-
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
@@ -28,13 +26,14 @@ public class MenuScreen extends CRMScreen {
         this.user = currentUser;
         this.options = user.isAdmin() ?
                 new Commands[]{USERS, STATS, LOAD} : new Commands[]{LEAD, ACCOUNT, OPP};
-        constructScreen();
+
         for (Commands opt : options) this.addCommand(opt);
         if (!user.isAdmin()) addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
     }
 
     @Override
     public String start() throws CRMException {
+        constructScreen();
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
@@ -57,7 +56,6 @@ public class MenuScreen extends CRMScreen {
             LogWriter.logError(getClass().getSimpleName(),
                     "start","Received a unexpected exception.. "+ignored.getErrorType());
         }
-        constructScreen();
         return start();
     }
 
@@ -101,11 +99,11 @@ public class MenuScreen extends CRMScreen {
 
         this.textObject.addText(container).alignTextTop(height);
     }
-
-    @Override
-    protected String getHintLine(){
-        return super.getHintLine()+ List.of(options);
-    }
+//
+//    @Override
+//    protected String getHintLine(){
+//        return super.getHintLine()+ List.of(options);
+//    }
 }
 
 

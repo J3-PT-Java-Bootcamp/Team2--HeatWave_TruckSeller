@@ -147,8 +147,11 @@ public class UserOpManager {
                         stop=true;
                     }
                     case CLOSE -> {
-                        userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
-                        viewObject(currentUser,caughtInput);
+                        try{
+                            userOpManager.closeOpportunity(currentUser, new String[]{caughtInput[0],caughtInput[1], object.getId()});
+                            viewObject(currentUser,caughtInput);
+                        } catch (GoBackException ignored) {
+                        }catch (Exception e){throw new RuntimeException();}
                     }
                     case OPP -> screenManager.show_OpportunitiesScreen(currentUser,
                             crmData.getAccount(object.getId()).getOpportunities());

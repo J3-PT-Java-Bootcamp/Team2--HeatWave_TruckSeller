@@ -1,8 +1,6 @@
 package com.ironhack.CRMManager.ScreenManager;
 
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.ExitException;
-import com.ironhack.CRMManager.Exceptions.GoBackException;
+import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Screens.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
@@ -32,8 +30,11 @@ public class ScreenManager {
     public Commands menu_screen(User currentUser) throws CRMException {
         //todo
         MenuScreen main_menu = new MenuScreen(currentUser, "Main Menu");
+        main_menu.setHintLine("Enter one of the options above, or any other command if known. Enter help for more info");
         try {
-            return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());//fixme
+            return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());
+        }catch (GoBackException e){
+            throw new LogoutException(e.getErrorType());
         } catch (CRMException crmE) {
             throw crmE;
 
@@ -52,12 +53,20 @@ public class ScreenManager {
                 for (String id : currentUser.getLeadList()) {
                     list.add(crmData.getLead(id));
                 }
-                comm = Commands.valueOf(new TableScreen(currentUser, "Leads", list).start());
+                TableScreen leadScreen = new TableScreen(currentUser, "Leads", list);
+                leadScreen.setHintLine("-VIEW + ID:(access Lead)    -CONVERT + ID:(convert to Opportunity)     -DISCARD + ID (discard lead) ");
+                comm = Commands.valueOf(leadScreen.start());
 
                 switch (comm) {
                     case MENU, BACK, LOGOUT -> stop = true;
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
-                    case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                    case VIEW -> {
+                        try {
+                            userOpManager.viewObject(currentUser, comm.getCaughtInput());
+
+                        } catch (GoBackException ignored) {
+                        }
+                    }
                     case DISCARD -> {
                         var lead = crmData.getLead(comm.getCaughtInput()[1]);
                         if (modal_screen(currentUser, "Delete Lead ?", new TextObject("Do yo want to delete manager Lead?").addText(lead.printFullObject()))) {
@@ -87,12 +96,18 @@ public class ScreenManager {
                     var opp = crmData.getOpportunity(id);
                     list.add(opp);
                 }
-                comm = Commands.valueOf(new TableScreen(currentUser, "Opportunities", list).start());
+                TableScreen oppScreen = new TableScreen(currentUser, "Opportunities", list);
+                oppScreen.setHintLine("-VIEW + ID:(access Opportunity)      -CLOSE WON/LOST + ID:(close Opportunity)");
+                comm = Commands.valueOf(oppScreen.start());
 
                 switch (comm) {
 
                     case VIEW -> {
-                        userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                        try {
+                            userOpManager.viewObject(currentUser, comm.getCaughtInput());
+
+                        } catch (GoBackException ignored) {
+                        }
                     }
                     case DISCARD -> {
                         var opp = crmData.getOpportunity(comm.getCaughtInput()[1]);
@@ -116,6 +131,8 @@ public class ScreenManager {
                         "show_OpportunitiesScreen",
                         "Received a unexpected NullPointerException.. " + e.getMessage());
                 break;
+            } catch (GoBackException back){
+                stop=true;
             }
             list.clear();
         } while (!stop);
@@ -136,6 +153,7 @@ public class ScreenManager {
                 accountArr = crmData.getAccountsAsList();
             }
             var account_screen = new TableScreen(currentUser, selectionMode ? "Select an Account" : "Accounts", accountArr);
+            account_screen.setHintLine(selectionMode?"-SELECT + ID:(select an Account)   - NEW:(create a new Account)":" -VIEW + ID:(access Account)      -CREATE:(create new account)");
             try{
                 res = Commands.valueOf(account_screen.start());
             } catch (GoBackException back){

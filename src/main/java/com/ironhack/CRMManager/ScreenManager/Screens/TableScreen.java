@@ -45,7 +45,6 @@ public class TableScreen extends CRMScreen {
                 addCommand(CONVERT);
             }
         }
-        constructScreen();
     }
     //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
@@ -148,6 +147,8 @@ public class TableScreen extends CRMScreen {
     //----------------------------------------------------------------------------------------------------PUBLIC METHODS
     @Override
     public String start() throws CRMException {
+
+        constructScreen();
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
@@ -189,7 +190,6 @@ public class TableScreen extends CRMScreen {
             LogWriter.logError(getClass().getSimpleName(),
                     "start","Received a unexpected CRMException.. "+ignored.getErrorType());
         }
-        constructScreen();
         return start();
     }
 

@@ -29,8 +29,8 @@ public class ViewScreen extends CRMScreen{
         type = object.getClass();
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
-            optionsNames.add("CLOSE WON +id ");
-            optionsNames.add("CLOSE LOST +id ");
+            optionsNames.add("CLOSE WON");
+            optionsNames.add("CLOSE LOST");
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
         } else if (Lead.class.equals(type)) {
