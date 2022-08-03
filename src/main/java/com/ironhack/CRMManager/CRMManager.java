@@ -17,6 +17,7 @@ import com.ironhack.Sales.Opportunity;
 
 import java.util.ArrayList;
 
+import static com.ironhack.CRMManager.CRMData.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
@@ -35,7 +36,7 @@ public class CRMManager {
     public CRMManager() {
         this.exit = false;
         try {
-            crmData = crmData.loadData();
+            crmData = loadData();
 
         } catch (Exception e) {
             crmData = new CRMData();
@@ -95,7 +96,7 @@ public class CRMManager {
     private void runFirstConfig() {
         try {
             adminOpManager.createNewUser(null,true);
-            crmData.saveData();
+            saveData();
         } catch (CRMException e) {
             runFirstConfig();
         } catch (Exception e) {
@@ -109,7 +110,8 @@ public class CRMManager {
     private void appStart() {
         while (!exit) {
             try {
-            var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
+                var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
+
                 if(currentUser.isAdmin()) switch (comm) {
                     case USERS -> adminOpManager.manageUsers_screen(currentUser);
                     case STATS -> adminOpManager.showStats_screen(currentUser);
@@ -145,6 +147,11 @@ public class CRMManager {
                 LogWriter.logError(getClass().getSimpleName(),
                         "appStart",
                         "Unexpected exception ... " + e.getClass()+e.getMessage());
+            }
+            try {
+                saveData();
+            } catch (Exception ignored) {
+
             }
         }
         System.exit(0);
