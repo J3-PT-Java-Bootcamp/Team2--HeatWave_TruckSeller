@@ -22,6 +22,7 @@ import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.YES;
 @Data
 public class ScreenManager {
 
+    private boolean isTest;
     /**
      * Shows different menu for User or Admin
      *

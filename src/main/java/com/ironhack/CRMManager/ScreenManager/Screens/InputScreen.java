@@ -139,7 +139,7 @@ public class InputScreen extends CRMScreen{
             sb.append(inputNames[j]);
             sb.append( ":  ");
             sb.append( (inputTypes[j].equals(NEW_PASSWORD)||inputTypes[j].equals(PASSWORD)?"*"
-                    .repeat(outValues.get(j).length()):outValues.get(j)));
+                    .repeat(outValues.get(j).length()):inputTypes[j].formatOutput(outValues.get(j))));
             sb.append('\n');
         }
         return sb.toString();

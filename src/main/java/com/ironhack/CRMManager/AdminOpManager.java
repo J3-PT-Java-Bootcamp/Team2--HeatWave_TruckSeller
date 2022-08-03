@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
@@ -98,7 +99,7 @@ public class AdminOpManager {
                         }
                         counter += leadsPerUser;
                     }
-                    crmData.saveData();
+                    if(!screenManager.isTest())saveData();
                     screenManager.confirming_screen(currentUser,"Leads were distributed among all users.","",false);
                     stop = true;
                 } else if (crmData.getUserList().containsKey(userVal.get(0))) {
@@ -107,7 +108,7 @@ public class AdminOpManager {
                         user.getLeadList().add(lead.getId());
                         crmData.addLead(lead);
                     }
-                    crmData.saveData();
+                    if(!screenManager.isTest())saveData();
                     screenManager.confirming_screen(currentUser,"All leads assigned to: " + userVal.get(0) + " correctly",
                             "",
                             false);
@@ -125,7 +126,7 @@ public class AdminOpManager {
             Lead lead = new Lead(values[0], crmData.getNextID(Lead.class), values[1], values[2], values[3]);
             resVal.add(lead);
         }
-        crmData.saveData();
+        if(!screenManager.isTest())saveData();
         return resVal;
     }
     void showStats_screen(User currentUser) {
@@ -178,7 +179,7 @@ public class AdminOpManager {
                 if (userVal.get(1).equalsIgnoreCase(userVal.get(2))) {
                     crmData.getUserList().get(userVal.get(0)).setPassword(userVal.get(1));
                     try {
-                        crmData.saveData();
+                        if(!screenManager.isTest())saveData();
                     } catch (Exception ignored) {
                         LogWriter.logError(getClass().getSimpleName(),
                                 "createNewUser","Received a unexpected exception.. "+ignored.getMessage());

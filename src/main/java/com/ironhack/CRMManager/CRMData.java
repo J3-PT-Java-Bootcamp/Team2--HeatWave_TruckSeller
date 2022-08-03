@@ -31,17 +31,8 @@ public class CRMData implements Printable{
         opportunityMap =new HashMap<>();
         contactMap=new HashMap<>();
         accountMap=new HashMap<>();
-
         userList=new HashMap<>();
     }
-
-
-    public static CRMData loadCRMData(String rawData){
-        com.google.gson.Gson gson=new com.google.gson.Gson();
-        return gson.fromJson(rawData,CRMData.class);
-        
-    }
-
 
     //---------------------------------------------------------------------------------------------------GETTERSnSETTERS
     public  String getNextID(Class objClass){
@@ -203,7 +194,6 @@ public class CRMData implements Printable{
     }
 
     public static void saveData() throws Exception {
-        //var crmDataToSave = new CRMData(this.accountCounter,)
         Gson sessionGson = new Gson();
         var writer= new FileWriter("data/SessionData.json", false);
         writer.write(sessionGson.toJson(CRMManager.crmData));
