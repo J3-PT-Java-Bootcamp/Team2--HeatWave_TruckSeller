@@ -590,30 +590,30 @@ public class TextObject {
      *
      * @see ColorFactory
      */
-    private TextObject colorizeAllText(CColors... colors) {
-        switch (colors.length) {
-            case 0 -> {
-                for (int i = 0; i < totalHeight; i++) {
-                    text.set(i, colorizeLine(text.get(i), getRandomColor()));
-                }
-            }
-            case 1 -> {
-                int lastIndex = text.size() - 1;
-                text.set(0, colors[0] + text.get(0));
-                text.set(lastIndex, text.get(lastIndex) + RESET);
-            }
-            default -> {
-                int colorCount = 0;
-                for (int i = 0; i < totalHeight; i++) {
-                    text.set(i, colorizeLine(text.get(i), colors[colorCount]));
-                    colorCount++;
-                    if (colorCount >= colors.length) colorCount = 0;
-                }
-
-            }
-        }
-        return this;
-    }
+//    private TextObject colorizeAllText(CColors... colors) {
+//        switch (colors.length) {
+//            case 0 -> {
+//                for (int i = 0; i < totalHeight; i++) {
+//                    text.set(i, colorizeLine(text.get(i), getRandomColor()));
+//                }
+//            }
+//            case 1 -> {
+//                int lastIndex = text.size() - 1;
+//                text.set(0, colors[0] + text.get(0));
+//                text.set(lastIndex, text.get(lastIndex) + RESET);
+//            }
+//            default -> {
+//                int colorCount = 0;
+//                for (int i = 0; i < totalHeight; i++) {
+//                    text.set(i, colorizeLine(text.get(i), colors[colorCount]));
+//                    colorCount++;
+//                    if (colorCount >= colors.length) colorCount = 0;
+//                }
+//
+//            }
+//        }
+//        return this;
+//    }
 
     /**
      * Method that sets a style for all current text

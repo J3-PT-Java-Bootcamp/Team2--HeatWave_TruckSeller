@@ -31,10 +31,13 @@ public class CRMManager {
     public static final ConsolePrinter printer = new ConsolePrinter();
     public static CRMData crmData;
     public static final ScreenManager screenManager = new ScreenManager();
+    private final boolean isTest;
 
     //-------------------------------------------------------------------------------------------------------CONSTRUCTOR
     public CRMManager() {
+
         this.exit = false;
+        this.isTest=false;
         try {
             crmData = loadData();
 
@@ -53,6 +56,7 @@ public class CRMManager {
      */
     public CRMManager(Boolean testWithScreens) {
         this.exit = false;
+        this.isTest=true;
         crmData = new CRMData();
         var leadList = FakeLead.getRawLeads(200);
 
@@ -96,7 +100,7 @@ public class CRMManager {
     private void runFirstConfig() {
         try {
             adminOpManager.createNewUser(null,true);
-            saveData();
+            if(!isTest)saveData();
         } catch (CRMException e) {
             runFirstConfig();
         } catch (Exception e) {
@@ -108,6 +112,7 @@ public class CRMManager {
      * Main app Screens loop
      */
     private void appStart() {
+        screenManager.setTest(isTest);
         while (!exit) {
             try {
                 var comm = screenManager.menu_screen(currentUser == null ?login_screen() : currentUser);
@@ -149,7 +154,7 @@ public class CRMManager {
                         "Unexpected exception ... " + e.getClass()+e.getMessage());
             }
             try {
-                saveData();
+                if(!isTest)saveData();
             } catch (Exception ignored) {
 
             }

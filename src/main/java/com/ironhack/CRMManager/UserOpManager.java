@@ -12,6 +12,7 @@ import lombok.Data;
 
 import java.util.Objects;
 
+import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.ID_NOK;
@@ -21,7 +22,6 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 @Data
 public class UserOpManager {
-
     public Opportunity closeOpportunity(User currentUser, String[] caughtInput) {
         //TODO
         if (caughtInput != null && caughtInput.length == 3
@@ -106,7 +106,7 @@ public class UserOpManager {
                     crmData.addOpportunity(opp);
                     crmData.removeLead(lead.getId());
                     try {
-                        crmData.saveData();
+                        if(!screenManager.isTest())saveData();
                     } catch (Exception e) {
                         LogWriter.logError(getClass().getSimpleName(),
                                 "convertLeadToOpp->saveData", "Received a unexpected exception.. " + e.getMessage());
