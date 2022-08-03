@@ -2,16 +2,22 @@ package com.ironhack.CRMManager;
 
 import com.google.gson.Gson;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Constants.ColorFactory;
 import com.ironhack.Sales.*;
 
 import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
+import static com.ironhack.Constants.ColorFactory.CColors.RED;
+import static com.ironhack.Constants.ColorFactory.SMART_RESET;
+import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.Constants.MAX_ID;
 
 
@@ -23,6 +29,10 @@ public class CRMData implements Printable{
 
     private final HashMap<String, Contact> contactMap;
     private final HashMap<String, User> userList;
+
+    private int totalClosedLeads;
+    private int totalLostOpps;
+    private int totalSuccesOpps;
     
     public CRMData(){
         leadCounter=0;
@@ -32,6 +42,9 @@ public class CRMData implements Printable{
         contactMap=new HashMap<>();
         accountMap=new HashMap<>();
         userList=new HashMap<>();
+        totalClosedLeads=0;
+        totalLostOpps=0;
+        totalSuccesOpps=0;
     }
 
     //---------------------------------------------------------------------------------------------------GETTERSnSETTERS
@@ -127,6 +140,31 @@ public class CRMData implements Printable{
     public CRMData removeContact(String id){
         this.contactMap.remove(id);
         return this;}
+
+    public int getTotalClosedLeads() {
+        int totalClosedLeads = 0;
+        for (int i=0; i < userList.size(); i++){
+            totalClosedLeads = totalClosedLeads + userList.get(i).getClosedLeads();
+        }
+        return totalClosedLeads;
+    }
+
+    public int getTotalLostOpps() {
+        int totalLostOpps = 0;
+        for (int i=0; i < userList.size(); i++){
+            totalLostOpps = totalLostOpps + userList.get(i).getLostOpp();
+        }
+        return totalLostOpps;
+    }
+
+    public int getTotalSuccesOpps() {
+        int totalSuccesOpps =0;
+        for (int i=0; i < userList.size(); i++){
+            totalSuccesOpps = totalSuccesOpps + userList.get(i).getSuccessfulOpp();
+        }
+        return totalSuccesOpps;
+    }
+
 
 
     //----------------------------------------------------------------------------------------------------UNKNOWN OBJECT
@@ -225,11 +263,52 @@ public class CRMData implements Printable{
 
     @Override
     public TextObject printFullObject() {
-        return new TextObject("Global Stats.");//TODO
+        var globalStats = new TextObject();
+        DecimalFormat df = new DecimalFormat("###.##");
+        globalStats.addText(BLANK_SPACE)
+                .addText("- LEADS- ")
+                .addText("Pending: " + leadMap.size())
+                .addText("Closed: " +BOLD+ leadObjectiveChecker(this.totalLeadRatioGetter()) + df.format(totalLeadRatioGetter())+ "%" + SMART_RESET)
+                .addText("")
+                .addText("- OPPORTUNITIES -")
+                .addText("Pending: " + opportunityMap.size())
+                .addText("Success Rate :"+BOLD+ oppObjectiveChecker(this.totalOppSuccessRatio()) + df.format(totalOppSuccessRatio()) + "%" + SMART_RESET)
+                .addText(BLANK_SPACE)
+                .addText("Overall Productivity : " +BOLD+ totalObjectiveChecker(this.totalOverallProductivityGetter()) + df.format(totalOverallProductivityGetter()) + "%" + SMART_RESET );
+
+
+        return globalStats;//TODO
     }
 
     @Override
     public String[] getPrintableAttributes() {
         return new String[]{"Name"};
+    }
+
+
+    public double totalLeadRatioGetter(){ return ((getTotalClosedLeads())/(leadMap.size()+0.0))*100;}
+
+    public double totalOppSuccessRatio(){ return ((getTotalSuccesOpps()+0.0)/(opportunityMap.size()+0.0))*100;}
+
+    public double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
+
+    public ColorFactory.CColors leadObjectiveChecker(double ratio){
+        if (ratio < 50) return RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
+        else return ColorFactory.CColors.GREEN;
+    }
+
+    public ColorFactory.CColors oppObjectiveChecker(double ratio){
+        if(ratio < 15 ) return RED;
+        else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.YELLOW;
+        else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.GREEN;
+        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BLUE;
+        else  return ColorFactory.CColors.PURPLE;
+    }
+
+    public ColorFactory.CColors totalObjectiveChecker(double ratio){
+        if (ratio < 50) return RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
+        else return ColorFactory.CColors.GREEN;
     }
 }
