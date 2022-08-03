@@ -90,6 +90,7 @@ public class UserOpManager {
                             new String[]{"Product", "Quantity"},
                             PRODUCT_TYPE,
                             INTEGER);
+                    firstScreen.setHintLine("Enter the product and quantity, product could be: BOX, HYBRID or FLATBED trucks. ");
                     var result = firstScreen.start();
                     if (result.equalsIgnoreCase(EXIT.name())) return EXIT.name();
 
