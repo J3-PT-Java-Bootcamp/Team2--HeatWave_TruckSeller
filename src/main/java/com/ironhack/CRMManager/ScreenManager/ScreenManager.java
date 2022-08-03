@@ -84,7 +84,6 @@ public class ScreenManager {
                 else oppList = opportunitiesId;
                 for (String id : oppList ) {
                     var opp = crmData.getOpportunity(id);
-//                    if (opp.getStatus().equals(OpportunityStatus.OPEN)) list.add(opp);
                     list.add(opp);
                 }
                 comm = Commands.valueOf(new TableScreen(currentUser, "Opportunities", list).start());
@@ -136,7 +135,11 @@ public class ScreenManager {
                 accountArr = crmData.getAccountsAsList();
             }
             var account_screen = new TableScreen(currentUser, selectionMode ? "Select an Account" : "Accounts", accountArr);
-            res = Commands.valueOf(account_screen.start());
+            try{
+                res = Commands.valueOf(account_screen.start());
+            } catch (GoBackException back){
+                return "";
+            }catch (CRMException e){throw e;}
             switch (res) {
                 case CREATE -> {
                     try {
@@ -150,7 +153,9 @@ public class ScreenManager {
                             return res.getCaughtInput()[1];
                         }
                     }
-                    userOpManager.viewObject(currentUser, res.getCaughtInput());
+                    try {
+                        userOpManager.viewObject(currentUser, res.getCaughtInput());
+                    }catch (GoBackException ignored){}
                 }
                 case DISCARD -> {
                     var account = crmData.getAccount(res.getCaughtInput()[1]);
