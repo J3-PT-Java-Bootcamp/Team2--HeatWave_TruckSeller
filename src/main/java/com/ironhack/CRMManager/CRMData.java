@@ -189,9 +189,6 @@ public class CRMData implements Printable{
         CRMData crmData = sessionGson.fromJson(reader, CRMData.class);
         if (crmData==null) throw new Exception();
         return crmData;
-
-        //TODO LOAD FULL CRMData object from json and aSsign it to crmData field
-
     }
 
     public static void saveData() throws Exception {
@@ -199,8 +196,6 @@ public class CRMData implements Printable{
         var writer= new FileWriter("data/SessionData.json", false);
         writer.write(sessionGson.toJson(CRMManager.crmData));
         writer.close();
-        //TODO Save crmData object to .json file in ./data
-
     }
 
     public User getUser(String userName) {
