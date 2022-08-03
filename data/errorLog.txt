@@ -21,3 +21,10 @@
 >3/8/22 13:34:52 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
 >3/8/22 13:41:20 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
 >3/8/22 14:10:19 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 14:54:02 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IllegalStateExceptionUnexpected value: class com.ironhack.CRMManager.User
+>3/8/22 14:56:17 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArithmeticException/ by zero
+>3/8/22 15:00:26 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.ArithmeticException/ by zero
+>3/8/22 15:00:38 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "com.ironhack.CRMManager.CRMData.getUser(String)" because "com.ironhack.CRMManager.CRMManager.crmData" is null
+>3/8/22 15:01:55 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "com.ironhack.CRMManager.CRMData.getUser(String)" because "com.ironhack.CRMManager.CRMManager.crmData" is null
+>3/8/22 15:02:41 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "com.ironhack.CRMManager.CRMData.getUser(String)" because "com.ironhack.CRMManager.CRMManager.crmData" is null
+>3/8/22 15:06:06 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptioncom.ironhack.CRMManager.Exceptions.GoBackException

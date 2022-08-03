@@ -138,7 +138,7 @@ public class AdminOpManager {
             try {
                 comm = Commands.valueOf(new TableScreen(currentUser,
                         "Users statistics:",
-                        new java.util.ArrayList<User>(crmData.getUserList().values())).start());
+                        new java.util.ArrayList<User>(crmData.getUsers(false))).start());
                 switch (comm) {
                     case MENU, BACK, LOGOUT -> stop = true;
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
