@@ -21,12 +21,5 @@ class OpportunityTest extends TextObject {
         assertEquals("PFFA",opp.getId());
     }
 
-//    @org.junit.jupiter.api.Test
-//    void testprintable() {
-//        var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
-//
-//        printer.sendToQueue(op);
-//        printer.startPrint();
-//    }
 
 }

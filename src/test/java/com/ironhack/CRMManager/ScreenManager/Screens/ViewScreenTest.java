@@ -29,7 +29,7 @@ class ViewScreenTest {
 
 
     @Test
-    void start_exception_ok() throws CRMException {
+    void start_exception_ok() {
         System.setIn(new ByteArrayInputStream("menu\n".getBytes()));
         assertThrows(GoToMenuException.class, ()->screen.start());
 

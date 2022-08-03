@@ -49,16 +49,16 @@ public enum Commands {
     }
     private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){
-            case EXIT -> throw new ExitException(false);
+            case EXIT -> throw new ExitException();
             case MENU -> {
                 if(screen.getCurrentUser()!=null) throw new GoToMenuException();
-                throw new GoBackException(screen);
+                throw new GoBackException();
             }
             case LOGOUT -> throw new LogoutException(OK);
             case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE -> {
                 return true;
             }
-            case BACK -> throw new GoBackException(screen);
+            case BACK -> throw new GoBackException();
             case HELP -> throw new HelpException(ErrorType.HELP, inputReader.getHint(), screen.commands.toArray(new Commands[0]));
             case VIEW, DISCARD, CONVERT -> {
                 if(caughtInput.length!=2){

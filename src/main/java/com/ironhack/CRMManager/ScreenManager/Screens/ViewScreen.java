@@ -19,9 +19,9 @@ import static com.ironhack.Constants.Constants.LIMIT_Y;
 
 public class ViewScreen extends CRMScreen{
     //Screen that prints properties of an object
-    Printable object;
-    Type type;
-    ArrayList<String> optionsNames;
+    private final Printable object;
+    private final Type type;
+    private final ArrayList<String> optionsNames;
     public ViewScreen(User currentUser, String name, Printable object) {
         super(currentUser, name);
         this.object=object;
@@ -54,7 +54,6 @@ public class ViewScreen extends CRMScreen{
     }
     @Override
     public String start() throws CRMException {
-        boolean stop = false;
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();

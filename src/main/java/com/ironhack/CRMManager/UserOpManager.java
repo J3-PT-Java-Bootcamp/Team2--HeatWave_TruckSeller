@@ -22,18 +22,16 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 @Data
 public class UserOpManager {
-    public Opportunity closeOpportunity(User currentUser, String[] caughtInput) {
+    public void closeOpportunity(User currentUser, String[] caughtInput) {
         //TODO
         if (caughtInput != null && caughtInput.length == 3
                 && (caughtInput[1].equalsIgnoreCase("won") || caughtInput[1].equalsIgnoreCase("lost"))) {
             var opp = crmData.getOpportunity(caughtInput[2].trim().toUpperCase());
-            if (opp == null) return null;//fixme
+            if (opp == null) return;//fixme
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
             screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
             currentUser.removeFromOpportunities(opp.getId());
-            return opp;
         }
-        return null;
     }
 
     public String createNewAccount(User currentUser, String... importedData) throws CRMException {
@@ -186,7 +184,7 @@ public class UserOpManager {
     }
 
     //------------------------------------------------------------------------------------------------------INNER METHODS
-    private ContactBuilder createNewContactBuilder(User currentUser, Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
+    private ContactBuilder createNewContactBuilder(User currentUser, Lead lead, String accountName) throws CRMException {
         ContactBuilder contact = new ContactBuilder();
         if (screenManager.modal_screen(currentUser, "Copy Lead Data ?",
                 new TextObject("Do you want to create a new contact\n from the following Lead data?")

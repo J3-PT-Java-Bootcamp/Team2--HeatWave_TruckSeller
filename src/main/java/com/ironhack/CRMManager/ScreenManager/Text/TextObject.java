@@ -338,7 +338,7 @@ public class TextObject {
     }
 
     /**
-     * Recursive method that checks line size. If its bigger than limit it splits the String recursively
+     * Recursive method that checks line size. If it's bigger than limit it splits the String recursively
      * until all resulting lines fits on specified limit char size
      *
      * @param line  text to analyze
@@ -578,44 +578,6 @@ public class TextObject {
     }
 
     /**
-     * Method that sets a color/s for all current text
-     *
-     * @param colors optional parameter,
-     *               if present it assigns the only CColor enum value to all text and a RESET character at the end.
-     *               if there are more than one CColor value,
-     *               it applies color each line by repeating the pattern (colorA,colorB,colorC --> A,B,C,A,B,C,A..)
-     *               Otherwise it peeks a random color for each line.
-     *
-     * @return this TextObject allow chain call.
-     *
-     * @see ColorFactory
-     */
-//    private TextObject colorizeAllText(CColors... colors) {
-//        switch (colors.length) {
-//            case 0 -> {
-//                for (int i = 0; i < totalHeight; i++) {
-//                    text.set(i, colorizeLine(text.get(i), getRandomColor()));
-//                }
-//            }
-//            case 1 -> {
-//                int lastIndex = text.size() - 1;
-//                text.set(0, colors[0] + text.get(0));
-//                text.set(lastIndex, text.get(lastIndex) + RESET);
-//            }
-//            default -> {
-//                int colorCount = 0;
-//                for (int i = 0; i < totalHeight; i++) {
-//                    text.set(i, colorizeLine(text.get(i), colors[colorCount]));
-//                    colorCount++;
-//                    if (colorCount >= colors.length) colorCount = 0;
-//                }
-//
-//            }
-//        }
-//        return this;
-//    }
-
-    /**
      * Method that sets a style for all current text
      *
      * @param style sets same style tag for all text and a RESET character at end of last line in text
@@ -700,10 +662,7 @@ public class TextObject {
     }
 
     public TextObject fillAllLines() {
-        for (int i = 0; i < text.size(); i++) {
-            String line = text.get(i);
-            text.set(i,fillLine(line));
-        }
+        text.replaceAll(this::fillLine);
         return this;
     }
 

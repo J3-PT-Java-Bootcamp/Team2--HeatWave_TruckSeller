@@ -121,11 +121,9 @@ public class CRMManager {
                     case USERS -> adminOpManager.manageUsers_screen(currentUser);
                     case STATS -> adminOpManager.showStats_screen(currentUser);
                     case LOAD -> adminOpManager.loadLeadData(currentUser);
-                    default -> {
-                        LogWriter.logError(getClass().getSimpleName(),
-                                "appStart",
-                                "Unexpected command value... " + comm.name());
-                    }
+                    default -> LogWriter.logError(getClass().getSimpleName(),
+                            "appStart",
+                            "Unexpected command value... " + comm.name());
                 }
                 else switch (comm) {
                     case OPP -> screenManager.show_OpportunitiesScreen(currentUser,new ArrayList<>());
@@ -134,11 +132,9 @@ public class CRMManager {
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
-                    default -> {
-                        LogWriter.logError(getClass().getSimpleName(),
-                                "appStart",
-                                "Unexpected command value... " + comm.name());
-                    }
+                    default -> LogWriter.logError(getClass().getSimpleName(),
+                            "appStart",
+                            "Unexpected command value... " + comm.name());
                 }
             }catch (ExitException e){
                 this.exit=true;

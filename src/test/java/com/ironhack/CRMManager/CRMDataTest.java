@@ -131,14 +131,22 @@ class CRMDataTest {
     void test_getUsers_withAdmin_ok() {
         boolean areAdmin=false;
         var list = crmData.getUsers(true);
-        for(User user: list)if(user.isAdmin())areAdmin=true;
+        for(User user: list)
+            if (user.isAdmin()) {
+                areAdmin = true;
+                break;
+            }
         assertTrue(areAdmin);
     }
     @Test
     void test_getUsers_withoutAdmin_ok() {
         boolean areAdmin=false;
         var list = crmData.getUsers(false);
-        for(User user: list)if(user.isAdmin())areAdmin=true;
+        for(User user: list)
+            if (user.isAdmin()) {
+                areAdmin = true;
+                break;
+            }
         assertFalse(areAdmin);
     }
 

@@ -79,7 +79,7 @@ public enum InputReader {
     private int validateIntegerInput(int min, int max, CRMScreen screen) throws CRMException {
         int inputNumber = -1;
         try {
-            inputNumber = Integer.parseInt(validateCommand(screen.getCommands().toArray(new Commands[0]),screen));//check if there is any global command);
+            inputNumber = Integer.parseInt(validateCommand(screen.getCommands().toArray(new Commands[0]),screen));
         } catch (CRMException e) {
             throw e;
         } catch (Exception e) {
@@ -88,7 +88,6 @@ public enum InputReader {
         }
         if (inputNumber <= max && inputNumber >= min) return inputNumber;
         printer.showErrorLine(FORMAT_NOK);
-//        startPrint();
         return validateIntegerInput(min, max,screen);
     }
 

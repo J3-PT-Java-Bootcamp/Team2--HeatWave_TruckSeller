@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.CRMManager.*;
-import static com.ironhack.CRMManager.CRMManager.userOpManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.EXIT;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
@@ -25,43 +24,34 @@ import static com.ironhack.Constants.Constants.*;
 @Data
 public class AdminOpManager {
     void loadLeadData(User currentUser) throws Exception {
-        boolean stop = false;
-        do {
-            var txtObj = new TextObject("You can load lead data from any CSV file saved on root/import", LIMIT_X / 2, LIMIT_Y)
-                    .addText(BLANK_SPACE).setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
-            var rightCol = new TextObject("File names:");
-            var leftCol = new TextObject("INDEX: ");
-            var files = new ArrayList<>(List.of(Objects.requireNonNull(new File("import").listFiles())));
-            for (int i = 0; i < Objects.requireNonNull(files).size(); i++) {
-                File file = files.get(i);
-                rightCol.addText(file.getName());
-                leftCol.addText("-" + i + ": ");
-            }
-            txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH, new TextObject[]{leftCol, rightCol});
-            var inpScreen = new InputScreen(currentUser, "Select a File: ", txtObj,
-                    new String[]{"File Index"}, INTEGER);
-            var resVal = inpScreen.start();
-            if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
-            if (resVal.equals(EXIT.name())) stop = true;
-            var index = Integer.parseInt(resVal);
-            var currentFile=files.get(index);
-            var leads = parseCSVLeads(currentFile);
-            if (!leads.isEmpty()) {
-                assignLeadsToUser(currentUser,leads);
-            }
-//            var toDelete = new File(files.remove(index).getAbsolutePath());//FIXME
-            try{
-                if(!currentFile.delete())
-                    throw new RuntimeException("Delete=false!");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-
-            stop=true;
-
-
-
-        } while (!stop);
+        var txtObj = new TextObject("You can load lead data from any CSV file saved on root/import", LIMIT_X / 2, LIMIT_Y)
+                .addText(BLANK_SPACE).setBgcolor(MAIN_BG).setTxtColor(MAIN_TXT_COLOR);
+        var rightCol = new TextObject("File names:");
+        var leftCol = new TextObject("INDEX: ");
+        var files = new ArrayList<>(List.of(Objects.requireNonNull(new File("import").listFiles())));
+        for (int i = 0; i < Objects.requireNonNull(files).size(); i++) {
+            File file = files.get(i);
+            rightCol.addText(file.getName());
+            leftCol.addText("-" + i + ": ");
+        }
+        txtObj.addGroupInColumns(2, txtObj.MAX_WIDTH, new TextObject[]{leftCol, rightCol});
+        var inpScreen = new InputScreen(currentUser, "Select a File: ", txtObj,
+                new String[]{"File Index"}, INTEGER);
+        var resVal = inpScreen.start();
+        if (resVal.contains(":")) resVal = resVal.split(":")[1].trim();
+        if (resVal.equals(EXIT.name())) return;
+        var index = Integer.parseInt(resVal);
+        var currentFile=files.get(index);
+        var leads = parseCSVLeads(currentFile);
+        if (!leads.isEmpty()) {
+            assignLeadsToUser(currentUser,leads);
+        }
+        try{
+            if(!currentFile.delete())
+                throw new RuntimeException("Delete=false!");
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
     private void assignLeadsToUser(User currentUser,ArrayList<Lead> leadList) throws Exception {
         TextObject txtObj;
@@ -138,7 +128,7 @@ public class AdminOpManager {
             try {
                 comm = Commands.valueOf(new TableScreen(currentUser,
                         "Users statistics:",
-                        new java.util.ArrayList<User>(crmData.getUsers(false))).start());
+                        new java.util.ArrayList<>(crmData.getUsers(false))).start());
                 switch (comm) {
                     case MENU, BACK, LOGOUT -> stop = true;
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
@@ -162,9 +152,9 @@ public class AdminOpManager {
     }
     /**
      * Creates the newUser screen to create a new user,
-     * if there is not previous user it makes admin user by default
+     * if there is no previous user it makes admin user by default
      *
-     * @param isAdmin true if must create an admin
+     * @param isAdmin true if it must create an admin
      * @throws CRMException if Back/Exit/Logout/Menu commands are read
      */
     public void createNewUser(User currentUser,boolean isAdmin) throws CRMException {

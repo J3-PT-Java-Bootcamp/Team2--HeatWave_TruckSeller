@@ -185,7 +185,7 @@ public class ScreenManager {
             }
 
         } while (!stop);
-        throw new ExitException(true);
+        throw new ExitException();
     }
 
 
@@ -197,15 +197,12 @@ public class ScreenManager {
      * @param showData true if it must print saved data
      */
     public void confirming_screen(User currentUser, String message, String strData, boolean showData) {
-        try {
-            if (showData) {
-                new ConfirmationScreen(currentUser, "Confirmation", message, strData).start();
-            } else {
-                new ConfirmationScreen(currentUser, "Confirmation", message).start();
-            }
-        } catch (CRMException ignored) {
-            //start() a confirmationScreen won't send any exception
+        if (showData) {
+            new ConfirmationScreen(currentUser, "Confirmation", message, strData).start();
+        } else {
+            new ConfirmationScreen(currentUser, "Confirmation", message).start();
         }
+
     }
 
     /**

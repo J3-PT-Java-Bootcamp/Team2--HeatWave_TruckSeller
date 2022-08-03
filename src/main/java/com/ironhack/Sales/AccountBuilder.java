@@ -21,10 +21,6 @@ public class AccountBuilder {
     private ArrayList<String> contacts, opportunities;
     private String companyName;
 
-    public static void save(Account accountOne) {
-    }
-
-
     public Account constructAccount() throws NoCompleteObjectException {
 
         if(industryType==null || employeeCount ==0 || city==null|| country==null||companyName==null) throw new NoCompleteObjectException();
