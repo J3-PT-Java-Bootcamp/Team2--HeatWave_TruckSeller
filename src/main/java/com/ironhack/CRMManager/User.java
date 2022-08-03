@@ -172,9 +172,18 @@ public class User implements Printable {
         this.totalOpps = this.getOpportunityListSize() + this.getSuccessfulOpp() + this.getLostOpp();
     }
 
+    //This one is for the removeUnknownObject it only lets you set it as a lost Opp
     public void removeFromOpportunities(String id) {
         opportunityList.remove(id);
-        this.setClosedLeads(+1);
+        this.setLostOpp(+1);
+
+    }
+
+
+    public void removeFromOpportunities(String id, boolean isSuccess) {
+        opportunityList.remove(id);
+        if (isSuccess){this.setSuccessfulOpp(+1);}
+        else {this.setLostOpp(+1);}
     }
 
     public void removeUnknown(String id) {

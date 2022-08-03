@@ -10,7 +10,6 @@ import com.ironhack.Constants.Product;
 import com.ironhack.Sales.*;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMData.saveData;
@@ -20,22 +19,21 @@ import static com.ironhack.CRMManager.Exceptions.ErrorType.ID_NOK;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.Constants.FAV_MAX;
 
 @Data
 public class UserOpManager {
-    public void closeOpportunity(User currentUser, String[] caughtInput) {
+    public Opportunity closeOpportunity(User currentUser, String[] caughtInput) {
         //TODO
         if (caughtInput != null && caughtInput.length == 3
                 && (caughtInput[1].equalsIgnoreCase("won") || caughtInput[1].equalsIgnoreCase("lost"))) {
             var opp = crmData.getOpportunity(caughtInput[2].trim().toUpperCase());
-            if (opp == null) return;//fixme
+            if (opp == null) return null;//fixme
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
-            var favs= currentUser.getFavourites();
-            if(favs!=null&&!favs.isEmpty()&&favs.contains(opp.getId()))currentUser.getFavourites().remove(opp.getId());
             screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
-            currentUser.removeFromOpportunities(opp.getId());
+            currentUser.removeFromOpportunities(opp.getId(), (caughtInput[1].equalsIgnoreCase("won")));
+            return opp;
         }
+        return null;
     }
 
     public String createNewAccount(User currentUser, String... importedData) throws CRMException {
@@ -78,36 +76,6 @@ public class UserOpManager {
             }
         }
         return createNewAccount(currentUser, importedData);
-    }
-    public String createNewLead(User currentUser) throws CRMException {
-
-        var newLeadScreen = new InputScreen(currentUser,
-                "New Screen",
-                new TextObject("Enter data for the new Lead: ").addText(BLANK_SPACE),
-                new String[]{"Contact Name", "Phone number", "Mail", "Company"},
-                OPEN, PHONE, MAIL, OPEN);
-        String strRes = null;
-        try {
-            strRes = newLeadScreen.start();
-            if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
-        } catch (GoBackException | GoToMenuException | LogoutException | ExitException exit) {
-            throw exit;
-        } catch (CRMException e) {
-            return "";
-        }
-        var userVal = newLeadScreen.getValues();
-
-        if (userVal != null && !userVal.isEmpty() && userVal.size() >= 4) {
-            var lead = new Lead(userVal.get(0),userVal.get(1),userVal.get(2),userVal.get(3));
-
-                crmData.addLead(lead);
-                screenManager.confirming_screen(currentUser, "Lead " + lead.shortPrint() + " was properly saved.",
-                        strRes,
-                        true);
-                currentUser.addToLeadList(lead);
-                return lead.getId();
-        }
-        return createNewLead(currentUser);
     }
 
     public String convertLeadToOpp(User currentUser, String[] caughtInput) {
@@ -171,24 +139,19 @@ public class UserOpManager {
                     printer.showErrorLine(ID_NOK);
                     return;
                 }
-                ViewScreen viewScreen = new ViewScreen(currentUser, object.shortPrint(), object);
-                var res= viewScreen.start();
+                var res= new ViewScreen(currentUser, object.shortPrint(), object).start();
                 switch (Commands.valueOf(res)) {
-                    case FAV -> userOpManager.addToFavourites(currentUser,new String[]{res,object.getId()});
+
                     case CONVERT -> {
-                        userOpManager.convertLeadToOpp(currentUser, new String[]{CONVERT.name(), object.getId()});
+                        userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
                         stop=true;
                     }
                     case CLOSE -> {
-//                        try{
-                            userOpManager.closeOpportunity(currentUser, new String[]{CLOSE.name(),CLOSE.getCaughtInput()[1], object.getId()});
-                            viewObject(currentUser,caughtInput);
-//                        } catch (GoBackException ignored) {
-//                        }catch (Exception e){throw new RuntimeException();}
+                        userOpManager.closeOpportunity(currentUser, new String[]{res, object.getId()});
+                        viewObject(currentUser,caughtInput);
                     }
-                    case OPP ->
-                                screenManager.show_OpportunitiesScreen(currentUser,
-                                        crmData.getAccount(object.getId()).getOpportunities());
+                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser,
+                            crmData.getAccount(object.getId()).getOpportunities());
                     case ACCOUNT -> {
                         var id = "";
                         if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName().toUpperCase();
@@ -199,59 +162,28 @@ public class UserOpManager {
                         if(object instanceof Opportunity)id= ((Opportunity) object).getDecisionMakerID();
                         userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), id});
                     }
-                    case DISCARD -> stop = discardObject(currentUser, object);
+                    case DISCARD -> {
+                        if(screenManager.modal_screen(currentUser,
+                                "Discard Lead?",
+                                new TextObject("Do you want to delete this lead?")
+                                        .addText(BLANK_SPACE).addText(object.printFullObject()))){
+                            currentUser.removeUnknown(object.getId());
+                            crmData.removeUnknownObject(object.getId());
+                            screenManager.confirming_screen(currentUser,
+                                    "Lead %s was deleted!".formatted(object.getId()),
+                                    object.printFullObject().toString(),
+                                    true);
+                            stop=true;
+
+                        }
+                    }
                 }
             } while (!stop);
         }
     }
 
-    boolean discardObject(User currentUser, Printable object) {
-        if ((!currentUser.isAdmin() && object.getClass() != User.class) || object.getClass() == CRMData.class)
-            return false;
-        if(screenManager.modal_screen(currentUser,
-                " Delete %s ? ".formatted(object.shortPrint()),
-                new TextObject("Do you want to delete this %s ?".formatted(object.getClass().getSimpleName()))
-                        .addText(BLANK_SPACE).addText(object.printFullObject()))){
-
-            currentUser.removeUnknown(object.getId());
-            crmData.removeUnknownObject(object.getId());
-            screenManager.confirming_screen(currentUser,
-                    "%s : %s was deleted!".formatted(object.getClass().getSimpleName(),object.getId()),
-                    object.printFullObject().toString(),
-                    true);
-            return true;
-        }
-        return false;
-    }
-
-    public void addToFavourites(User currentUser, String[] caughtInput) {
-        String varWord= "added to";
-        Printable unknownObject = crmData.getUnknownObject(caughtInput[1]);
-        ArrayList<String> favs = currentUser.getFavourites();
-        if (favs != null) {
-            if (favs.contains(caughtInput[1])) {
-                if (!screenManager.modal_screen(currentUser, "Quit from Favourites",
-                        new TextObject("%s is already saved in favourites. Do you want to quit it?"
-                                .formatted(unknownObject.printFullObject())))) {
-                    return;
-                }
-                    varWord = "deleted from";
-            } else if (favs.size() >= FAV_MAX && !screenManager.modal_screen(currentUser, "Favourites is full",
-                    new TextObject("Favourites list is full, confirm if you want to add %s and delete the older element showed below:".formatted(unknownObject.shortPrint()))
-                            .addText(crmData.getUnknownObject(favs.get(0)).toTextObject()))) {
-                return;
-            }
-        }
-        currentUser.addToFavourites(caughtInput[1]);
-        screenManager.confirming_screen(currentUser,
-                unknownObject.shortPrint()+" was properly "+varWord+" the favourites list",
-                unknownObject.printFullObject().toString(),
-                true
-                );
-    }
-
     //------------------------------------------------------------------------------------------------------INNER METHODS
-    private ContactBuilder createNewContactBuilder(User currentUser, Lead lead, String accountName) throws CRMException {
+    private ContactBuilder createNewContactBuilder(User currentUser, Lead lead, String accountName) throws CRMException, NoCompleteObjectException {
         ContactBuilder contact = new ContactBuilder();
         if (screenManager.modal_screen(currentUser, "Copy Lead Data ?",
                 new TextObject("Do you want to create a new contact\n from the following Lead data?")
