@@ -132,16 +132,13 @@ public class AdminOpManager {
         return resVal;
     }
     void showStats_screen(User currentUser) {
-        var list = new java.util.ArrayList<User>();
         boolean stop = false;
         Commands comm = null;
         do {
             try {
-                for (User user : crmData.getUserList().values()) {
-                    list.add(user);
-                }
-                comm = Commands.valueOf(new TableScreen(currentUser, "Users statistics:", list).start());
-
+                comm = Commands.valueOf(new TableScreen(currentUser,
+                        "Users statistics:",
+                        new java.util.ArrayList<User>(crmData.getUserList().values())).start());
                 switch (comm) {
                     case MENU, BACK, LOGOUT -> stop = true;
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
@@ -151,7 +148,6 @@ public class AdminOpManager {
             } catch (CRMException e) {
                 throw new RuntimeException(e);
             }
-            list.clear();
         } while (!stop);
 
     }
