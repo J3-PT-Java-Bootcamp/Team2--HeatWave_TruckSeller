@@ -352,7 +352,7 @@ public class TextObject {
 
         var wordList = line.replace(BLANK_SPACE + BLANK_SPACE, "€€").split(BLANK_SPACE);
         StringBuilder line1 = new StringBuilder();
-        StringBuilder line2 = new StringBuilder();
+        StringBuilder line2 = new StringBuilder("  ");
         int charCounter = 0;
         for (String word : wordList) {
             charCounter += countValidCharacters(word) + (java.util.Objects.equals(word, "€€") ? 0 : 1);
@@ -558,7 +558,7 @@ public class TextObject {
      *
      * @return this TextObject to allow chain calls.
      */
-    private TextObject alignTextRight() {
+    public TextObject alignTextRight() {
         for (int i = 0; i < totalHeight; i++) {
             text.set(i, lineToRight(text.get(i)));
         }
