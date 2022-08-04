@@ -143,24 +143,27 @@ public class CRMData implements Printable{
 
     public int getTotalClosedLeads() {
         int totalClosedLeads = 0;
-        for (int i=0; i < userList.size(); i++){
-            totalClosedLeads = totalClosedLeads + userList.get(i).getClosedLeads();
+        var users = getUsers(false);
+        for (int i=0; i < users.size(); i++){
+            totalClosedLeads = totalClosedLeads + users.get(i).getClosedLeads();
         }
         return totalClosedLeads;
     }
 
     public int getTotalLostOpps() {
         int totalLostOpps = 0;
-        for (int i=0; i < userList.size(); i++){
-            totalLostOpps = totalLostOpps + userList.get(i).getLostOpp();
+        var users = getUsers(false);
+        for (int i=0; i < users.size(); i++){
+            totalLostOpps = totalLostOpps + users.get(i).getLostOpp();
         }
         return totalLostOpps;
     }
 
     public int getTotalSuccesOpps() {
         int totalSuccesOpps =0;
-        for (int i=0; i < userList.size(); i++){
-            totalSuccesOpps = totalSuccesOpps + userList.get(i).getSuccessfulOpp();
+        var users = getUsers(false);
+        for (int i=0; i < users.size(); i++){
+            totalSuccesOpps = totalSuccesOpps + users.get(i).getSuccessfulOpp();
         }
         return totalSuccesOpps;
     }
