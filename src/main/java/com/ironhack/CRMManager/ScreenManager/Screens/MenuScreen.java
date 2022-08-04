@@ -77,23 +77,25 @@ public class MenuScreen extends CRMScreen {
             statistics.addText(user.printFullObject());
         }
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
-        TextObject historicObjects = new TextObject("History :", width / 4, height);
+        TextObject favObjects = new TextObject("Favourites :", width / 4, height);
 
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
-        for (String id : user.getRecentObjects())
-            historicObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
-        historicObjects.fillAllLines();
+        if(user.getFavourites()!=null) {
+            for (String id : user.getFavourites())
+                favObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
+//        historicObjects.fillAllLines();
+        }
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
         statistics.setBgcolor(BgColors.CYAN).alignTextTop(height)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
-        historicObjects.alignTextTop(height)
+        favObjects.alignTextTop(height)
                 .setBgcolor(BgColors.BLACK)
                 .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
         container.addGroupInColumns(3,
                 width,
-                new TextObject[]{optionsNames, statistics, historicObjects});
+                new TextObject[]{optionsNames, statistics, favObjects});
         container.addText(BRIGHT_BLACK+this.getHintLine()+SMART_RESET);
         container.alignTextMiddle();
 
