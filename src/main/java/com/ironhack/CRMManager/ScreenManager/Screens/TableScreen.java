@@ -17,6 +17,7 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_BLACK;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
@@ -76,7 +77,7 @@ public class TableScreen extends CRMScreen {
 
     private ArrayList<List<? extends Printable>> getLists(ArrayList<? extends Printable> data) {
         ArrayList<List<? extends Printable>> masterArr = new java.util.ArrayList<>();
-        pages = (int) Math.floor(data.size() / 15) + (data.size() % 15 == 0 ? 0 : 1);
+        pages =(data.size() / 15) + (data.size() % 15 == 0 ? 0 : 1);
         int lastIndex = 0;
         for (int i = 0; i < pages; i++) {
             masterArr.add(data.subList(lastIndex, Math.min((i + 1) * 15, data.size())));
@@ -125,7 +126,7 @@ public class TableScreen extends CRMScreen {
             for (int j = 0; j < columnTitles.length; j++) {
                 String currentField = "";
                 if (i < 0) currentField = UNDERLINE + columnTitles[j];
-                else currentField = currentTxtObj.get(j);
+                else currentField = currentTxtObj.getTotalHeight()>j?currentTxtObj.get(j):BLANK_SPACE;
                 if (!fits && j == largestFieldIndex && i >= 0) {
                     sb.append(currentField, 0, columnsMinSize[j] - 5);
                     sb.append("...");
@@ -184,9 +185,9 @@ public class TableScreen extends CRMScreen {
         } catch (GoToMenuException menu) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             throw menu;
-        } catch (CRMException ignored) {
+        } catch (CRMException e) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start","Received a unexpected CRMException.. "+ignored.getErrorType());
+                    "start","Received a unexpected CRMException.. "+e.getErrorType());
         }
         return start();
     }

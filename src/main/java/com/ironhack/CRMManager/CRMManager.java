@@ -121,6 +121,7 @@ public class CRMManager {
                     case USERS -> adminOpManager.manageUsers_screen(currentUser);
                     case STATS -> adminOpManager.showStats_screen(currentUser);
                     case LOAD -> adminOpManager.loadLeadData(currentUser);
+                    case README -> screenManager.readme_screen(currentUser);
                     default -> LogWriter.logError(getClass().getSimpleName(),
                             "appStart",
                             "Unexpected command value... " + comm.name());
@@ -132,6 +133,7 @@ public class CRMManager {
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                    case README -> screenManager.readme_screen(currentUser);
                     default -> LogWriter.logError(getClass().getSimpleName(),
                             "appStart",
                             "Unexpected command value... " + comm.name());
@@ -140,9 +142,9 @@ public class CRMManager {
                 this.exit=true;
             }catch (LogoutException logout){
                 currentUser=null;
-            } catch (CRMException ignored){
+            } catch (CRMException e){
                 LogWriter.logError(getClass().getSimpleName(),
-                        "appStart","Unexpected exception.. "+ignored.getClass()+" "+ignored.getErrorType());
+                        "appStart","Unexpected exception.. "+e.getClass()+" "+e.getErrorType());
             } catch (Exception e) {
 
                 LogWriter.logError(getClass().getSimpleName(),
