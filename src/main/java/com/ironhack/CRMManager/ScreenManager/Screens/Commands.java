@@ -21,8 +21,8 @@ public enum Commands implements Printable {
     OPP("View OPPortunities", "View user's active Opportunities",false, "OPP","OPPORTUNITY"),
     LEAD("View LEADs","View user's assigned Leads",false,"LEAD",  "LEADS"),
     ACCOUNT("View ACCounts","View saved Accounts",false, "ACC", "ACCOUNT"),
-    CONTACTS("View CONTacts","View related Contact",false, "CONT",  "CONTACT","CONTACTS"),
-    USERS("View USERs","Manage users and passwords",false,"MANAGE USERS",  "USERS","USER"),
+    CONTACTS("View CONTacts","View related Contact",false, "CONT",  "CONTACT"),
+    USERS("View USERs","Manage users and passwords",false,"MANAGE",  "USERS","USER"),
     LOAD("LOAD Leads Data","Load lead data from csv file",false,"LOAD"),
     STATS("View STATistics","View all users statistics",false,"STAT", "STATISTICS"),
     YES("Confirm","Confirm option...",false,"YES", "OK","CONFIRM"),
@@ -33,8 +33,8 @@ public enum Commands implements Printable {
     HELP("HELP","Shows help hint...",false,"HELP"),
     VIEW("SELECT/VIEW","Shows all data from the selected object",true,"VIEW", "SELECT"),
     DISCARD("Discard..","Delete the selected object",true,"DISCARD", "DELETE","REMOVE"),
-    FAV("Add to Favourites","Adds selected object to favourites",true,"FAV","FAVOURITE"),
-    README("READ commands info", "Open this commands help", false, "READ","README","COMMAND");
+    FAV("Add to Favourites","Adds selected object to favourites",true,"FAV","SAVE"),
+    README("READ commands info", "Open this commands help", false, "READ","COMMAND");
 
     private final String[] keyWords;
     private final String description;

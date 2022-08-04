@@ -31,6 +31,8 @@ public class UserOpManager {
             var opp = crmData.getOpportunity(caughtInput[2].trim().toUpperCase());
             if (opp == null) return;//fixme
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
+            var favs= currentUser.getFavourites();
+            if(favs!=null&&!favs.isEmpty()&&favs.contains(opp.getId()))currentUser.getFavourites().remove(opp.getId());
             screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
             currentUser.removeFromOpportunities(opp.getId());
         }
