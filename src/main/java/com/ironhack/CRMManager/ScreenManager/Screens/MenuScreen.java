@@ -25,7 +25,7 @@ public class MenuScreen extends CRMScreen {
         super(currentUser, title);
         this.user = currentUser;
         this.options = user.isAdmin() ?
-                new Commands[]{USERS, STATS, LOAD} : new Commands[]{LEAD, ACCOUNT, OPP};
+                new Commands[]{USERS, STATS, LOAD,README} : new Commands[]{LEAD, ACCOUNT, OPP,README};
 
         for (Commands opt : options) this.addCommand(opt);
         if (!user.isAdmin()) addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
@@ -52,9 +52,9 @@ public class MenuScreen extends CRMScreen {
                     new TextObject("Do you want to close app?"))) {
                throw e;
             }
-        } catch (CRMException ignored) {
+        } catch (CRMException e) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start","Received a unexpected exception.. "+ignored.getErrorType());
+                    "start","Received a unexpected exception.. "+e.getErrorType());
         }
         return start();
     }

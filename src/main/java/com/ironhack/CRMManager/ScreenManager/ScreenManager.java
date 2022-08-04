@@ -11,6 +11,7 @@ import com.ironhack.Sales.Opportunity;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
@@ -158,12 +159,14 @@ public class ScreenManager {
                 res = Commands.valueOf(account_screen.start());
             } catch (GoBackException back){
                 return "";
-            }catch (CRMException e){throw e;}
+            }
             switch (res) {
                 case CREATE -> {
                     try {
                         return userOpManager.createNewAccount(currentUser);
                     } catch (GoBackException ignored) {
+                    }catch (ExitException e){
+                        stop=true;
                     }
                 }
                 case VIEW -> {
@@ -174,7 +177,9 @@ public class ScreenManager {
                     }
                     try {
                         userOpManager.viewObject(currentUser, res.getCaughtInput());
-                    }catch (GoBackException ignored){}
+                    }catch (GoBackException ignored){  }catch (ExitException e){
+                        stop=true;
+                    }
                 }
                 case DISCARD -> {
                     var account = crmData.getAccount(res.getCaughtInput()[1]);
@@ -220,6 +225,15 @@ public class ScreenManager {
         } catch (IllegalArgumentException e) {
             printer.showErrorLine(FORMAT_NOK);
             return modal_screen(currentUser, name, message);
+        }
+    }
+
+    public void readme_screen(User currentUser) throws CRMException {
+        var readme= new TableScreen(currentUser,"Commands ReadMe",new ArrayList<>(List.of(Commands.values())));
+        try {
+
+            readme.start();
+        }catch (GoBackException ignored){
         }
     }
 }

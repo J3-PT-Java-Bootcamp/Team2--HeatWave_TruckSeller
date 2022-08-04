@@ -3,51 +3,60 @@ package com.ironhack.CRMManager.ScreenManager.Screens;
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.Exceptions.*;
 import com.ironhack.CRMManager.ScreenManager.InputReader;
+import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Sales.Printable;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 import static com.ironhack.CRMManager.Exceptions.ErrorType.OK;
 @Getter
-public enum Commands {
-    EXIT("Exit App","EXIT","BYE","TURNOFF"),
-    MENU("Go to Menu","MENU"),
-    LOGOUT("Log Out","LOGOUT","LOG OUT"),
-    CREATE("Create New...","CREATE","NEW","CREATE NEW"),
-    CONVERT("CONVERT to Opportunity","CONVERT", "CONVERT LEAD"),
-    CLOSE("CLOSE Opportunity","CLOSE","CLOSE OPP", "CLOSE OPPORTUNITY"),
-    OPP("View OPPortunities","OPP","OPPORTUNITY","OPPORTUNITIES","VIEW OPPORTUNITY","VIEW OPP"),
-    LEAD("View LEADs","LEAD","LEADS","VIEW LEADS","VIEW LEAD"),
-    ACCOUNT("View ACCounts","ACC","ACCOUNT","ACCOUNTS","VIEW ACCOUNTS","VIEW ACCOUNT"),
-    CONTACTS("View CONTacts","CONT","CONTACT","CONTACTS", "VIEW CONTACTS", "VIEW CONTACT"),
-    USERS("View USERs","MANAGE USERS","USERS","USER"),
-    LOAD("LOAD Leads Data","LOAD LEADS","LOAD DATA","LOAD"),
-    STATS("View STATistics","STAT","STATISTICS","VIEW STATS","VIEW STATISTICS"),
-    YES("Confirm","YES","OK","CONFIRM","Y"),
-    NO("Cancel","NO","CANCEL","N"),
-    BACK("Go BACK","BACK"),
-    NEXT("NEXT","NEXT"),
-    PREVIOUS("PREVious","PREV","PREVIOUS"),
-    HELP("HELP","HELP"),
-    VIEW("SELECT/VIEW","VIEW","CHECK","SEE","SELECT"),
-    DISCARD("Discard..","DISCARD","DELETE","REMOVE");
+public enum Commands implements Printable {
+    EXIT("Exit App","Close application", false, "EXIT","BYE","TURNOFF"),
+    MENU("Go to Menu","Go back to Main Menu", false, "MENU"),
+    LOGOUT("Log Out","Logout and go to Login screen", false, "LOGOUT","LOG OUT"),
+    CREATE("Create New...","Create new object", false, "CREATE","NEW"),
+    CONVERT("CONVERT to Opportunity","Converts Lead into Opportunity", true, "CONVERT"),
+    CLOSE("CLOSE Opportunity","Close selected Opportunity", true, "CLOSE WON","CLOSE LOST"),
+    OPP("View OPPortunities", "View user's active Opportunities",false, "OPP","OPPORTUNITY"),
+    LEAD("View LEADs","View user's assigned Leads",false,"LEAD",  "LEADS"),
+    ACCOUNT("View ACCounts","View saved Accounts",false, "ACC", "ACCOUNT","ACCOUNTS"),
+    CONTACTS("CONTact","View related Contact",false, "CONT",  "CONTACT"),
+    USERS("View USERs","Manage users and passwords",false,"MANAGE USERS",  "USERS","USER"),
+    LOAD("LOAD Leads Data","Load lead data from csv file",false,"LOAD"),
+    STATS("View STATistics","View all users statistics",false,"STAT", "STATISTICS"),
+    YES("Confirm","Confirm option...",false,"YES", "OK","CONFIRM"),
+    NO("Cancel","Cancel option...",false,"NO", "CANCEL"),
+    BACK("Go BACK","Turn back to the previous screen or input",false,"BACK"),
+    NEXT("NEXT","Go to next page in table screens",false,"NEXT","NXT"),
+    PREVIOUS("PREVious","Go to previous page in table screens",false,"PREV","PREVIOUS"),
+    HELP("HELP","Shows help hint...",false,"HELP"),
+    VIEW("SELECT/VIEW","Shows all data from the selected object",false,"VIEW","SELECT"),
+    DISCARD("Discard..","Delete the selected object",false,"DISCARD", "DELETE","REMOVE"),
+    README("READme (Commands info)", "View this screen",false,"READ", "README");
 
     private final String[] keyWords;
+    private final String description;
     private final String display;
+    private final boolean needsId;
 
     String[] caughtInput;
-    Commands(String display,String... keyWords){
+    Commands(String display, String description, boolean needsId, String... keyWords){
         this.display=display;
+        this.needsId = needsId;
         this.keyWords = keyWords;
+        this.description=description;
     }
     public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
         caughtInput=input.trim().split(" ");
         for(String key: keyWords){
-            if(input.contains(key.toUpperCase())) {//TODO better method that "contains" to check also if it has more text than allowed
-                return act(input, screen,inputReader);
+            if(input.contains(key.toUpperCase())) {
+                return act(screen,inputReader);
             }
         }
         return false;
     }
-    private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
+    private Boolean act(CRMScreen screen, InputReader inputReader) throws CRMException{
         switch (this){
             case EXIT -> throw new ExitException();
             case MENU -> {
@@ -55,7 +64,7 @@ public enum Commands {
                 throw new GoBackException();
             }
             case LOGOUT -> throw new LogoutException(OK);
-            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE,README -> {
                 return true;
             }
             case BACK -> throw new GoBackException();
@@ -65,7 +74,6 @@ public enum Commands {
                     if(! (screen instanceof ViewScreen))throw new WrongInputException(ErrorType.COMMAND_NOK);
                 }else {
                     var inputId = caughtInput[1].trim().toUpperCase();
-                    char identifier = inputId.toCharArray()[0];
                     if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
                 return true;
@@ -75,12 +83,36 @@ public enum Commands {
                     if(! (screen instanceof ViewScreen)&&caughtInput.length==2)throw new WrongInputException(ErrorType.COMMAND_NOK);
                 }else {
                     var inputId = caughtInput[2].trim().toUpperCase();
-                    char identifier = inputId.toCharArray()[0];
                     if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return name();
+    }
+
+    @Override
+    public TextObject toTextObject() {
+        return new TextObject(shortPrint()).addText(description).addText(Arrays.stream(keyWords).toList() +( needsId?" + objectID":""));
+    }
+
+    @Override
+    public String shortPrint() {
+        return display;
+    }
+
+    @Override
+    public TextObject printFullObject() {
+        return null;
+    }
+
+    @Override
+    public String[] getPrintableAttributes() {
+        return new String[]{"Command", "Description","Keywords"};
     }
 }
