@@ -3,7 +3,7 @@ package com.ironhack.Constants;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 
 public class Constants {
-
+    public static final int FAV_MAX = 8;
     public static final ColorFactory.BgColors MAIN_BG = ColorFactory.BgColors.CYAN;
     public static final ColorFactory.BgColors FRAME_BG = ColorFactory.BgColors.CYAN;
     public static final ColorFactory.CColors MAIN_TXT_COLOR = ColorFactory.CColors.BLACK;

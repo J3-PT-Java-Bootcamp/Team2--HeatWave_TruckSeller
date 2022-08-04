@@ -16,9 +16,11 @@ import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
+import static com.ironhack.Constants.Constants.FAV_MAX;
 
 @Data
 public class User implements Printable {
+
     private String name;
     private String password;
     private ArrayList<String> opportunityList,leadList, favourites;
@@ -74,12 +76,16 @@ public class User implements Printable {
         this.setClosedLeads(+1);
     }
     public void addToFavourites(String id){
+        if (favourites==null)favourites=new ArrayList<>();
         if(favourites.contains(id)){
             favourites.remove(id);
         }else {
-            if (this.updateFavourites().size() >= 10) favourites.remove(0);
+            if (this.updateFavourites().size() >= FAV_MAX) favourites.remove(0);
             favourites.add(id);
         }
+    }
+    public ArrayList<String> getFavourites(){
+        return updateFavourites();
     }
     private ArrayList<String> updateFavourites(){
         favourites.removeIf(fav -> !crmData.existsObject(fav));

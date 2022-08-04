@@ -10,6 +10,7 @@ import com.ironhack.Constants.Product;
 import com.ironhack.Sales.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.ironhack.CRMManager.CRMData.saveData;
@@ -19,6 +20,7 @@ import static com.ironhack.CRMManager.Exceptions.ErrorType.ID_NOK;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
+import static com.ironhack.Constants.Constants.FAV_MAX;
 
 @Data
 public class UserOpManager {
@@ -139,7 +141,7 @@ public class UserOpManager {
                 }
                 var res= new ViewScreen(currentUser, object.shortPrint(), object).start();
                 switch (Commands.valueOf(res)) {
-
+                    case FAV -> userOpManager.addToFavourites(currentUser,new String[]{res,object.getId()});
                     case CONVERT -> {
                         userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
                         stop=true;
@@ -181,6 +183,32 @@ public class UserOpManager {
                 }
             } while (!stop);
         }
+    }
+
+    private void addToFavourites(User currentUser, String[] caughtInput) {
+        String varWord= "added to";
+        Printable unknownObject = crmData.getUnknownObject(caughtInput[1]);
+        ArrayList<String> favs = currentUser.getFavourites();
+        if (favs != null) {
+            if (favs.contains(caughtInput[1])) {
+                if (!screenManager.modal_screen(currentUser, "Quit from Favourites",
+                        new TextObject("%s is already saved in favourites. Do you want to quit it?"
+                                .formatted(unknownObject.printFullObject())))) {
+                    return;
+                }
+                    varWord = "deleted from";
+            } else if (favs.size() >= FAV_MAX && !screenManager.modal_screen(currentUser, "Favourites is full",
+                    new TextObject("Favourites list is full, confirm if you want to add %s and delete the older element showed below:".formatted(unknownObject.shortPrint()))
+                            .addText(crmData.getUnknownObject(favs.get(0)).toTextObject()))) {
+                return;
+            }
+        }
+        currentUser.addToFavourites(caughtInput[1]);
+        screenManager.confirming_screen(currentUser,
+                unknownObject.shortPrint()+" was properly "+varWord+" the favourites list",
+                unknownObject.printFullObject().toString(),
+                true
+                );
     }
 
     //------------------------------------------------------------------------------------------------------INNER METHODS

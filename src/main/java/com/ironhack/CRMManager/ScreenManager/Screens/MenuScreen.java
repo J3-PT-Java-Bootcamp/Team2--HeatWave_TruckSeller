@@ -84,7 +84,6 @@ public class MenuScreen extends CRMScreen {
         if(user.getFavourites()!=null) {
             for (String id : user.getFavourites())
                 favObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
-//        historicObjects.fillAllLines();
         }
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);

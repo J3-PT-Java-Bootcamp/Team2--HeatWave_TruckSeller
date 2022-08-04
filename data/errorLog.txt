@@ -57,3 +57,9 @@
 >4/8/22 0:14:28 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
 >4/8/22 10:40:57 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
 >4/8/22 11:25:24 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 11:51:00 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.NullPointerExceptionCannot invoke "java.util.ArrayList.contains(Object)" because "this.favourites" is null
+>4/8/22 11:52:44 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 11:54:34 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 12:09:20 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>4/8/22 12:12:50 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>4/8/22 12:17:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
