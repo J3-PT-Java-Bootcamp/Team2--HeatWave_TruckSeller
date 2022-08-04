@@ -77,13 +77,20 @@ public class MenuScreen extends CRMScreen {
             statistics.addText(user.printFullObject());
         }
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
-        TextObject favObjects = new TextObject("Favourites :", width / 4, height);
+        TextObject favObjects = new TextObject(user.isAdmin()?"  Users : ":"  Favourites : ", width / 4, height);
 
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
-        if(user.getFavourites()!=null) {
+        if(!user.isAdmin()&&user.getFavourites()!=null) {
             for (String id : user.getFavourites())
                 favObjects.addText("- " + id + ": " + crmData.getUnknownObject(id).shortPrint());
+        }
+        if (user.isAdmin()){
+            for (User user : crmData.getUsers(false)) {
+                int success = user.getSuccessfulOpp();
+                favObjects.addText("- " + user.shortPrint() + ": " + user.oppObjectiveChecker(success)+ success);
+            }
+
         }
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
