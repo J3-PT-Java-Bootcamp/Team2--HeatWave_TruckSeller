@@ -19,6 +19,6 @@ class ContactBuilderTest {
             contactOne.setCompany("Cocacola");
 
         var finalContact= contactOne.constructContact();
-        assertEquals("Salvatore",finalContact.getName()); //TODO TEST INDUSTRYTYPE no lagafa
+        assertEquals("Salvatore",finalContact.getName());
         }
     }

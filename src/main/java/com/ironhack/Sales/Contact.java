@@ -38,7 +38,7 @@ public class Contact implements Printable{
     @Override
     public TextObject printFullObject() {
 
-         return new TextObject("Provisional account").addText("ID: "+this.id)
+         return new TextObject().addText("ID: "+this.id)
                  .addText("Name: "+toCamelCase(this.name)).addText("Phone: "+this.phoneNumber)
                  .addText("Email: "+InputReader.MAIL.formatOutput(this.mail))
                  .addText("Company: "+toCamelCase(this.company));

@@ -41,7 +41,8 @@ public class Opportunity implements Printable{
 
     public void close(Boolean won){
         this.status=won?CLOSE_WON:CLOSE_LOST;
-    }
+        }
+
 
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
