@@ -1,8 +1,8 @@
 package com.ironhack;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Sales.Lead;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import com.ironhack.Sales.Lead;
 
 public class FakeLead {
     public static TextObject[] getRawLeads(int val) {

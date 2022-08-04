@@ -15,7 +15,8 @@ import static com.ironhack.Constants.Constants.LIMIT_X;
 
 
 /**
- * InputScreen is a CRMScreen that prompts 1..* inputs provided by inputTypes/inputNames
+ * InputScreen is a CRMScreen that prompts 1
+ * inputs provided by inputTypes/inputNames
  * results are stored in "outValues"
  */
 public class InputScreen extends CRMScreen{
@@ -118,7 +119,7 @@ public class InputScreen extends CRMScreen{
 
     @Override
     public void constructScreen() {
-        int maxHeight= textObject.MAX_HEIGHT-2;
+        int maxHeight= textObject.MAX_HEIGHT-4;
         constructTitle(getName());
         var container= new TextObject(textObject.MAX_WIDTH,maxHeight)
                 .addText(content).addText("-".repeat((textObject.MAX_WIDTH/3)*2)).setBgcolor(textObject.bgColor).setTxtColor(textObject.txtColor);
@@ -132,9 +133,7 @@ public class InputScreen extends CRMScreen{
     }
     @Override
     protected String getHintLine() {
-//        if(inputIndex>0&&inputIndex<inputTypes.length-1)
             return inputTypes[Math.min(inputTypes.length-1,outValues.size())].getHint();
-//        return inputTypes[inputIndex].getHint();
     }
 
 

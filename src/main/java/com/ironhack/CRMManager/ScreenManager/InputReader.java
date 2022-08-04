@@ -1,18 +1,18 @@
 package com.ironhack.CRMManager.ScreenManager;
 
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.WrongInputException;
 import com.ironhack.CRMManager.ScreenManager.Screens.CRMScreen;
 import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.WrongInputException;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static com.ironhack.CRMManager.CRMManager.printer;
-import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.*;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
 
 /**
  * Enum with different configurations to read input from user,
@@ -23,9 +23,9 @@ public enum InputReader {
     PHONE("Expects phone number format, only numbers and +() signs"),
     INTEGER("Expects an integer value"),
     NEW_PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
-    PASSWORD("Use a alphanumeric value, you may enter it twice for security reasons"),
-    OPEN("Expects a String value, special characters not allowed"),
-    COMMAND("Available commands are: "),
+    PASSWORD("Use a alphanumeric value."),
+    OPEN("Expects a String value(min 2 characters), special characters not allowed"),
+    COMMAND("Available Commands: "),
     INDUSTRY_TYPE("Enter a Industry type: "+ Arrays.toString(IndustryType.values())),
     PRODUCT_TYPE("Enter a Product type: "+ Arrays.toString(Product.values()));
 
@@ -68,17 +68,18 @@ public enum InputReader {
     }
     private String validateOpenInput(CRMScreen screen) throws CRMException {
         String input =validateCommand(screen.getCommands().toArray(new Commands[0]),screen);//check if there is any global command
-        if (input.trim().length() < 3 || !isValidString(input.trim())) {
+        String finalInput= input.trim().replace(" ","_");
+        if (finalInput.length() < 2 || !isValidString(finalInput)) {
             printer.showErrorLine(FORMAT_NOK);
             return validateOpenInput(screen);
         }
-        return input.trim();
+        return finalInput;
     }
 
     private int validateIntegerInput(int min, int max, CRMScreen screen) throws CRMException {
         int inputNumber = -1;
         try {
-            inputNumber = Integer.parseInt(validateCommand(screen.getCommands().toArray(new Commands[0]),screen));//check if there is any global command);
+            inputNumber = Integer.parseInt(validateCommand(screen.getCommands().toArray(new Commands[0]),screen));
         } catch (CRMException e) {
             throw e;
         } catch (Exception e) {
@@ -87,7 +88,6 @@ public enum InputReader {
         }
         if (inputNumber <= max && inputNumber >= min) return inputNumber;
         printer.showErrorLine(FORMAT_NOK);
-//        startPrint();
         return validateIntegerInput(min, max,screen);
     }
 
@@ -217,7 +217,7 @@ public enum InputReader {
         return switch (this) {
             case MAIL->output.toLowerCase();
             case NEW_PASSWORD, PASSWORD ->"*".repeat(output.length());
-            case OPEN->toCamelCase(output);
+            case OPEN->toCamelCase(output).replace("_", " ");
             case INDUSTRY_TYPE-> IndustryType.valueOf(output).toString();
             case PRODUCT_TYPE-> Product.valueOf(output).toString();
             default -> output;

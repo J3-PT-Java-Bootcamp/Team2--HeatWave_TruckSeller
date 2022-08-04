@@ -3,6 +3,7 @@ package com.ironhack.CRMManager.ScreenManager;
 import com.ironhack.CRMManager.Exceptions.CRMException;
 import com.ironhack.CRMManager.Exceptions.ExitException;
 import com.ironhack.CRMManager.Exceptions.GoBackException;
+import com.ironhack.CRMManager.Exceptions.LogoutException;
 import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Screens.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
@@ -13,6 +14,7 @@ import com.ironhack.Sales.Opportunity;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
@@ -32,8 +34,11 @@ public class ScreenManager {
     public Commands menu_screen(User currentUser) throws CRMException {
         //todo
         MenuScreen main_menu = new MenuScreen(currentUser, "Main Menu");
+        main_menu.setHintLine("Enter one of the options above, or any other command if known. Enter help for more info");
         try {
-            return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());//fixme
+            return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());
+        }catch (GoBackException e){
+            throw new LogoutException(e.getErrorType());
         } catch (CRMException crmE) {
             throw crmE;
 
@@ -52,12 +57,20 @@ public class ScreenManager {
                 for (String id : currentUser.getLeadList()) {
                     list.add(crmData.getLead(id));
                 }
-                comm = Commands.valueOf(new TableScreen(currentUser, "Leads", list).start());
+                TableScreen leadScreen = new TableScreen(currentUser, "Leads", list);
+                leadScreen.setHintLine("-VIEW + ID:(access Lead)    -CONVERT + ID:(convert to Opportunity)     -DISCARD + ID (discard lead) ");
+                comm = Commands.valueOf(leadScreen.start());
 
                 switch (comm) {
                     case MENU, BACK, LOGOUT -> stop = true;
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
-                    case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                    case VIEW -> {
+                        try {
+                            userOpManager.viewObject(currentUser, comm.getCaughtInput());
+
+                        } catch (GoBackException ignored) {
+                        }
+                    }
                     case DISCARD -> {
                         var lead = crmData.getLead(comm.getCaughtInput()[1]);
                         if (modal_screen(currentUser, "Delete Lead ?", new TextObject("Do yo want to delete manager Lead?").addText(lead.printFullObject()))) {
@@ -65,6 +78,7 @@ public class ScreenManager {
                             crmData.removeLead(lead.getId());
                         }
                     }
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
                 break;
@@ -87,12 +101,18 @@ public class ScreenManager {
                     var opp = crmData.getOpportunity(id);
                     list.add(opp);
                 }
-                comm = Commands.valueOf(new TableScreen(currentUser, "Opportunities", list).start());
+                TableScreen oppScreen = new TableScreen(currentUser, "Opportunities", list);
+                oppScreen.setHintLine("-VIEW + ID:(access Opportunity)      -CLOSE WON/LOST + ID:(close Opportunity)");
+                comm = Commands.valueOf(oppScreen.start());
 
                 switch (comm) {
 
                     case VIEW -> {
-                        userOpManager.viewObject(currentUser, comm.getCaughtInput());
+                        try {
+                            userOpManager.viewObject(currentUser, comm.getCaughtInput());
+
+                        } catch (GoBackException ignored) {
+                        }
                     }
                     case DISCARD -> {
                         var opp = crmData.getOpportunity(comm.getCaughtInput()[1]);
@@ -110,12 +130,15 @@ public class ScreenManager {
                         }
                     }
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
                 LogWriter.logError(getClass().getSimpleName(),
                         "show_OpportunitiesScreen",
                         "Received a unexpected NullPointerException.. " + e.getMessage());
                 break;
+            } catch (GoBackException back){
+                stop=true;
             }
             list.clear();
         } while (!stop);
@@ -136,16 +159,19 @@ public class ScreenManager {
                 accountArr = crmData.getAccountsAsList();
             }
             var account_screen = new TableScreen(currentUser, selectionMode ? "Select an Account" : "Accounts", accountArr);
+            account_screen.setHintLine(selectionMode?"-SELECT + ID:(select an Account)   - NEW:(create a new Account)":" -VIEW + ID:(access Account)      -CREATE:(create new account)");
             try{
                 res = Commands.valueOf(account_screen.start());
             } catch (GoBackException back){
                 return "";
-            }catch (CRMException e){throw e;}
+            }
             switch (res) {
                 case CREATE -> {
                     try {
                         return userOpManager.createNewAccount(currentUser);
                     } catch (GoBackException ignored) {
+                    }catch (ExitException e){
+                        stop=true;
                     }
                 }
                 case VIEW -> {
@@ -156,7 +182,9 @@ public class ScreenManager {
                     }
                     try {
                         userOpManager.viewObject(currentUser, res.getCaughtInput());
-                    }catch (GoBackException ignored){}
+                    }catch (GoBackException ignored){  }catch (ExitException e){
+                        stop=true;
+                    }
                 }
                 case DISCARD -> {
                     var account = crmData.getAccount(res.getCaughtInput()[1]);
@@ -164,10 +192,11 @@ public class ScreenManager {
                         crmData.removeAccount(account.getCompanyName());
                     }
                 }
+                case FAV -> userOpManager.addToFavourites(currentUser,res.getCaughtInput());
             }
 
         } while (!stop);
-        throw new ExitException(true);
+        throw new ExitException();
     }
 
 
@@ -179,15 +208,12 @@ public class ScreenManager {
      * @param showData true if it must print saved data
      */
     public void confirming_screen(User currentUser, String message, String strData, boolean showData) {
-        try {
-            if (showData) {
-                new ConfirmationScreen(currentUser, "Confirmation", message, strData).start();
-            } else {
-                new ConfirmationScreen(currentUser, "Confirmation", message).start();
-            }
-        } catch (CRMException ignored) {
-            //start() a confirmationScreen won't send any exception
+        if (showData) {
+            new ConfirmationScreen(currentUser, "Confirmation", message, strData).start();
+        } else {
+            new ConfirmationScreen(currentUser, "Confirmation", message).start();
         }
+
     }
 
     /**
@@ -205,6 +231,15 @@ public class ScreenManager {
         } catch (IllegalArgumentException e) {
             printer.showErrorLine(FORMAT_NOK);
             return modal_screen(currentUser, name, message);
+        }
+    }
+
+    public void readme_screen(User currentUser) throws CRMException {
+        var readme= new TableScreen(currentUser,"Commands ReadMe",new ArrayList<>(List.of(Commands.values())));
+        try {
+
+            readme.start();
+        }catch (GoBackException ignored){
         }
     }
 }

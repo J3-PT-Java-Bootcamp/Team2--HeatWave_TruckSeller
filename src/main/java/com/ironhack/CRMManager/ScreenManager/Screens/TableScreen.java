@@ -17,6 +17,7 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static com.ironhack.CRMManager.CRMManager.screenManager;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.*;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_BLACK;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
@@ -24,20 +25,20 @@ import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
 
 public class TableScreen extends CRMScreen {
     private int pages, currentPage;
-    private final Class<? extends Printable> type;
     ArrayList<List<? extends Printable>> masterArr;
     private final boolean hasContent;
-    private  ArrayList<? extends Printable> data;
+    private final ArrayList<? extends Printable> data;
     public TableScreen(User currentUser, String name, ArrayList<? extends Printable> data) {
         super(currentUser, name);
         this.data=data;
         addCommand(NEXT).addCommand(PREVIOUS).addCommand(CREATE).addCommand(DISCARD).addCommand(VIEW);
+        Class<? extends Printable> type;
         if (data == null || data.isEmpty()) {
             hasContent = false;
-            type = null;
         } else {
             hasContent = true;
             masterArr = getLists(data);
+            addCommand(FAV);
             type = data.get(0).getClass();
             if (Opportunity.class.equals(type)) {
                 addCommand(CLOSE);
@@ -45,7 +46,6 @@ public class TableScreen extends CRMScreen {
                 addCommand(CONVERT);
             }
         }
-        constructScreen();
     }
     //----------------------------------------------------------------------------------------------------------CONSTRUCTION
     public void constructScreen() {
@@ -78,7 +78,7 @@ public class TableScreen extends CRMScreen {
 
     private ArrayList<List<? extends Printable>> getLists(ArrayList<? extends Printable> data) {
         ArrayList<List<? extends Printable>> masterArr = new java.util.ArrayList<>();
-        pages = (int) Math.floor(data.size() / 15) + (data.size() % 15 == 0 ? 0 : 1);
+        pages =(data.size() / 15) + (data.size() % 15 == 0 ? 0 : 1);
         int lastIndex = 0;
         for (int i = 0; i < pages; i++) {
             masterArr.add(data.subList(lastIndex, Math.min((i + 1) * 15, data.size())));
@@ -127,7 +127,7 @@ public class TableScreen extends CRMScreen {
             for (int j = 0; j < columnTitles.length; j++) {
                 String currentField = "";
                 if (i < 0) currentField = UNDERLINE + columnTitles[j];
-                else currentField = currentTxtObj.get(j);
+                else currentField = currentTxtObj.getTotalHeight()>j?currentTxtObj.get(j):BLANK_SPACE;
                 if (!fits && j == largestFieldIndex && i >= 0) {
                     sb.append(currentField, 0, columnsMinSize[j] - 5);
                     sb.append("...");
@@ -148,22 +148,21 @@ public class TableScreen extends CRMScreen {
     //----------------------------------------------------------------------------------------------------PUBLIC METHODS
     @Override
     public String start() throws CRMException {
+
+        constructScreen();
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
         String comm = "";
         try {
             comm = COMMAND.getInput(this, commands.toArray(new Commands[0]));
-            Commands command;
             if (Commands.valueOf(comm) == NEXT) {
                 if (currentPage + 1 < pages) currentPage++;
-
-            } else if (Commands.valueOf(comm) == PREVIOUS) {
+            }else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
-            } else if (Commands.valueOf(comm) == CONVERT || Commands.valueOf(comm) == CLOSE || Commands.valueOf(comm) == CREATE || Commands.valueOf(comm) == VIEW || Commands.valueOf(comm) == DISCARD) {
-                return comm;
-            }
-
+            }else if (Commands.valueOf(comm) == CONVERT || Commands.valueOf(comm) == CLOSE
+                    || Commands.valueOf(comm) == CREATE  || Commands.valueOf(comm) == VIEW
+                    || Commands.valueOf(comm) == DISCARD || Commands.valueOf(comm)==FAV){ return comm;}
         } catch (IllegalArgumentException e) {
             printer.showErrorLine(ErrorType.COMMAND_NOK);
         } catch (HelpException help) {
@@ -185,11 +184,10 @@ public class TableScreen extends CRMScreen {
         } catch (GoToMenuException menu) {
             //If enter EXIT it prompts user for confirmation as entered data will be lost
             throw menu;
-        } catch (CRMException ignored) {
+        } catch (CRMException e) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start","Received a unexpected CRMException.. "+ignored.getErrorType());
+                    "start","Received a unexpected CRMException.. "+e.getErrorType());
         }
-        constructScreen();
         return start();
     }
 

@@ -17,13 +17,12 @@ public class LogWriter {
         }
     }
 
-    public static Object logError(String className,String methodName,String notes){
+    public static void logError(String className,String methodName,String notes){
         try {
             writer.write(getDateTime()+" //-> "+className+"."+methodName+"() : "+notes+"\n");
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
-        return null;
     }
 
     private static String getDateTime() {

@@ -45,7 +45,7 @@ public class Account implements Printable{
 
     @Override
     public String shortPrint() {
-        return toCamelCase(this.companyName);
+        return toCamelCase(this.companyName)+" "+toCamelCase(city);
     }
 
     @Override

@@ -8,7 +8,6 @@ public class ColorFactory {
     public static final String NEW_LINE = "\n";
     public static final char BLANK_SPACE_CH = ' ';
     public static final String BLANK_SPACE = " ";
-    public static final String TAB_SPACE = "    ";
 
 
     public static final int COLOR_LABEL_CHAR_SIZE=6;

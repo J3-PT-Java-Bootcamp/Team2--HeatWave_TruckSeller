@@ -10,17 +10,20 @@ import lombok.Data;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
 import static com.ironhack.Constants.ColorFactory.CColors.RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
+import static com.ironhack.Constants.Constants.FAV_MAX;
 
 @Data
 public class User implements Printable {
+
     private String name;
     private String password;
-    private ArrayList<String> opportunityList,leadList,recentObjects;
+    private ArrayList<String> opportunityList,leadList, favourites;
     private final boolean isAdmin;
     private int closedLeads;
     private int lostOpp;
@@ -35,7 +38,7 @@ public class User implements Printable {
         this.isAdmin=isAdmin;
         this.password = password;
         this.opportunityList=new ArrayList<>();
-        this.recentObjects=new ArrayList<>();
+        this.favourites =new ArrayList<>();
         this.leadList=new ArrayList<>();
         this.closedLeads = 0;
         this.lostOpp = 0;
@@ -72,9 +75,21 @@ public class User implements Printable {
         leadList.remove(id);
         this.setClosedLeads(+1);
     }
-    public void addToRecentObjects(String id){
-        if(this.recentObjects.size()>=10) recentObjects.remove(0);
-        recentObjects.add(id);
+    public void addToFavourites(String id){
+        if (favourites==null)favourites=new ArrayList<>();
+        if(favourites.contains(id)){
+            favourites.remove(id);
+        }else {
+            if (this.updateFavourites().size() >= FAV_MAX) favourites.remove(0);
+            favourites.add(id);
+        }
+    }
+    public ArrayList<String> getFavourites(){
+        return updateFavourites();
+    }
+    private ArrayList<String> updateFavourites(){
+        favourites.removeIf(fav -> !crmData.existsObject(fav));
+        return favourites;
     }
     public boolean isAdmin() {
         return this.isAdmin;

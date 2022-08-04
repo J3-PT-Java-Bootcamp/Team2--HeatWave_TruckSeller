@@ -5,7 +5,6 @@ import com.ironhack.CRMManager.Exceptions.ErrorType;
 import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.CRMManager.ScreenManager.Text.DynamicLine;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
-import com.ironhack.CRMManager.ScreenManager.Text.WindowObject;
 
 import java.util.ArrayList;
 
@@ -26,35 +25,7 @@ public class ConsolePrinter {
 
     //---------------------------------------------------------------------------   PUBLIC METHODS
 
-   /**
-     * Shows the Team Logo after calibrating console size
-    * @deprecated
-     */
-    private void splashScreen() {
-        try {
-            calibrateScreen();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        clearScreen();
-        //TODO GENERATE WELCOME SCREEN
-        startPrint();
-        waitFor(1000);
-    }
 
-    /**
-     * Shows Square with the screen size to allow User to resize console,
-     * waits until user confirm
-     */
-    private void calibrateScreen() throws Exception {
-        sendToQueue(new WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1)
-                .setFrameColor(BgColors.BRIGHT_BLACK).setBgcolor(BgColors.CYAN)
-                .setTxtColor(CColors.BRIGHT_WHITE)
-                .addText(TextStyle.BOLD + "Adjust your console size to fit this box.")
-                .addText(TextStyle.BOLD + "Press Enter when done").alignTextCenter().alignTextMiddle()
-                .addText(CENTER_CARET));
-        startPrint();
-    }
     //---------------------------------------------------------------------------   CONSOLE MANAGER
     private TextObject smartReplaceReset(TextObject obj) {
 
@@ -159,7 +130,7 @@ public class ConsolePrinter {
         var line = new DynamicLine(LIMIT_X, 5, 1);
         line.setPrintSpeed(0.5f);
         line.addText(CColors.BRIGHT_GREEN + message + RESET).alignTextCenter();
-        var sb= new StringBuilder("Available Commands: ");
+        var sb= new StringBuilder();
         for(Commands comm:commands) sb.append("[").append(comm.toString()).append("] ");
         line.addText(CColors.BRIGHT_GREEN + sb.toString() + RESET).alignTextCenter();
         line.addText(CENTER_CARET);

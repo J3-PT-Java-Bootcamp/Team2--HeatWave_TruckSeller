@@ -17,7 +17,8 @@ import com.ironhack.Sales.Opportunity;
 
 import java.util.ArrayList;
 
-import static com.ironhack.CRMManager.CRMData.*;
+import static com.ironhack.CRMManager.CRMData.loadData;
+import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
@@ -121,11 +122,10 @@ public class CRMManager {
                     case USERS -> adminOpManager.manageUsers_screen(currentUser);
                     case STATS -> adminOpManager.showStats_screen(currentUser);
                     case LOAD -> adminOpManager.loadLeadData(currentUser);
-                    default -> {
-                        LogWriter.logError(getClass().getSimpleName(),
-                                "appStart",
-                                "Unexpected command value... " + comm.name());
-                    }
+                    case README -> screenManager.readme_screen(currentUser);
+                    default -> LogWriter.logError(getClass().getSimpleName(),
+                            "appStart",
+                            "Unexpected command value... " + comm.name());
                 }
                 else switch (comm) {
                     case OPP -> screenManager.show_OpportunitiesScreen(currentUser,new ArrayList<>());
@@ -134,19 +134,20 @@ public class CRMManager {
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
-                    default -> {
-                        LogWriter.logError(getClass().getSimpleName(),
-                                "appStart",
-                                "Unexpected command value... " + comm.name());
-                    }
+                    case README -> screenManager.readme_screen(currentUser);
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
+                    case DISCARD -> userOpManager.discardObject(currentUser,crmData.getUnknownObject(comm.getCaughtInput()[1]));
+                    default -> LogWriter.logError(getClass().getSimpleName(),
+                            "appStart",
+                            "Unexpected command value... " + comm.name());
                 }
             }catch (ExitException e){
                 this.exit=true;
             }catch (LogoutException logout){
                 currentUser=null;
-            } catch (CRMException ignored){
+            } catch (CRMException e){
                 LogWriter.logError(getClass().getSimpleName(),
-                        "appStart","Unexpected exception.. "+ignored.getClass()+" "+ignored.getErrorType());
+                        "appStart","Unexpected exception.. "+e.getClass()+" "+e.getErrorType());
             } catch (Exception e) {
 
                 LogWriter.logError(getClass().getSimpleName(),

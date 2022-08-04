@@ -46,17 +46,16 @@ public class Opportunity implements Printable{
 //-------------------------------------------------------------------------------------------------------------PRINTABLE
     @Override
     public TextObject toTextObject(){
-        var opp= new TextObject(id).addText(PRODUCT_TYPE.formatOutput(product.name())).addText(String.valueOf(quantity))
+
+        return new TextObject(id).addText(PRODUCT_TYPE.formatOutput(product.name())).addText(String.valueOf(quantity))
         .addText(toCamelCase(status.name())).addText(toCamelCase(account_companyName))
                 .addText(toCamelCase(crmData.getContact(decisionMakerID).shortPrint()));
-
-       return opp;
 
     }
 
     @Override
     public String shortPrint() {
-        return this.id+" - "+ this.account_companyName;
+        return this.account_companyName+" ("+quantity+")"+product.toString();
     }
 
     @Override

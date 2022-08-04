@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InputReaderTest {
-    final static CRMManager manager=new CRMManager(false);;
-    final static private HashMap<InputReader,InputScreen> screen = new HashMap<>();;
+    final static CRMManager manager=new CRMManager(false);
+    final static private HashMap<InputReader,InputScreen> screen = new HashMap<>();
 
     @BeforeAll
     static void setUp() {
@@ -52,7 +52,7 @@ class InputReaderTest {
     @Test
     void open_test_inputOK() throws CRMException {
         System.setIn(new ByteArrayInputStream("Patatas fritas\n".getBytes()));
-        assertTrue(OPEN.getInput(screen.get(OPEN)).equalsIgnoreCase("Patatas fritas"));
+        assertTrue(OPEN.getInput(screen.get(OPEN)).equalsIgnoreCase("Patatas_fritas"));
     }
 
     @Test

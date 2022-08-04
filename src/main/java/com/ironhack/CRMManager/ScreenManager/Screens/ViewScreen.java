@@ -19,31 +19,34 @@ import static com.ironhack.Constants.Constants.LIMIT_Y;
 
 public class ViewScreen extends CRMScreen{
     //Screen that prints properties of an object
-    Printable object;
-    Type type;
-    ArrayList<String> optionsNames;
+    private final Printable object;
+    private final ArrayList<String> optionsNames;
     public ViewScreen(User currentUser, String name, Printable object) {
         super(currentUser, name);
         this.object=object;
         this.optionsNames=new ArrayList<>();
-        type = object.getClass();
+        Type type = object.getClass();
         if (Opportunity.class.equals(type)) {
-            addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS);
-            optionsNames.add("CLOSE WON +id ");
-            optionsNames.add("CLOSE LOST +id ");
+            addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS).addCommand(FAV);
+            optionsNames.add("CLOSE WON");
+            optionsNames.add("CLOSE LOST");
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
+            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Lead.class.equals(type)) {
-            addCommand(CONVERT).addCommand(DISCARD);
+            addCommand(CONVERT).addCommand(DISCARD).addCommand(FAV);
             optionsNames.add(CONVERT.getDisplay());
             optionsNames.add(DISCARD.getDisplay());
+            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Account.class.equals(type)) {
-            addCommand(OPP);
+            addCommand(OPP).addCommand(FAV).addCommand(FAV);
             optionsNames.add("View related "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
+            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Contact.class.equals(type)) {
-            addCommand(ACCOUNT).addCommand(OPP);
+            addCommand(ACCOUNT).addCommand(OPP).addCommand(FAV);
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add("View "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITY");
+            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
 
         } else if (User.class.equals(type)) {
 
@@ -54,11 +57,9 @@ public class ViewScreen extends CRMScreen{
     }
     @Override
     public String start() throws CRMException {
-        boolean stop = false;
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
-        String input = "";
         try {
             return COMMAND.getInput(this, commands.toArray(new Commands[0]));
 
@@ -77,9 +78,9 @@ public class ViewScreen extends CRMScreen{
             }
         } catch (GoBackException|GoToMenuException e) {
             throw e;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start", "Received a unexpected exception.. " + ignored.getMessage());
+                    "start", "Received a unexpected exception.. " + e.getMessage());
         }
         constructScreen();
         return start();

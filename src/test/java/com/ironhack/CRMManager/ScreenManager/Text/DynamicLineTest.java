@@ -3,7 +3,7 @@ package com.ironhack.CRMManager.ScreenManager.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DynamicLineTest {
 
@@ -19,7 +19,7 @@ class DynamicLineTest {
     void poll_test_sizeOk() {
         var size=txtObj.getTotalHeight();
         txtObj.poll();
-        assertTrue(size-1==txtObj.getTotalHeight());
+        assertEquals(size - 1, txtObj.getTotalHeight());
     }
     @Test
     void print_test_ok() {

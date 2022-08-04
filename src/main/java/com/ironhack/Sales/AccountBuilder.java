@@ -1,8 +1,8 @@
 package com.ironhack.Sales;
 
 
-import com.ironhack.Constants.IndustryType;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.Constants.IndustryType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,10 +20,6 @@ public class AccountBuilder {
     private String city, country;
     private ArrayList<String> contacts, opportunities;
     private String companyName;
-
-    public static void save(Account accountOne) {
-    }
-
 
     public Account constructAccount() throws NoCompleteObjectException {
 

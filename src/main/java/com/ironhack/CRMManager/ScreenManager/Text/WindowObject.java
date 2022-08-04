@@ -10,22 +10,11 @@ public class WindowObject extends TextObject {
     final java.awt.Point borderSize;
     final java.awt.Point margin;
     String[] pattern;
-    String title,lastLine;
+    String title;
     final int windowWidth;
     final int windowHeight;
     private BgColors frameColor;
     private CColors titleColor;
-
-    WindowObject(int maxWidth, int maxHeight, java.awt.Point padding, java.awt.Point borderSize, java.awt.Point margin, String ... pattern){
-        super(Scroll.BLOCK, maxWidth-((padding.x+borderSize.x+margin.x)*2),
-                maxHeight-(padding.y+borderSize.y+margin.y));
-        this.pattern=pattern;
-        this.borderSize=borderSize;
-        this.margin=margin;
-        this.windowHeight=maxHeight;
-        this.windowWidth=maxWidth;
-        //generateBorder(pattern);
-    }
 
     public WindowObject(int maxWidth, int maxHeight, int borderSize, int margin, String... pattern){
         super(Scroll.BLOCK, maxWidth-((borderSize+margin)*2),
@@ -74,8 +63,9 @@ public class WindowObject extends TextObject {
                     sb.append(pattern[starts ? i : borderSize.y - i-1]
                             .repeat(!starts&&i==borderSize.y-1?windowWidth-(margin.x*2)- borderSize.y-5:windowWidth-(margin.x*2)));
                     if(!starts&&i==borderSize.y-1){
-                        sb.append(BOLD+ BRIGHT_WHITE.toString()+LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
-                        sb.append(BLANK_SPACE.repeat(borderSize.y));
+                        sb.append(BOLD).append(BRIGHT_WHITE.toString())
+                                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")))
+                                .append(BLANK_SPACE.repeat(borderSize.y));
                     }
                 }
                 sb.append(TextStyle.RESET).append(BLANK_SPACE.repeat(margin.x)).append(NEW_LINE);

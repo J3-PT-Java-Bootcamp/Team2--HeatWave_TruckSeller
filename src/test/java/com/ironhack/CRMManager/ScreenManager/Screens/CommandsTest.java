@@ -22,12 +22,12 @@ class CommandsTest {
 
     }
     @Test
-    void check_command_test_EXIT() throws CRMException {
+    void check_command_test_EXIT() {
         assertThrows(ExitException.class,()-> EXIT.check("EXIT",screen, InputReader.COMMAND));
     }
 
     @Test
-    void check_command_test_MENU() throws CRMException {
+    void check_command_test_MENU() {
         assertThrows(GoToMenuException.class,()-> MENU.check("MENU",screen, InputReader.COMMAND));
     }
 

@@ -97,10 +97,9 @@ public abstract class CRMScreen {
     }
 
     protected String getHintLine() {
-        if (hintLine == null || hintLine == "") {
+        if (hintLine == null || hintLine.equals("")) {
 
-            StringBuilder sb = new StringBuilder(String.valueOf(this.commands.toString()));
-            return sb.toString();
+            return String.valueOf(this.commands.toString());
         }
         return hintLine;
     }

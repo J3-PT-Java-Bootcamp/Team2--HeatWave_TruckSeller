@@ -2,10 +2,11 @@ package com.ironhack.Constants;
 
 import org.junit.jupiter.api.Test;
 
+import static com.ironhack.Constants.ColorFactory.*;
 import static com.ironhack.Constants.ColorFactory.TextStyle.RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.UNDERLINE;
-import static com.ironhack.Constants.ColorFactory.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ColorFactoryTest {
 
@@ -30,6 +31,6 @@ class ColorFactoryTest {
     }
     @Test
     void containsSpecialCharacters_test_nok() {
-        assertTrue(containsSpecialCharacters("PATATA"));
+        assertFalse(containsSpecialCharacters("PATATA"));
     }
 }
