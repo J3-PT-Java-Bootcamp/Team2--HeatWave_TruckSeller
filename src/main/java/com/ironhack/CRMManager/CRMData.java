@@ -177,10 +177,7 @@ public class CRMData implements Printable{
             case "Lead" -> leadMap.isEmpty();
             case "Contact" -> contactMap.isEmpty();
             case "User" -> userList.isEmpty();
-            default ->
-                    LogWriter.logError(getClass().getSimpleName(),
-                            "isEmptyMap",
-                            "Unexpected objType class.. "+objType.getSimpleName())==null;
+            default ->false;
         };
     }
 
