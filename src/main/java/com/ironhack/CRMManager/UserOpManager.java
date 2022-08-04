@@ -172,6 +172,8 @@ public class UserOpManager {
     }
 
     boolean discardObject(User currentUser, Printable object) {
+        if ((!currentUser.isAdmin() && object.getClass() != User.class) || object.getClass() == CRMData.class)
+            return false;
         if(screenManager.modal_screen(currentUser,
                 " Delete %s ? ".formatted(object.shortPrint()),
                 new TextObject("Do you want to delete this %s ?".formatted(object.getClass().getSimpleName()))
