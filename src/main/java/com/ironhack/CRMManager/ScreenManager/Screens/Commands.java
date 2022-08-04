@@ -17,7 +17,7 @@ public enum Commands implements Printable {
     LOGOUT("Log Out","Logout and go to Login screen", false, "LOGOUT","LOG OUT"),
     CREATE("Create New...","Create new object depending on current screen", false, "CREATE","NEW"),
     CONVERT("CONVERT to Opportunity","Converts selected Lead into Opportunity", true, "CONVERT"),
-    CLOSE("CLOSE Opportunity","Close selected Opportunity ", true, "CLOSE WIN","CLOSE LOST"),
+    CLOSE("CLOSE Opportunity","Close selected Opportunity ", true, "CLOSE","CLOSE WIN","CLOSE LOST"),
     OPP("View OPPortunities", "View user's active Opportunities",false, "OPP","OPPORTUNITY"),
     LEAD("View LEADs","View user's assigned Leads",false,"LEAD",  "LEADS"),
     ACCOUNT("View ACCounts","View saved Accounts",false, "ACC", "ACCOUNT"),
