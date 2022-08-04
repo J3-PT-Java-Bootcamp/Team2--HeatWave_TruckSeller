@@ -34,9 +34,8 @@ public class UserOpManager {
             var favs= currentUser.getFavourites();
             if(favs!=null&&!favs.isEmpty()&&favs.contains(opp.getId()))currentUser.getFavourites().remove(opp.getId());
             screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
-            currentUser.removeFromOpportunities(opp.getId());
             currentUser.removeFromOpportunities(opp.getId(), (caughtInput[1].equalsIgnoreCase("won")));
-            return opp;
+
         }
     }
 
