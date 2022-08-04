@@ -68,3 +68,4 @@
 >4/8/22 13:00:06 //-> CRMManager.appStart() : Unexpected command value... DISCARD
 >4/8/22 13:13:22 //-> CRMManager.appStart() : Unexpected command value... DISCARD
 >4/8/22 13:25:37 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 13:39:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
