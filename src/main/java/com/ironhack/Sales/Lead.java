@@ -40,7 +40,7 @@ public class Lead implements Printable{
 
     @Override
     public String shortPrint() {
-        return "Lead: "+getId();
+        return getName()+" from "+getCompanyName();
     }
 
     @Override

@@ -55,7 +55,7 @@ public class Opportunity implements Printable{
 
     @Override
     public String shortPrint() {
-        return this.id+" - "+ this.account_companyName;
+        return this.account_companyName+" "+quantity+product.toString();
     }
 
     @Override
