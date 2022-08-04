@@ -81,7 +81,6 @@ public class MenuScreen extends CRMScreen {
         TextObject favObjects = new TextObject( width / 4, height).addText(user.isAdmin()?"  Users : ":"  Favourites : ").addText(BLANK_SPACE);
 
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
-        optionsNames.alignTextMiddle();
         if(!user.isAdmin()&&user.getFavourites()!=null) {
             for (String id : user.getFavourites()) {
                 Printable unknownObject = crmData.getUnknownObject(id);
@@ -99,10 +98,9 @@ public class MenuScreen extends CRMScreen {
             }
 
         }
-        optionsNames.alignTextCenter()
-                .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
-        statistics.alignTextCenter().setBgcolor(BgColors.CYAN)
-                .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
+        optionsNames.setBgcolor(MAIN_BG).setTxtStyle(BOLD).alignTextMiddle();
+        statistics.setBgcolor(BgColors.CYAN)
+                .setTxtColor(CColors.BRIGHT_WHITE).fillAllLines().alignTextMiddle();
         favObjects
                 .setBgcolor(BgColors.BLACK)
                 .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE).fillAllLines().alignTextTop();
