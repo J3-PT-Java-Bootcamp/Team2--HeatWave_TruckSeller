@@ -26,7 +26,7 @@ public enum Product {
     }
 
     static public Product checkAllProducts(String input) throws WrongInputException {
-        var pInput= input.trim().toUpperCase();
+        input= input.trim().toUpperCase();
         for (Product val :Product.values() ) if (val.containsKeyword(input)) return val;
         throw new WrongInputException(PRODUCT_NOK);
     }

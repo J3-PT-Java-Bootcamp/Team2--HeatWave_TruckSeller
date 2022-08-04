@@ -17,7 +17,8 @@ import com.ironhack.Sales.Opportunity;
 
 import java.util.ArrayList;
 
-import static com.ironhack.CRMManager.CRMData.*;
+import static com.ironhack.CRMManager.CRMData.loadData;
+import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.WRONG_PASSWORD;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PASSWORD;
@@ -134,6 +135,8 @@ public class CRMManager {
                     case CONVERT -> userOpManager.convertLeadToOpp(currentUser, comm.getCaughtInput());
                     case VIEW -> userOpManager.viewObject(currentUser, comm.getCaughtInput());
                     case README -> screenManager.readme_screen(currentUser);
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
+                    case DISCARD -> userOpManager.discardObject(currentUser,crmData.getUnknownObject(comm.getCaughtInput()[1]));
                     default -> LogWriter.logError(getClass().getSimpleName(),
                             "appStart",
                             "Unexpected command value... " + comm.name());

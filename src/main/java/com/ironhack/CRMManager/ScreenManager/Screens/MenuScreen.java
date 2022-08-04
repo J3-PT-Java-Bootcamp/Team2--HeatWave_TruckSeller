@@ -28,7 +28,7 @@ public class MenuScreen extends CRMScreen {
                 new Commands[]{USERS, STATS, LOAD,README} : new Commands[]{LEAD, ACCOUNT, OPP,README};
 
         for (Commands opt : options) this.addCommand(opt);
-        if (!user.isAdmin()) addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT);
+        if (!user.isAdmin()) addCommand(VIEW).addCommand(DISCARD).addCommand(CLOSE).addCommand(CONVERT).addCommand(FAV);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MenuScreen extends CRMScreen {
             statistics.addText(user.printFullObject());
         }
         TextObject optionsNames = new TextObject(BOLD + UNDERLINE.toString() + "Options :" + SMART_RESET, width / 4, height).addText(BLANK_SPACE);
-        TextObject favObjects = new TextObject(user.isAdmin()?"  Users : ":"  Favourites : ", width / 4, height);
+        TextObject favObjects = new TextObject( width / 4, height).addText(user.isAdmin()?"  Users : ":"  Favourites : ").addText(BLANK_SPACE);
 
         for (Commands opt : options) optionsNames.addText("-" + opt.getDisplay() + "-").addText(BLANK_SPACE);
         optionsNames.alignTextMiddle();
@@ -94,14 +94,14 @@ public class MenuScreen extends CRMScreen {
         }
         optionsNames.alignTextCenter()
                 .setBgcolor(MAIN_BG).setTxtStyle(BOLD);
-        statistics.setBgcolor(BgColors.CYAN).alignTextTop(height)
+        statistics.alignTextCenter().setBgcolor(BgColors.CYAN)
                 .setTxtColor(CColors.BRIGHT_WHITE).alignTextMiddle();
-        favObjects.alignTextTop(height)
+        favObjects.alignTextTop()
                 .setBgcolor(BgColors.BLACK)
-                .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE);
+                .setTxtColor(ColorFactory.CColors.BRIGHT_WHITE).fillAllLines();
         container.addGroupInColumns(3,
                 width,
-                new TextObject[]{optionsNames, statistics, favObjects});
+                new TextObject[]{statistics,optionsNames, favObjects});
         container.addText(BRIGHT_BLACK+this.getHintLine()+SMART_RESET);
         container.alignTextMiddle();
 

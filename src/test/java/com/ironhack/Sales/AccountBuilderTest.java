@@ -1,14 +1,14 @@
 package com.ironhack.Sales;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.Constants.IndustryType;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.Constants.IndustryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AccountBuilderTest {
    @BeforeEach

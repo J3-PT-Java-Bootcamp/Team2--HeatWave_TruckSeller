@@ -380,7 +380,8 @@ public class TextObject {
      * @return resulting String
      */
     private String fillLine(String line, int width) {
-        return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
+//        return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
+        return applyTextColorsToLine(line)+bgColor + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
     }
 
     String fillLine(String line) {
@@ -662,6 +663,10 @@ public class TextObject {
     }
 
     public TextObject fillAllLines() {
+        text.replaceAll(this::fillLine);
+        return this;
+    }
+    public TextObject fillAllLines(BgColors bg) {
         text.replaceAll(this::fillLine);
         return this;
     }

@@ -34,7 +34,7 @@ public enum Commands implements Printable {
     VIEW("SELECT/VIEW","Shows all data from the selected object",true,"VIEW", "SELECT"),
     DISCARD("Discard..","Delete the selected object",true,"DISCARD", "DELETE","REMOVE"),
     FAV("Add to Favourites","Adds selected object to favourites",true,"FAV","FAVOURITE"),
-    README("Open READme..", "READ", false, "README");
+    README("READ commands info", "Open this commands help", false, "READ","README","COMMAND");
 
     private final String[] keyWords;
     private final String description;
@@ -51,13 +51,14 @@ public enum Commands implements Printable {
     public boolean check(String input, CRMScreen screen, InputReader inputReader) throws CRMException {
         caughtInput=input.trim().split(" ");
         for(String key: keyWords){
-            if(input.contains(key.toUpperCase())) {//TODO better method that "contains" to check also if it has more text than allowed
-                return act(input, screen,inputReader);
+            if(input.contains(key.toUpperCase())) {
+                return act(screen,inputReader);
             }
         }
         return false;
     }
-    private Boolean act(String input, CRMScreen screen, InputReader inputReader) throws CRMException{
+    private Boolean act(CRMScreen screen, InputReader inputReader) throws CRMException{
+
         switch (this){
             case EXIT -> throw new ExitException();
             case MENU -> {
@@ -65,7 +66,7 @@ public enum Commands implements Printable {
                 throw new GoBackException();
             }
             case LOGOUT -> throw new LogoutException(OK);
-            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE -> {
+            case OPP, NO, YES, NEXT, PREVIOUS, ACCOUNT,CONTACTS, LEAD, STATS, LOAD, USERS, CREATE,README -> {
                 return true;
             }
             case BACK -> throw new GoBackException();
@@ -75,7 +76,6 @@ public enum Commands implements Printable {
                     if(! (screen instanceof ViewScreen))throw new WrongInputException(ErrorType.COMMAND_NOK);
                 }else {
                     var inputId = caughtInput[1].trim().toUpperCase();
-                    char identifier = inputId.toCharArray()[0];
                     if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
                 return true;
@@ -85,7 +85,6 @@ public enum Commands implements Printable {
                     if(! (screen instanceof ViewScreen)&&caughtInput.length==2)throw new WrongInputException(ErrorType.COMMAND_NOK);
                 }else {
                     var inputId = caughtInput[2].trim().toUpperCase();
-                    char identifier = inputId.toCharArray()[0];
                     if (!CRMManager.crmData.existsObject(inputId)) throw new WrongInputException(ErrorType.ID_NOK);
                 }
                 return true;

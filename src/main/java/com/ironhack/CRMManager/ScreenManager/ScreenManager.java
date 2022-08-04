@@ -1,6 +1,9 @@
 package com.ironhack.CRMManager.ScreenManager;
 
-import com.ironhack.CRMManager.Exceptions.*;
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.ExitException;
+import com.ironhack.CRMManager.Exceptions.GoBackException;
+import com.ironhack.CRMManager.Exceptions.LogoutException;
 import com.ironhack.CRMManager.LogWriter;
 import com.ironhack.CRMManager.ScreenManager.Screens.*;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
@@ -75,6 +78,7 @@ public class ScreenManager {
                             crmData.removeLead(lead.getId());
                         }
                     }
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
                 break;
@@ -126,6 +130,7 @@ public class ScreenManager {
                         }
                     }
                     case CLOSE -> userOpManager.closeOpportunity(currentUser, comm.getCaughtInput());
+                    case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
                 LogWriter.logError(getClass().getSimpleName(),
@@ -187,6 +192,7 @@ public class ScreenManager {
                         crmData.removeAccount(account.getCompanyName());
                     }
                 }
+                case FAV -> userOpManager.addToFavourites(currentUser,res.getCaughtInput());
             }
 
         } while (!stop);
