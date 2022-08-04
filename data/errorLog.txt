@@ -3,6 +3,10 @@
 >2/8/22 14:00:57 //-> ERR.ERR() : $&&$
 >2/8/22 14:02:20 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >2/8/22 14:02:55 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
+>2/8/22 21:35:06 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 9:39:24 //-> MenuScreen.start() : Received a unexpected exception.. All good!
+>3/8/22 9:40:33 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>3/8/22 9:42:10 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IllegalArgumentExceptionNo enum constant com.ironhack.CRMManager.ScreenManager.Screens.Commands.C
 >2/8/22 21:37:02 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >2/8/22 21:47:11 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.ExitExceptionnull
 >2/8/22 23:22:50 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
@@ -71,3 +75,4 @@
 >4/8/22 13:39:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 14:21:08 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 15:16:51 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 21:16:02 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!

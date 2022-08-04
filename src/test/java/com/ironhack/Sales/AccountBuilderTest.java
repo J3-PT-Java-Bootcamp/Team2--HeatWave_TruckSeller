@@ -25,7 +25,7 @@ class AccountBuilderTest {
        accountOne.setOpportunities(new ArrayList<>());
 
        var finalAccount= accountOne.constructAccount();
-       assertEquals("Barcelona",finalAccount.getCity()); //TODO TEST INDUSTRYTYPE no lagafa
+       assertEquals("Barcelona",finalAccount.getCity());
 
 
     }
