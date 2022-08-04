@@ -31,7 +31,7 @@ public class UserOpManager {
             opp.close(caughtInput[1].equalsIgnoreCase("won"));
             screenManager.confirming_screen(currentUser, opp.shortPrint() + " Closed!",opp.printFullObject().toString(),true);
             currentUser.removeFromOpportunities(opp.getId(), (caughtInput[1].equalsIgnoreCase("won")));
-            return opp;
+
         }
         return null;
     }
