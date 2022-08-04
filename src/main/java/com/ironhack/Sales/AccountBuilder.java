@@ -1,8 +1,8 @@
 package com.ironhack.Sales;
 
 
-import com.ironhack.Constants.IndustryType;
 import com.ironhack.CRMManager.Exceptions.NoCompleteObjectException;
+import com.ironhack.Constants.IndustryType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

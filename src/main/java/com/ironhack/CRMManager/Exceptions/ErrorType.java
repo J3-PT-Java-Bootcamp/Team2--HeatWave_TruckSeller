@@ -5,7 +5,6 @@ public enum ErrorType {
     FORMAT_NOK("The format is not okay, please enter HELP for more info"),
     INTEGER_NOK("The input is not correct, please input an integer"),
     ID_NOK("The ID is not correct"),
-    LENGTH_NOK("The length is not correct"),
     FATAL_ERR("The has been a fatal error"),
     MAIL_NOK("The email format is not correct"),
     PHONE_NOK("The phone format is not correct"),

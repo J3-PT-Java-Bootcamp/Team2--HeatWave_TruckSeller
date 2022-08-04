@@ -8,7 +8,7 @@
 ***
 
 <h1 >Truck Seller CRM </h1>
-<p text-align center >This is a project created by the team HEATWAVE. The project idea was to create a CRM that allows registered users to create leads and update them by utilizing queries</p>
+<p   >This is a project created by the team HEATWAVE. The project idea was to create a CRM that allows registered users to create leads and update them by utilizing queries</p>
 
 <h3><u>INTRO</u> --> </h3>
 <p>Before being able to create your first lead, you'll be met with a login screen, where you'll need to enter a predefined username and password.</p>

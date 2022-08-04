@@ -5,7 +5,6 @@ import com.ironhack.CRMManager.Exceptions.ErrorType;
 import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.CRMManager.ScreenManager.Text.DynamicLine;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
-import com.ironhack.CRMManager.ScreenManager.Text.WindowObject;
 
 import java.util.ArrayList;
 
@@ -27,20 +26,6 @@ public class ConsolePrinter {
     //---------------------------------------------------------------------------   PUBLIC METHODS
 
 
-
-    /**
-     * Shows Square with the screen size to allow User to resize console,
-     * waits until user confirm
-     */
-    private void calibrateScreen() {
-        sendToQueue(new WindowObject(LIMIT_X, LIMIT_Y + 2, 1, 1)
-                .setFrameColor(BgColors.BRIGHT_BLACK).setBgcolor(BgColors.CYAN)
-                .setTxtColor(CColors.BRIGHT_WHITE)
-                .addText(TextStyle.BOLD + "Adjust your console size to fit this box.")
-                .addText(TextStyle.BOLD + "Press Enter when done").alignTextCenter().alignTextMiddle()
-                .addText(CENTER_CARET));
-        startPrint();
-    }
     //---------------------------------------------------------------------------   CONSOLE MANAGER
     private TextObject smartReplaceReset(TextObject obj) {
 

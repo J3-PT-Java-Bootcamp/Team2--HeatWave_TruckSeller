@@ -1,18 +1,18 @@
 package com.ironhack.CRMManager.ScreenManager;
 
+import com.ironhack.CRMManager.Exceptions.CRMException;
+import com.ironhack.CRMManager.Exceptions.WrongInputException;
 import com.ironhack.CRMManager.ScreenManager.Screens.CRMScreen;
 import com.ironhack.CRMManager.ScreenManager.Screens.Commands;
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.Constants.Product;
-import com.ironhack.CRMManager.Exceptions.CRMException;
-import com.ironhack.CRMManager.Exceptions.WrongInputException;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static com.ironhack.CRMManager.CRMManager.printer;
-import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.*;
+import static com.ironhack.Constants.ColorFactory.BLANK_SPACE_CH;
 
 /**
  * Enum with different configurations to read input from user,

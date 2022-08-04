@@ -38,6 +38,7 @@ public class TableScreen extends CRMScreen {
         } else {
             hasContent = true;
             masterArr = getLists(data);
+            addCommand(FAV);
             type = data.get(0).getClass();
             if (Opportunity.class.equals(type)) {
                 addCommand(CLOSE);
@@ -157,13 +158,11 @@ public class TableScreen extends CRMScreen {
             comm = COMMAND.getInput(this, commands.toArray(new Commands[0]));
             if (Commands.valueOf(comm) == NEXT) {
                 if (currentPage + 1 < pages) currentPage++;
-
-            } else if (Commands.valueOf(comm) == PREVIOUS) {
+            }else if (Commands.valueOf(comm) == PREVIOUS) {
                 if (currentPage > 0) currentPage--;
-            } else if (Commands.valueOf(comm) == CONVERT || Commands.valueOf(comm) == CLOSE || Commands.valueOf(comm) == CREATE || Commands.valueOf(comm) == VIEW || Commands.valueOf(comm) == DISCARD) {
-                return comm;
-            }
-
+            }else if (Commands.valueOf(comm) == CONVERT || Commands.valueOf(comm) == CLOSE
+                    || Commands.valueOf(comm) == CREATE  || Commands.valueOf(comm) == VIEW
+                    || Commands.valueOf(comm) == DISCARD || Commands.valueOf(comm)==FAV){ return comm;}
         } catch (IllegalArgumentException e) {
             printer.showErrorLine(ErrorType.COMMAND_NOK);
         } catch (HelpException help) {

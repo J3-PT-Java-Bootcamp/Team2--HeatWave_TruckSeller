@@ -165,27 +165,30 @@ public class UserOpManager {
                         if(object instanceof Opportunity)id= ((Opportunity) object).getDecisionMakerID();
                         userOpManager.viewObject(currentUser, new String[]{CONTACTS.name(), id});
                     }
-                    case DISCARD -> {
-                        if(screenManager.modal_screen(currentUser,
-                                "Discard Lead?",
-                                new TextObject("Do you want to delete this lead?")
-                                        .addText(BLANK_SPACE).addText(object.printFullObject()))){
-                            currentUser.removeUnknown(object.getId());
-                            crmData.removeUnknownObject(object.getId());
-                            screenManager.confirming_screen(currentUser,
-                                    "Lead %s was deleted!".formatted(object.getId()),
-                                    object.printFullObject().toString(),
-                                    true);
-                            stop=true;
-
-                        }
-                    }
+                    case DISCARD -> stop = discardObject(currentUser, object);
                 }
             } while (!stop);
         }
     }
 
-    private void addToFavourites(User currentUser, String[] caughtInput) {
+    boolean discardObject(User currentUser, Printable object) {
+        if(screenManager.modal_screen(currentUser,
+                " Delete %s ? ".formatted(object.shortPrint()),
+                new TextObject("Do you want to delete this %s ?".formatted(object.getClass().getSimpleName()))
+                        .addText(BLANK_SPACE).addText(object.printFullObject()))){
+
+            currentUser.removeUnknown(object.getId());
+            crmData.removeUnknownObject(object.getId());
+            screenManager.confirming_screen(currentUser,
+                    "%s : %s was deleted!".formatted(object.getClass().getSimpleName(),object.getId()),
+                    object.printFullObject().toString(),
+                    true);
+            return true;
+        }
+        return false;
+    }
+
+    public void addToFavourites(User currentUser, String[] caughtInput) {
         String varWord= "added to";
         Printable unknownObject = crmData.getUnknownObject(caughtInput[1]);
         ArrayList<String> favs = currentUser.getFavourites();
@@ -241,5 +244,4 @@ public class UserOpManager {
 
         return contact;
     }
-
 }

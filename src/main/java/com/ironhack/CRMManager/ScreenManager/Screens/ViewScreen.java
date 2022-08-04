@@ -20,13 +20,12 @@ import static com.ironhack.Constants.Constants.LIMIT_Y;
 public class ViewScreen extends CRMScreen{
     //Screen that prints properties of an object
     private final Printable object;
-    private final Type type;
     private final ArrayList<String> optionsNames;
     public ViewScreen(User currentUser, String name, Printable object) {
         super(currentUser, name);
         this.object=object;
         this.optionsNames=new ArrayList<>();
-        type = object.getClass();
+        Type type = object.getClass();
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS).addCommand(FAV);
             optionsNames.add("CLOSE WON");
@@ -61,7 +60,6 @@ public class ViewScreen extends CRMScreen{
         printer.clearScreen();
         printer.sendToQueue(getTextObject());
         printer.startPrint();
-        String input = "";
         try {
             return COMMAND.getInput(this, commands.toArray(new Commands[0]));
 
@@ -80,9 +78,9 @@ public class ViewScreen extends CRMScreen{
             }
         } catch (GoBackException|GoToMenuException e) {
             throw e;
-        } catch (Exception ignored) {
+        } catch (Exception e) {
             LogWriter.logError(getClass().getSimpleName(),
-                    "start", "Received a unexpected exception.. " + ignored.getMessage());
+                    "start", "Received a unexpected exception.. " + e.getMessage());
         }
         constructScreen();
         return start();
