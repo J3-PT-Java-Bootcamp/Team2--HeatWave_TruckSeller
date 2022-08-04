@@ -70,6 +70,10 @@ public class User implements Printable {
     public int getLeadListSize(){
         return this.leadList.size();
     }
+    public ArrayList<String> getLeadList(){
+        leadList.removeIf(id -> !crmData.existsObject(id));
+        return leadList;
+    }
 
     public void removeFromLeadList(String id){
         leadList.remove(id);
