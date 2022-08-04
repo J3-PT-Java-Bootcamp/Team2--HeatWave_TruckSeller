@@ -71,3 +71,6 @@
 >4/8/22 13:39:54 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 14:21:08 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 15:16:51 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>4/8/22 19:33:01 //-> ERR.ERR() : $&&$
+>4/8/22 22:02:36 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.IllegalArgumentExceptionNo enum constant com.ironhack.CRMManager.ScreenManager.Screens.Commands.CLOSE WON
+>4/8/22 22:10:23 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
