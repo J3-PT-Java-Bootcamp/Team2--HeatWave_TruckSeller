@@ -22,7 +22,7 @@ class OpportunityBuilderTest {
         contBuilder.setName("GILBERTO");
         contBuilder.setPhoneNumber("93456456");
         var finalOpportunity= opportunityOne.constructOpportunity("ACC",contBuilder);
-        assertEquals("USER",finalOpportunity.getOwner()); //TODO TEST INDUSTRYTYPE no lagafa
+        assertEquals("USER",finalOpportunity.getOwner());
 
     }
 }
