@@ -1,12 +1,15 @@
 package com.ironhack.Sales;
 
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.MAIL;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
 
 @Data
+@AllArgsConstructor
 public class Lead implements Printable{
 
     private String name;
@@ -16,9 +19,11 @@ public class Lead implements Printable{
     private String companyName;
 
 
-    public Lead(String name, String id, String phoneNumber, String mail, String companyName) {
+
+
+    public Lead(String name, String phoneNumber, String mail, String companyName) {
         setName(name);
-        setId(id);
+        setId(crmData.getNextID(Lead.class));
         setPhoneNumber(phoneNumber);
         setMail(mail);
         setCompanyName(companyName);

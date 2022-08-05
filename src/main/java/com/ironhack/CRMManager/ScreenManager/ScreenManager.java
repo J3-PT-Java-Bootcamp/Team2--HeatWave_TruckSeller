@@ -98,6 +98,7 @@ public class ScreenManager {
                             crmData.removeLead(lead.getId());
                         }
                     }
+                    case CREATE -> userOpManager.createNewLead(currentUser);
                     case FAV -> userOpManager.addToFavourites(currentUser,comm.getCaughtInput());
                 }
             } catch (NullPointerException e) {
