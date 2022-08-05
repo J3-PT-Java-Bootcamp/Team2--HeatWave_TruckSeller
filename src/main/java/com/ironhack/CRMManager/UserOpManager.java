@@ -13,7 +13,6 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.ironhack.CRMManager.CRMData.saveData;
 import static com.ironhack.CRMManager.CRMManager.*;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
 import static com.ironhack.CRMManager.Exceptions.ErrorType.ID_NOK;
@@ -139,12 +138,7 @@ public class UserOpManager {
                     currentUser.removeFromLeadList(lead.getId());
                     crmData.addOpportunity(opp);
                     crmData.removeLead(lead.getId());
-                    try {
-                        if(!screenManager.isTest())saveData();
-                    } catch (Exception e) {
-                        LogWriter.logError(getClass().getSimpleName(),
-                                "convertLeadToOpp->saveData", "Received a unexpected exception.. " + e.getMessage());
-                    }
+                    tryToSaveData(getClass().getSimpleName(),"convertLeadToOpp->saveData");
 
                     screenManager.confirming_screen(currentUser,
                             "Lead %s was properly converted to Opportunity: ".formatted(lead.getId()),
@@ -181,11 +175,8 @@ public class UserOpManager {
                         stop=true;
                     }
                     case CLOSE -> {
-//                        try{
                             userOpManager.closeOpportunity(currentUser, new String[]{CLOSE.name(),CLOSE.getCaughtInput()[1], object.getId()});
                             viewObject(currentUser,caughtInput);
-//                        } catch (GoBackException ignored) {
-//                        }catch (Exception e){throw new RuntimeException();}
                     }
                     case OPP ->
                                 screenManager.show_OpportunitiesScreen(currentUser,
@@ -220,6 +211,7 @@ public class UserOpManager {
                     "%s : %s was deleted!".formatted(object.getClass().getSimpleName(),object.getId()),
                     object.printFullObject().toString(),
                     true);
+            tryToSaveData(getClass().getSimpleName(),"discardObject->saveData");
             return true;
         }
         return false;
@@ -244,12 +236,15 @@ public class UserOpManager {
             }
         }
         currentUser.addToFavourites(caughtInput[1]);
+        tryToSaveData(getClass().getSimpleName(),"addToFavourites->saveData");
         screenManager.confirming_screen(currentUser,
                 unknownObject.shortPrint()+" was properly "+varWord+" the favourites list",
                 unknownObject.printFullObject().toString(),
                 true
                 );
     }
+
+
 
     //------------------------------------------------------------------------------------------------------INNER METHODS
     private ContactBuilder createNewContactBuilder(User currentUser, Lead lead, String accountName) throws CRMException {
