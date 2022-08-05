@@ -350,14 +350,14 @@ public class TextObject {
     private String[] wrapLine(String line, int limit) {
         String[] result;
 
-        var wordList = line.replace(BLANK_SPACE + BLANK_SPACE, "€€").split(BLANK_SPACE);
+        var wordList = line.replace(BLANK_SPACE + BLANK_SPACE, "**").split(BLANK_SPACE);
         StringBuilder line1 = new StringBuilder();
         StringBuilder line2 = new StringBuilder("  ");
         int charCounter = 0;
         for (String word : wordList) {
-            charCounter += countValidCharacters(word) + (java.util.Objects.equals(word, "€€") ? 0 : 1);
-            if (charCounter <= limit) line1.append(" ").append(word.replace("€€", "  "));
-            else line2.append(" ").append(word.replace("€€", "  "));
+            charCounter += countValidCharacters(word) + (java.util.Objects.equals(word, "**") ? 0 : 1);
+            if (charCounter <= limit) line1.append(" ").append(word.replace("**", "  "));
+            else line2.append(" ").append(word.replace("**", "  "));
         }
         if (charCounter > limit * 2) {
             var auxList = wrapLine(line2.toString(), limit);

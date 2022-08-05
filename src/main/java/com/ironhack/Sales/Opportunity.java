@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.PRODUCT_TYPE;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
 import static com.ironhack.Constants.OpportunityStatus.*;
@@ -32,7 +33,7 @@ public class Opportunity implements Printable{
         setQuantity(quantity);
         setDecisionMakerID(decisionMaker);
         setOwner(owner);
-        setStatus(OPEN);
+        setStatus(OpportunityStatus.OPEN);
         setAccount_companyName(companyName);
     }
 
@@ -56,7 +57,7 @@ public class Opportunity implements Printable{
 
     @Override
     public String shortPrint() {
-        return this.account_companyName+" ("+quantity+")"+product.toString();
+        return OPEN.formatOutput(this.account_companyName)+" ("+quantity+")"+product.toString();
     }
 
     @Override
@@ -65,9 +66,9 @@ public class Opportunity implements Printable{
         return new TextObject("Id: "+id)
                 .addText("Product: "+product.toString())
                 .addText("Quantity: "+quantity)
-                .addText("Contact: "+ toCamelCase(crmData.getUnknownObject(decisionMakerID).shortPrint()))
-                .addText("Opp Status: "+toCamelCase(status.name()))
-                .addText("Account: "+toCamelCase(account_companyName))
+                .addText("Contact: "+ OPEN.formatOutput(crmData.getUnknownObject(decisionMakerID).shortPrint()))
+                .addText("Opp Status: "+OPEN.formatOutput(status.name()))
+                .addText("Account: "+OPEN.formatOutput(account_companyName))
                 .addText("Proprietary: "+toCamelCase(owner));
 
     }
