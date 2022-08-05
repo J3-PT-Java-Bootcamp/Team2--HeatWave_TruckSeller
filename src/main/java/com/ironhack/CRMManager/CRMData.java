@@ -230,4 +230,13 @@ public class CRMData implements Printable{
     public String[] getPrintableAttributes() {
         return new String[]{"Name"};
     }
+
+    public void deleteAllData() {
+        this.userList.clear();
+        this.accountMap.clear();
+        this.contactMap.clear();
+        this.leadMap.clear();
+        this.opportunityMap.clear();
+
+    }
 }

@@ -100,6 +100,7 @@ public class CRMManager {
      */
     private void runFirstConfig() {
         try {
+            this.currentUser=null;
             adminOpManager.createNewUser(null,true);
             if(!isTest)saveData();
         } catch (CRMException e) {
@@ -189,8 +190,9 @@ public class CRMManager {
      *
      * @return the user logged
      */
-    private User login_screen() {
+    private User login_screen() throws CRMException {
         String strResult = "";
+        if(crmData.isEmptyMap(User.class))adminOpManager.createNewUser(null,true);
         var loginScreen = new InputScreen(null, "Login", new TextObject("Enter your User Name and Password:"), new String[]{"User Name", "Password"}, OPEN, PASSWORD);
         try {
             strResult = loginScreen.start();

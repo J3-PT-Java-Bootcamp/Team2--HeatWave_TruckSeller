@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ironhack.CRMManager.CRMManager.*;
-import static com.ironhack.CRMManager.Exceptions.ErrorType.COMMAND_NOK;
-import static com.ironhack.CRMManager.Exceptions.ErrorType.FORMAT_NOK;
+import static com.ironhack.CRMManager.Exceptions.ErrorType.*;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.COMMAND;
 import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.YES;
 
 @Data
@@ -38,11 +38,31 @@ public class ScreenManager {
         try {
             return Commands.valueOf(main_menu.start().split(" ")[0].toUpperCase());
         }catch (GoBackException e){
+
             throw new LogoutException(e.getErrorType());
+
         } catch (CRMException crmE) {
+            if(COMMAND.lastInput.equalsIgnoreCase("DELETE ALL")&&currentUser.isAdmin()&&
+            screenManager.modal_screen(currentUser,
+                    "DELETE ALL APP DATA?",
+                    new TextObject("You wil lost all your data and users, this action cannot be undone. Are you sure?"))){
+                    crmData.deleteAllData();
+                    throw new LogoutException(EXIT);
+            }
+
+
+
+
             throw crmE;
 
         } catch (Exception e) {
+            if(COMMAND.lastInput.equalsIgnoreCase("DELETE ALL")&&currentUser.isAdmin()&&
+                    screenManager.modal_screen(currentUser,
+                            "DELETE ALL APP DATA?",
+                            new TextObject("You wil lost all your data and users, this action cannot be undone. Are you sure?"))){
+                crmData.deleteAllData();
+                throw new LogoutException(EXIT);
+            }
             printer.showErrorLine(COMMAND_NOK);
             return menu_screen(currentUser);
         }
