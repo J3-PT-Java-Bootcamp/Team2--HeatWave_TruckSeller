@@ -40,7 +40,8 @@ public class Account implements Printable{
     @Override
     public TextObject toTextObject() {
         return new TextObject(toCamelCase(this.companyName)).addText(industryType.toString())
-                .addText(String.valueOf(employeeCount)).addText(toCamelCase(city)).addText(toCamelCase(country));
+                .addText(String.valueOf(employeeCount)).addText(toCamelCase(city)).addText(toCamelCase(country))
+                .addText(String.valueOf(opportunities.size()));
     }
 
     @Override
@@ -53,12 +54,13 @@ public class Account implements Printable{
         return new TextObject().addText("Company name: "+toCamelCase(this.companyName))
                 .addText("Industry: "+this.industryType.toString()).addText("Employees: "+this.employeeCount)
                 .addText("City: "+toCamelCase(this.city))
-                .addText("Country: "+toCamelCase(this.country));
+                .addText("Country: "+toCamelCase(this.country))
+                .addText("Open opportunities: "+opportunities.size());
     }
 
     @Override
     public String[] getPrintableAttributes() {
-        return new String[]{"Company Name","Industry", "Employees", "City","Country" };
+        return new String[]{"Company Name","Industry", "Employees", "City","Country","Opp." };
     }
 
 }

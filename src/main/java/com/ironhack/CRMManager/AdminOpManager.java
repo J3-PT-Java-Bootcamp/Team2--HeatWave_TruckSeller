@@ -135,8 +135,8 @@ public class AdminOpManager {
                 }
             } catch (NullPointerException e) {
                 break;
-            } catch (CRMException e) {
-                throw new RuntimeException(e);
+            }catch (CRMException back){
+                stop=true;
             }
         } while (!stop);
 

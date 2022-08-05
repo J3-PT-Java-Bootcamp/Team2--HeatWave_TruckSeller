@@ -28,7 +28,7 @@ public class CRMManager {
     private boolean exit;
     private User currentUser;
     public static final UserOpManager userOpManager= new UserOpManager();
-    private static final AdminOpManager adminOpManager = new AdminOpManager();
+    static final AdminOpManager adminOpManager = new AdminOpManager();
     public static final ConsolePrinter printer = new ConsolePrinter();
     public static CRMData crmData;
     public static final ScreenManager screenManager = new ScreenManager();

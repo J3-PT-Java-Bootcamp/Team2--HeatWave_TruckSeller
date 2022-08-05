@@ -1,6 +1,9 @@
 package com.ironhack.CRMManager;
 
 import com.ironhack.CRMManager.Exceptions.GoBackException;
+import com.ironhack.Constants.Product;
+import com.ironhack.Sales.Contact;
+import com.ironhack.Sales.Opportunity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,5 +52,36 @@ class UserOpManagerTest {
         System.setIn(new ByteArrayInputStream("back\n".getBytes()));
         assertThrows(GoBackException.class,()->userOpManager.viewObject(crm.getCurrentUser(),
                 new String[]{"VIEW","LFFE"}));
+    }
+
+
+    @Test
+    void discardObject_test_ok() {
+        crmData.addUser(new User("TEST","TEST",false));
+
+        System.setIn(new ByteArrayInputStream("yes\n".getBytes()));
+        userOpManager.discardObject(crmData.getUser("ADMIN"),crmData.getUser("TEST"));
+        assertNull(crmData.getUser("TEST"));
+    }
+
+    @Test
+    void addToFavourites() {
+        System.setIn(new ByteArrayInputStream("yes\n".getBytes()));
+        var cont = new Contact("ANTONIO","93456956","ANTONIO@APPLE.COM","ACC");
+        crmData.addContact(cont);
+        var op = new Opportunity(Product.BOX, 12, cont.getId(), "USER", "ACC");
+        crmData.addOpportunity(op);
+        userOpManager.addToFavourites(crmData.getUser("USER"),new String[]{"FAV",op.getId()});
+        assertTrue(crmData.getUser("USER").getFavourites().contains(op.getId()));
+
+    }
+    @Test
+    void convertLeadToOpp_test_nullInput() {
+        assertNull(userOpManager.convertLeadToOpp(crm.getCurrentUser(),null));
+    }
+
+    @Test
+    void testToString() {
+        assertDoesNotThrow(userOpManager::toString);
     }
 }
