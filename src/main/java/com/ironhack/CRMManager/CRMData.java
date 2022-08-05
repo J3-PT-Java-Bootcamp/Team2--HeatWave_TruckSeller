@@ -149,8 +149,8 @@ public class CRMData implements Printable{
         } else if (id.startsWith("C")) {
             val= contactMap.remove(id);
         }
-        if (val==null) accountMap.remove(id);
-        removeAccount(id);
+        if (val==null) val=userList.remove(id);
+        if (val==null) removeAccount(id);
     }
     public void addUnknownObject(Printable obj){
         if(obj instanceof Lead) {

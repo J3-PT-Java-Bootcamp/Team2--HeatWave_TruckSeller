@@ -61,7 +61,7 @@ public class AdminOpManager {
                 break;
             } else {
                 txtObj = new TextObject("-- USERS --").addText(BLANK_SPACE);
-                for (User user : crmData.getUserList().values()) {
+                for (User user : crmData.getUsers(false)) {
                     txtObj.addText(user.getName());
                 }
                 txtObj.addText(BLANK_SPACE)
