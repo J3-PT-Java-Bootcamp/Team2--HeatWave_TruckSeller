@@ -26,27 +26,28 @@ public class ViewScreen extends CRMScreen{
         this.object=object;
         this.optionsNames=new ArrayList<>();
         Type type = object.getClass();
+        boolean isFav = currentUser.getFavourites().contains(object.getId());
         if (Opportunity.class.equals(type)) {
             addCommand(CLOSE).addCommand(ACCOUNT).addCommand(CONTACTS).addCommand(FAV);
             optionsNames.add("CLOSE WON");
             optionsNames.add("CLOSE LOST");
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add(UNDERLINE+"CONT"+SMART_RESET+textObject.getTextModifications()+"ACT");
-            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
+            optionsNames.add((isFav?"Quit ":"Add to ")+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Lead.class.equals(type)) {
             addCommand(CONVERT).addCommand(DISCARD).addCommand(FAV);
             optionsNames.add(CONVERT.getDisplay());
             optionsNames.add(DISCARD.getDisplay());
-            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
+            optionsNames.add((isFav?"Quit ":"Add to ")+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Account.class.equals(type)) {
             addCommand(OPP).addCommand(FAV).addCommand(FAV);
             optionsNames.add("View related "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITIES");
-            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
+            optionsNames.add((isFav?"Quit ":"Add to ")+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
         } else if (Contact.class.equals(type)) {
             addCommand(ACCOUNT).addCommand(OPP).addCommand(FAV);
             optionsNames.add("View "+UNDERLINE+"ACC"+SMART_RESET+textObject.getTextModifications()+"OUNT");
             optionsNames.add("View "+UNDERLINE+"OPP"+SMART_RESET+textObject.getTextModifications()+"ORTUNITY");
-            optionsNames.add("Add to "+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
+            optionsNames.add((isFav?"Quit ":"Add to ")+UNDERLINE+"FAV"+SMART_RESET+textObject.getTextModifications()+"OURITES");
 
         } else if (User.class.equals(type)) {
 

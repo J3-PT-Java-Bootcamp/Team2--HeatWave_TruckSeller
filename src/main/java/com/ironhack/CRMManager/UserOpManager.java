@@ -141,7 +141,8 @@ public class UserOpManager {
                     printer.showErrorLine(ID_NOK);
                     return;
                 }
-                var res= new ViewScreen(currentUser, object.shortPrint(), object).start();
+                ViewScreen viewScreen = new ViewScreen(currentUser, object.shortPrint(), object);
+                var res= viewScreen.start();
                 switch (Commands.valueOf(res)) {
                     case FAV -> userOpManager.addToFavourites(currentUser,new String[]{res,object.getId()});
                     case CONVERT -> {
@@ -149,11 +150,11 @@ public class UserOpManager {
                         stop=true;
                     }
                     case CLOSE -> {
-                        try{
-                            userOpManager.closeOpportunity(currentUser, new String[]{caughtInput[0],caughtInput[1], object.getId()});
+//                        try{
+                            userOpManager.closeOpportunity(currentUser, new String[]{CLOSE.name(),CLOSE.getCaughtInput()[1], object.getId()});
                             viewObject(currentUser,caughtInput);
-                        } catch (GoBackException ignored) {
-                        }catch (Exception e){throw new RuntimeException();}
+//                        } catch (GoBackException ignored) {
+//                        }catch (Exception e){throw new RuntimeException();}
                     }
                     case OPP -> screenManager.show_OpportunitiesScreen(currentUser,
                             crmData.getAccount(object.getId()).getOpportunities());
