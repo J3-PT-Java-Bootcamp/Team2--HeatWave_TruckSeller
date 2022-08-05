@@ -76,3 +76,9 @@
 >4/8/22 14:21:08 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 15:16:51 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
 >4/8/22 21:16:02 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoToMenuException All good!
+>5/8/22 18:46:38 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>5/8/22 19:34:59 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptioncom.ironhack.CRMManager.Exceptions.LogoutException
+>5/8/22 20:37:17 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
+>5/8/22 21:28:25 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
+>5/8/22 21:44:34 //-> AdminOpManager.manageUsers_screen() : Received a unexpected exception.. null
+>5/8/22 21:48:15 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!

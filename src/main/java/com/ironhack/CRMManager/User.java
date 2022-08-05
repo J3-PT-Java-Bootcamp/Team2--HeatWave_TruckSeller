@@ -43,8 +43,8 @@ public class User implements Printable {
         this.closedLeads = 0;
         this.lostOpp = 0;
         this.successfulOpp = 0;
-        this.totalLeads = leadList.size() + this.closedLeads;
-        this.totalOpps = opportunityList.size() + this.successfulOpp + this.lostOpp;
+        this.totalLeads = 0;
+        this.totalOpps = 0;
     }
 
 
@@ -73,7 +73,7 @@ public class User implements Printable {
 
     public void removeFromLeadList(String id){
         leadList.remove(id);
-        this.setClosedLeads(+1);
+        this.setClosedLeads(getClosedLeads()+1);
     }
     public void addToFavourites(String id){
         if (favourites==null)favourites=new ArrayList<>();
@@ -142,9 +142,22 @@ public class User implements Printable {
     }
 
 
-    private double getLeadRatio(){return ((getClosedLeads()+0.0)/(getTotalLeads()+0.0))*100;}
-    private double getSuccessfulOppRatio(){return ((getSuccessfulOpp()+0.0)/(getTotalOpps()+0.0))*100;}
-    private double getTotalProductivity(){return ((getLeadRatio()+getSuccessfulOppRatio())/200)*100;}
+    private double getLeadRatio() {
+        double leadRatio = ((getClosedLeads() + 0.0) / (getTotalLeads() + 0.0)) * 100;
+        if (leadRatio > 0) return leadRatio;
+        else return 0;
+    }
+    private double getSuccessfulOppRatio(){
+        double successRatio = ((getSuccessfulOpp()+0.0)/(getTotalOpps()+0.0))*100;
+        if (successRatio > 0 ) return successRatio;
+        else return 0 ;
+    }
+
+    private double getTotalProductivity(){
+        double totalProductivity =((getLeadRatio()+getSuccessfulOppRatio())/200)*100;
+        if(totalProductivity > 0) return totalProductivity;
+        else return 0 ;
+    }
 
 
     public ColorFactory.CColors leadObjectiveChecker(double ratio){
@@ -169,21 +182,21 @@ public class User implements Printable {
 
     private void updateTotals(){
         this.totalLeads = this.getLeadListSize() + this.getClosedLeads();
-        this.totalOpps = this.getOpportunityListSize() + this.getSuccessfulOpp() + this.getLostOpp();
+        this.totalOpps = this.getSuccessfulOpp() + this.getLostOpp();
     }
 
     //This one is for the removeUnknownObject it only lets you set it as a lost Opp
     public void removeFromOpportunities(String id) {
         opportunityList.remove(id);
-        this.setLostOpp(+1);
+        this.setLostOpp(getLostOpp()+1);
 
     }
 
 
     public void removeFromOpportunities(String id, boolean isSuccess) {
         opportunityList.remove(id);
-        if (isSuccess){this.setSuccessfulOpp(+1);}
-        else {this.setLostOpp(+1);}
+        if (isSuccess){this.setSuccessfulOpp(getSuccessfulOpp()+1);}
+        else {this.setLostOpp(getLostOpp()+1);}
     }
 
     public void removeUnknown(String id) {

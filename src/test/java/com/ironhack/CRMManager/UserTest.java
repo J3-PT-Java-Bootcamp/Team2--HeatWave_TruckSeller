@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
     CRMManager crm;
@@ -11,29 +12,8 @@ class UserTest {
     @BeforeEach
     void setUp() {
         crm = new CRMManager(false);
-        user = crmData.getUser("USER");
-    }
-    @Test
-    void removeFromLeadList() {
+        user = crmData.getUser("SIMON");
+
     }
 
-    @Test
-    void addToRecentObjects() {
-    }
-
-    @Test
-    void toTextObject() {
-    }
-
-    @Test
-    void shortPrint() {
-    }
-
-    @Test
-    void printFullObject() {
-    }
-
-    @Test
-    void getPrintableAttributes() {
-    }
 }
