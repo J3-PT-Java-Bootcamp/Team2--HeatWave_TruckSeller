@@ -79,6 +79,36 @@ public class UserOpManager {
         }
         return createNewAccount(currentUser, importedData);
     }
+    public String createNewLead(User currentUser) throws CRMException {
+
+        var newLeadScreen = new InputScreen(currentUser,
+                "New Screen",
+                new TextObject("Enter data for the new Lead: ").addText(BLANK_SPACE),
+                new String[]{"Contact Name", "Phone number", "Mail", "Company"},
+                OPEN, PHONE, MAIL, OPEN);
+        String strRes = null;
+        try {
+            strRes = newLeadScreen.start();
+            if (Objects.equals(strRes, EXIT.name())) return EXIT.name();
+        } catch (GoBackException | GoToMenuException | LogoutException | ExitException exit) {
+            throw exit;
+        } catch (CRMException e) {
+            return "";
+        }
+        var userVal = newLeadScreen.getValues();
+
+        if (userVal != null && !userVal.isEmpty() && userVal.size() >= 4) {
+            var lead = new Lead(userVal.get(0),userVal.get(1),userVal.get(2),userVal.get(3));
+
+                crmData.addLead(lead);
+                screenManager.confirming_screen(currentUser, "Lead " + lead.shortPrint() + " was properly saved.",
+                        strRes,
+                        true);
+                currentUser.addToLeadList(lead);
+                return lead.getId();
+        }
+        return createNewLead(currentUser);
+    }
 
     public String convertLeadToOpp(User currentUser, String[] caughtInput) {
         if (caughtInput != null && caughtInput.length == 2) {
