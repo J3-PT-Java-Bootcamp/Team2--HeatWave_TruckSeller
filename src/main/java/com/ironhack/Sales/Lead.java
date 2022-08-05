@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import static com.ironhack.CRMManager.CRMManager.crmData;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.MAIL;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.*;
 
 @Data
 @AllArgsConstructor
@@ -45,17 +44,17 @@ public class Lead implements Printable{
 
     @Override
     public String shortPrint() {
-        return getName()+" from "+getCompanyName();
+        return OPEN.formatOutput(getName())+" from "+OPEN.formatOutput(getCompanyName());
     }
 
     @Override
     public TextObject printFullObject() {
         return new TextObject()
                 .addText("- Lead ID: "+getId())
-                .addText("- Name: "+toCamelCase(getName()))
+                .addText("- Name: "+OPEN.formatOutput(getName()))
                 .addText("- Phone Number: "+getPhoneNumber())
                 .addText("- Mail : "+MAIL.formatOutput(getMail()))
-                .addText("- Company: "+toCamelCase(getCompanyName()));
+                .addText("- Company: "+OPEN.formatOutput(getCompanyName()));
     }
 
     @Override

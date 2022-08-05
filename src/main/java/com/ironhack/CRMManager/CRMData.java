@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.ColorFactory.CColors.RED;
+import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.Constants.MAX_ID;
@@ -303,22 +303,22 @@ public class CRMData implements Printable{
     public double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
 
     public ColorFactory.CColors leadObjectiveChecker(double ratio){
-        if (ratio < 50) return RED;
-        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
-        else return ColorFactory.CColors.GREEN;
+        if (ratio < 50) return BRIGHT_RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
+        else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 
     public ColorFactory.CColors oppObjectiveChecker(double ratio){
-        if(ratio < 15 ) return RED;
-        else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.YELLOW;
-        else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.GREEN;
-        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BLUE;
+        if(ratio < 15 ) return BRIGHT_RED;
+        else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.BRIGHT_YELLOW;
+        else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.BRIGHT_GREEN;
+        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BRIGHT_BLUE;
         else  return ColorFactory.CColors.PURPLE;
     }
 
     public ColorFactory.CColors totalObjectiveChecker(double ratio){
-        if (ratio < 50) return RED;
-        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
-        else return ColorFactory.CColors.GREEN;
+        if (ratio < 50) return BRIGHT_RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
+        else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.ScreenManager.InputReader.OPEN;
 import static com.ironhack.Constants.ColorFactory.BLANK_SPACE;
-import static com.ironhack.Constants.ColorFactory.CColors.RED;
+import static com.ironhack.Constants.ColorFactory.CColors.BRIGHT_RED;
 import static com.ironhack.Constants.ColorFactory.SMART_RESET;
 import static com.ironhack.Constants.ColorFactory.TextStyle.BOLD;
 import static com.ironhack.Constants.Constants.FAV_MAX;
@@ -121,15 +121,15 @@ public class User implements Printable {
         this.updateTotals();
         DecimalFormat df = new DecimalFormat("###.##");
         userStats.addText(BLANK_SPACE)
-                .addText("- LEADS- ")
+                .addText(BOLD+"- LEADS- "+SMART_RESET)
                 .addText("Pending: " + getLeadListSize())
                 .addText("Closed: " +BOLD+ leadObjectiveChecker(this.getLeadRatio()) + df.format(getLeadRatio() )+ "%" + SMART_RESET)
                 .addText("")
-                .addText("- OPPORTUNITIES -")
+                .addText(BOLD+"- OPPORTUNITIES -"+SMART_RESET)
                 .addText("Pending: " + getOpportunityListSize())
-                .addText("Success Rate :"+BOLD+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + SMART_RESET )
+                .addText("Success Rate:"+BOLD+ oppObjectiveChecker(this.getSuccessfulOppRatio()) + df.format(getSuccessfulOppRatio()) + "%" + SMART_RESET )
                 .addText(BLANK_SPACE)
-                .addText("Overall Productivity : " +BOLD+ totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + SMART_RESET );
+                .addText("Productivity: " +BOLD+ totalObjectiveChecker(this.getTotalProductivity()) + df.format(getTotalProductivity()) + "%" + SMART_RESET );
 
 
 
@@ -161,23 +161,23 @@ public class User implements Printable {
 
 
     public ColorFactory.CColors leadObjectiveChecker(double ratio){
-        if (ratio < 50) return RED;
-        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
-            else return ColorFactory.CColors.GREEN;
+        if (ratio < 50) return BRIGHT_RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
+            else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 
     public ColorFactory.CColors oppObjectiveChecker(double ratio){
-        if(ratio < 15 ) return RED;
-        else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.YELLOW;
-        else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.GREEN;
-        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BLUE;
-        else  return ColorFactory.CColors.PURPLE;
+        if(ratio < 15 ) return BRIGHT_RED;
+        else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.BRIGHT_YELLOW;
+        else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.BRIGHT_GREEN;
+        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BRIGHT_BLUE;
+        else  return ColorFactory.CColors.BRIGHT_PURPLE;
     }
 
     public ColorFactory.CColors totalObjectiveChecker(double ratio){
-        if (ratio < 50) return RED;
-        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.YELLOW;
-        else return ColorFactory.CColors.GREEN;
+        if (ratio < 50) return BRIGHT_RED;
+        else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
+        else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 
     private void updateTotals(){
