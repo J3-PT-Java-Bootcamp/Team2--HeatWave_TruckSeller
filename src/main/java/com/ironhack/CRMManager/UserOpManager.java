@@ -146,7 +146,7 @@ public class UserOpManager {
                 switch (Commands.valueOf(res)) {
                     case FAV -> userOpManager.addToFavourites(currentUser,new String[]{res,object.getId()});
                     case CONVERT -> {
-                        userOpManager.convertLeadToOpp(currentUser, new String[]{res, object.getId()});
+                        userOpManager.convertLeadToOpp(currentUser, new String[]{CONVERT.name(), object.getId()});
                         stop=true;
                     }
                     case CLOSE -> {
@@ -156,8 +156,9 @@ public class UserOpManager {
 //                        } catch (GoBackException ignored) {
 //                        }catch (Exception e){throw new RuntimeException();}
                     }
-                    case OPP -> screenManager.show_OpportunitiesScreen(currentUser,
-                            crmData.getAccount(object.getId()).getOpportunities());
+                    case OPP ->
+                                screenManager.show_OpportunitiesScreen(currentUser,
+                                        crmData.getAccount(object.getId()).getOpportunities());
                     case ACCOUNT -> {
                         var id = "";
                         if(object instanceof Opportunity)id= ((Opportunity) object).getAccount_companyName().toUpperCase();
