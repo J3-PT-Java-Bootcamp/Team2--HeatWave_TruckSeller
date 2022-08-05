@@ -91,7 +91,8 @@ public class AdminOpManager {
                         }
                         counter += leadsPerUser;
                     }
-                    if(!screenManager.isTest())saveData();
+
+                    tryToSaveData(getClass().getSimpleName(),"assignLeadsToUser->saveData");
                     screenManager.confirming_screen(currentUser,"Leads were distributed among all users.","",false);
                     stop = true;
                 } else if (crmData.getUserList().containsKey(userVal.get(0))) {
@@ -100,7 +101,8 @@ public class AdminOpManager {
                         user.getLeadList().add(lead.getId());
                         crmData.addLead(lead);
                     }
-                    if(!screenManager.isTest())saveData();
+
+                    tryToSaveData(getClass().getSimpleName(),"assignLeadsToUser->saveData");
                     screenManager.confirming_screen(currentUser,"All leads assigned to: " + userVal.get(0) + " correctly",
                             "",
                             false);
@@ -118,7 +120,8 @@ public class AdminOpManager {
             Lead lead = new Lead(values[0], crmData.getNextID(Lead.class), values[1], values[2], values[3]);
             resVal.add(lead);
         }
-        if(!screenManager.isTest())saveData();
+
+        tryToSaveData(getClass().getSimpleName(),"parseCSVLeads->saveData");
         return resVal;
     }
     void showStats_screen(User currentUser) {
@@ -144,6 +147,7 @@ public class AdminOpManager {
     void manageUsers_screen(User currentUser) {
         try {
             createNewUser(currentUser,false);
+            tryToSaveData(getClass().getSimpleName(),"assignLeadsToUser->saveData");
         } catch (CRMException e) {
 
             LogWriter.logError(getClass().getSimpleName(),

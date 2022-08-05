@@ -2,6 +2,7 @@ package com.ironhack.CRMManager;
 
 import com.ironhack.CRMManager.Exceptions.CRMException;
 import com.ironhack.CRMManager.Exceptions.ExitException;
+import com.ironhack.CRMManager.Exceptions.GoBackException;
 import com.ironhack.CRMManager.Exceptions.LogoutException;
 import com.ironhack.CRMManager.ScreenManager.ConsolePrinter;
 import com.ironhack.CRMManager.ScreenManager.ScreenManager;
@@ -63,8 +64,6 @@ public class CRMManager {
 
         crmData.addToUserList(new User("ADMIN", "ADMIN", true));
         crmData.addToUserList(new User("USER", "USER", false));
-        crmData.addToUserList(new User("PATATA", "111", false));
-        crmData.addToUserList(new User("FRITA", "111", false));
         for (TextObject data : leadList) {
             try {
                 var lead = new Lead(data.get(1), data.get(0), data.get(2), data.get(3), data.get(4));
@@ -144,22 +143,17 @@ public class CRMManager {
                 }
             }catch (ExitException e){
                 this.exit=true;
-            }catch (LogoutException logout){
-                currentUser=null;
-            } catch (CRMException e){
-                LogWriter.logError(getClass().getSimpleName(),
-                        "appStart","Unexpected exception.. "+e.getClass()+" "+e.getErrorType());
+            }catch (LogoutException logout) {
+                currentUser = null;
+            }catch (GoBackException ignored){
             } catch (Exception e) {
 
                 LogWriter.logError(getClass().getSimpleName(),
                         "appStart",
                         "Unexpected exception ... " + e.getClass()+e.getMessage());
             }
-            try {
-                if(!isTest)saveData();
-            } catch (Exception ignored) {
 
-            }
+            tryToSaveData(getClass().getSimpleName(),"appStart->saveData");
         }
         System.exit(0);
     }
@@ -209,5 +203,13 @@ public class CRMManager {
             login_screen();
         }
         return getCurrentUser();
+    }
+    public static void tryToSaveData(String className,String methodName) {
+        try {
+            if(!screenManager.isTest())saveData();
+        } catch (Exception e) {
+            LogWriter.logError(className,
+                    methodName, "Received a unexpected exception.. " + e.getMessage());
+        }
     }
 }
