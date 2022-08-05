@@ -381,7 +381,7 @@ public class TextObject {
      */
     private String fillLine(String line, int width) {
 //        return applyTextColorsToLine(line) + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
-        return applyTextColorsToLine(line)+bgColor + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
+        return applyTextColorsToLine(line)+(bgColor!=null?bgColor:"") + (BLANK_SPACE.repeat(Math.max(width - countValidCharacters(line), 0)));
     }
 
     String fillLine(String line) {

@@ -80,3 +80,7 @@
 >5/8/22 0:35:05 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptioncom.ironhack.CRMManager.Exceptions.GoBackException
 >5/8/22 0:37:46 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptionnull
 >5/8/22 1:33:11 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!
+>5/8/22 14:32:51 //-> CRMManager.appStart() : Unexpected exception ... class java.lang.RuntimeExceptioncom.ironhack.CRMManager.Exceptions.GoBackException
+>5/8/22 14:34:40 //-> ERR.ERR() : $&&$
+>5/8/22 14:38:52 //-> ERR.ERR() : $&&$
+>5/8/22 14:45:30 //-> CRMManager.appStart() : Unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackException All good!

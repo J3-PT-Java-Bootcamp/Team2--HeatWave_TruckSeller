@@ -7,6 +7,7 @@ import com.ironhack.Constants.Product;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.CRMManager.printer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +32,9 @@ class OpportunityTest extends TextObject {
 
    @Test
    void testprintable() {
-     var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
+        var cont = new Contact("ANTONIO","93456956","ANTONIO@APPLE.COM","ACC");
+        crmData.addContact(cont);
+     var op = new Opportunity(Product.BOX, 12, cont.getId(), "USER", "ACC").toTextObject();
 
         printer.sendToQueue(op);
         printer.startPrint();
