@@ -12,11 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ModalScreenTest {
-    CRMManager crm;
     ModalScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen=new ModalScreen(crmData.getUser("USER"),"TEST",new TextObject("Testing..."));
     }
 

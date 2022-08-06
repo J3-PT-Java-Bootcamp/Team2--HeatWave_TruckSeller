@@ -4,7 +4,6 @@ import com.ironhack.CRMManager.Exceptions.GoBackException;
 import com.ironhack.Constants.Product;
 import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Opportunity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,10 +21,6 @@ class UserOpManagerTest {
     void setUp() {
         crm = new CRMManager(false);
         crm.setCurrentUser(crmData.getUser("USER"));
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test

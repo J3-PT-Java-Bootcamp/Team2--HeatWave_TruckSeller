@@ -49,25 +49,25 @@ public class User implements Printable {
 
 
 
-    public void addToOpportunityList(Opportunity opportunity){
+    void addToOpportunityList(Opportunity opportunity){
        addToOpportunityList(opportunity.getId());
     }
-    public void addToOpportunityList(String opportunityID){
+    void addToOpportunityList(String opportunityID){
         opportunityList.add(opportunityID);
     }
 
-    public void addToLeadList(String leadID){
+    void addToLeadList(String leadID){
         leadList.add(leadID);
     }
-    public void addToLeadList(Lead lead){
+    void addToLeadList(Lead lead){
         addToLeadList(lead.getId());
     }
-    public int getOpportunityListSize(){
+    int getOpportunityListSize(){
        return this.opportunityList.size();
     }
 
 
-    public int getLeadListSize(){
+    int getLeadListSize(){
         return this.leadList.size();
     }
 
@@ -75,7 +75,7 @@ public class User implements Printable {
         leadList.remove(id);
         this.setClosedLeads(getClosedLeads()+1);
     }
-    public void addToFavourites(String id){
+    void addToFavourites(String id){
         if (favourites==null)favourites=new ArrayList<>();
         if(favourites.contains(id)){
             favourites.remove(id);
@@ -160,7 +160,7 @@ public class User implements Printable {
     }
 
 
-    public ColorFactory.CColors leadObjectiveChecker(double ratio){
+    private ColorFactory.CColors leadObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
             else return ColorFactory.CColors.BRIGHT_GREEN;
@@ -174,7 +174,7 @@ public class User implements Printable {
         else  return ColorFactory.CColors.BRIGHT_PURPLE;
     }
 
-    public ColorFactory.CColors totalObjectiveChecker(double ratio){
+    private ColorFactory.CColors totalObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
         else return ColorFactory.CColors.BRIGHT_GREEN;
@@ -187,19 +187,26 @@ public class User implements Printable {
 
     //This one is for the removeUnknownObject it only lets you set it as a lost Opp
     public void removeFromOpportunities(String id) {
-        opportunityList.remove(id);
-        this.setLostOpp(getLostOpp()+1);
-
+        if(opportunityList.remove(id))this.setLostOpp(getLostOpp()+1);
+        else{
+            var opp=crmData.getOpportunity(id);
+            if(opp!=null)crmData.getUser(opp.getOwner()).removeFromOpportunities(id);
+        }
     }
 
 
-    public void removeFromOpportunities(String id, boolean isSuccess) {
-        opportunityList.remove(id);
-        if (isSuccess){this.setSuccessfulOpp(getSuccessfulOpp()+1);}
-        else {this.setLostOpp(getLostOpp()+1);}
+    void removeFromOpportunities(String id, boolean isSuccess) {
+        if(opportunityList.remove(id)) {
+            if (isSuccess) this.setSuccessfulOpp(getSuccessfulOpp() + 1);
+            else this.setLostOpp(getLostOpp() + 1);
+        }
+        else{
+            var opp=crmData.getOpportunity(id);
+            if(opp!=null)crmData.getUser(opp.getOwner()).removeFromOpportunities(id,isSuccess);
+        }
     }
 
-    public void removeUnknown(String id) {
+    void removeUnknown(String id) {
         if(id.startsWith("L")) {
             removeFromLeadList(id);
         }

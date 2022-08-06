@@ -22,7 +22,9 @@ import static com.ironhack.Constants.Constants.MAX_ID;
 
 
 public class CRMData implements Printable{
-    private int leadCounter,opportunityCounter,accountCounter,contactCounter;
+    private int leadCounter;
+    private int opportunityCounter;
+    private int contactCounter;
     private final HashMap<String, Lead> leadMap;
     private final HashMap<String, Opportunity> opportunityMap;
     private final HashMap<String, Account> accountMap;
@@ -30,10 +32,6 @@ public class CRMData implements Printable{
     private final HashMap<String, Contact> contactMap;
     private final HashMap<String, User> userList;
 
-    private int totalClosedLeads;
-    private int totalLostOpps;
-    private int totalSuccesOpps;
-    
     public CRMData(){
         leadCounter=0;
         opportunityCounter=0;
@@ -42,9 +40,9 @@ public class CRMData implements Printable{
         contactMap=new HashMap<>();
         accountMap=new HashMap<>();
         userList=new HashMap<>();
-        totalClosedLeads=0;
-        totalLostOpps=0;
-        totalSuccesOpps=0;
+        int totalClosedLeads = 0;
+        int totalLostOpps = 0;
+        int totalSuccesOpps = 0;
     }
 
     //---------------------------------------------------------------------------------------------------GETTERSnSETTERS
@@ -76,9 +74,8 @@ public class CRMData implements Printable{
         this.leadMap.put(lead.getId(),lead);
         return this;
     }
-     public CRMData removeLead(String id){
+     public void removeLead(String id){
         this.leadMap.remove(id);
-        return this;
      }
      public Lead getLead(String id) {
         return leadMap.get(id);
@@ -99,9 +96,8 @@ public class CRMData implements Printable{
         this.opportunityMap.put(opp.getId(),opp);
         return this;
     }
-    public CRMData removeOpportunity(String id){
+    public void removeOpportunity(String id){
         this.opportunityMap.remove(id);
-        return this;
     }
     //----------------------------------------ACCOUNT
      public Account getAccount(String id) {
@@ -115,9 +111,8 @@ public class CRMData implements Printable{
         return this;
     }
 
-    public CRMData removeAccount(String id) {
+    public void removeAccount(String id) {
         this.accountMap.remove(id);
-        return this;
     }
     //----------------------------------------CONTACT
      public Contact getContact(String id) {
@@ -137,9 +132,9 @@ public class CRMData implements Printable{
         }
         return resArr;
     }
-    public CRMData removeContact(String id){
+    public void removeContact(String id){
         this.contactMap.remove(id);
-        return this;}
+    }
 
     public int getTotalClosedLeads() {
         int totalClosedLeads = 0;
@@ -193,15 +188,19 @@ public class CRMData implements Printable{
         } else if (id.startsWith("C")) {
             val= contactMap.remove(id);
         }
-        if (val==null) accountMap.remove(id);
-        removeAccount(id);
+        if (val==null) val=userList.remove(id);
+        if (val==null)removeAccount(id);
     }
-    public CRMData addUnknownObject(Printable obj){
-        if(obj instanceof Lead) return addLead((Lead)obj);
-        else if (obj instanceof Opportunity) return addOpportunity((Opportunity) obj);
-        else if (obj instanceof Contact) return addContact((Contact) obj);
-        else if(obj instanceof Account) return addAccount((Account) obj);
-        return null;
+    public void addUnknownObject(Printable obj){
+        if(obj instanceof Lead) {
+            addLead((Lead) obj);
+        } else if (obj instanceof Opportunity) {
+            addOpportunity((Opportunity) obj);
+        } else if (obj instanceof Contact) {
+            addContact((Contact) obj);
+        } else if(obj instanceof Account) {
+            addAccount((Account) obj);
+        }
     }
     public boolean existsObject(String id){
         boolean firstCheck = false;
@@ -217,10 +216,7 @@ public class CRMData implements Printable{
             case "Lead" -> leadMap.isEmpty();
             case "Contact" -> contactMap.isEmpty();
             case "User" -> userList.isEmpty();
-            default ->
-                    LogWriter.logError(getClass().getSimpleName(),
-                            "isEmptyMap",
-                            "Unexpected objType class.. "+objType.getSimpleName())==null;
+            default ->false;
         };
     }
 
@@ -288,20 +284,29 @@ public class CRMData implements Printable{
         return new String[]{"Name"};
     }
 
+    public void deleteAllData() {
+        this.userList.clear();
+        this.accountMap.clear();
+        this.contactMap.clear();
+        this.leadMap.clear();
+        this.opportunityMap.clear();
 
-    public double totalLeadRatioGetter(){ return ((getTotalClosedLeads())/(leadMap.size()+0.0))*100;}
+    }
 
-    public double totalOppSuccessRatio(){ return ((getTotalSuccesOpps()+0.0)/(opportunityMap.size()+0.0))*100;}
 
-    public double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
+    private double totalLeadRatioGetter(){ return ((getTotalClosedLeads())/(leadMap.size()+0.0))*100;}
 
-    public ColorFactory.CColors leadObjectiveChecker(double ratio){
+    private double totalOppSuccessRatio(){ return ((getTotalSuccesOpps()+0.0)/(opportunityMap.size()+0.0))*100;}
+
+    private double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
+
+    private ColorFactory.CColors leadObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
         else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 
-    public ColorFactory.CColors oppObjectiveChecker(double ratio){
+    private ColorFactory.CColors oppObjectiveChecker(double ratio){
         if(ratio < 15 ) return BRIGHT_RED;
         else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.BRIGHT_YELLOW;
         else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.BRIGHT_GREEN;
@@ -309,7 +314,7 @@ public class CRMData implements Printable{
         else  return ColorFactory.CColors.PURPLE;
     }
 
-    public ColorFactory.CColors totalObjectiveChecker(double ratio){
+    private ColorFactory.CColors totalObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
         else return ColorFactory.CColors.BRIGHT_GREEN;

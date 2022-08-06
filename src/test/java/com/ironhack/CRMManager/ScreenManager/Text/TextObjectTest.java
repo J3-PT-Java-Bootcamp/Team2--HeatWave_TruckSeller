@@ -36,11 +36,6 @@ class TextObjectTest {
     }
 
     @Test
-    void addGroupInColumns() {
-        //todo
-    }
-
-    @Test
     void countValidCharacters_test_ok() {
         assertEquals(8,txtObj.countValidCharacters(String.valueOf(RED) + BRIGHT_BLACK + UNDERLINE + " patata " +
                 SMART_RESET + RESET));

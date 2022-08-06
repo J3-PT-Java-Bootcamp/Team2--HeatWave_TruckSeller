@@ -15,11 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TableScreenTest {
 
-    CRMManager crm;
     TableScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen=new TableScreen(crmData.getUser("USER"),
                 "TEST",crmData.getLeadsAsList());
     }

@@ -30,7 +30,7 @@ public enum IndustryType {
 
     static public IndustryType checkAllIndustries(String input) throws WrongInputException {
         var pInput= input.trim().toUpperCase();
-        for (IndustryType val :IndustryType.values() ) if (val.containsKeyword(input)) return val;
+        for (IndustryType val :IndustryType.values() ) if (val.containsKeyword(pInput)) return val;
         throw new WrongInputException(INDUSTRY_NOK);
     }
 

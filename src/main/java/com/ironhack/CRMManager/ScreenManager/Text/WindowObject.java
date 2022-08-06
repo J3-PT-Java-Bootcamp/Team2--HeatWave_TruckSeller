@@ -63,7 +63,7 @@ public class WindowObject extends TextObject {
                     sb.append(pattern[starts ? i : borderSize.y - i-1]
                             .repeat(!starts&&i==borderSize.y-1?windowWidth-(margin.x*2)- borderSize.y-5:windowWidth-(margin.x*2)));
                     if(!starts&&i==borderSize.y-1){
-                        sb.append(BOLD).append(BRIGHT_WHITE.toString())
+                        sb.append(BOLD).append(BRIGHT_WHITE)
                                 .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")))
                                 .append(BLANK_SPACE.repeat(borderSize.y));
                     }

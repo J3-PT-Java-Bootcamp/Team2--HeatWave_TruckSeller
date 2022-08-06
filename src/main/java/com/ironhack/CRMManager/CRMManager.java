@@ -170,7 +170,7 @@ public class CRMManager {
      * @param password password input
      * @return true if user and password coincide with saved one
      */
-    public boolean checkCredentials(String userName, String password) {
+    boolean checkCredentials(String userName, String password) {
         var user = crmData.getUser(userName);
         if (user != null) {
             return user.getPassword().equalsIgnoreCase(password);
@@ -204,7 +204,7 @@ public class CRMManager {
         }
         return getCurrentUser();
     }
-    public static void tryToSaveData(String className,String methodName) {
+    static void tryToSaveData(String className,String methodName) {
         try {
             if(!screenManager.isTest())saveData();
         } catch (Exception e) {

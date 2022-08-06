@@ -9,11 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfirmationScreenTest {
-    CRMManager crm;
     ConfirmationScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen = new ConfirmationScreen(crmData.getUser("USER"),
                 "TEST",
                 "DSFSDFSFD",
