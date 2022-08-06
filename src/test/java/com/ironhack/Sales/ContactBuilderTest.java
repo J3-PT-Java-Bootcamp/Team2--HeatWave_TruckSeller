@@ -11,7 +11,7 @@ class ContactBuilderTest {
     @BeforeEach
     @Test
     void constructContact_test_1() throws NoCompleteObjectException {
-            var crm=new CRMManager(false);
+            new CRMManager(false);
             var contactOne = new ContactBuilder();
             contactOne.setName("Salvatore");
             contactOne.setPhoneNumber("672168089");

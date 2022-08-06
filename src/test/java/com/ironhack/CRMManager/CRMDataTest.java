@@ -6,7 +6,6 @@ import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Lead;
 import com.ironhack.Sales.Opportunity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,15 +13,10 @@ import static com.ironhack.CRMManager.CRMManager.crmData;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CRMDataTest {
-    CRMManager crm;
     @BeforeEach
     void setUp() {
-        crm = new CRMManager(false);
+        new CRMManager(false);
 
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test

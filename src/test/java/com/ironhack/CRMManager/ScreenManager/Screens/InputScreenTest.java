@@ -15,11 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InputScreenTest {
 
-    CRMManager crm;
     InputScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen=new InputScreen(crmData.getUser("USER"),
                 "INPUT TEST",
                 new TextObject("TEST"),

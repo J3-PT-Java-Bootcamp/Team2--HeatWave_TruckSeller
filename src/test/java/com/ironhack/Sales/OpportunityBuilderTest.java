@@ -12,7 +12,7 @@ class OpportunityBuilderTest {
     @BeforeEach
     @Test
     void constructOpportunity() throws NoCompleteObjectException {
-        var crm=new CRMManager(false);
+        new CRMManager(false);
         var opportunityOne = new OpportunityBuilder();
         opportunityOne.setProduct(Product.FLATBED);
         opportunityOne.setQuantity(232);

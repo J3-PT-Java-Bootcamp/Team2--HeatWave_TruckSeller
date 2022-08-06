@@ -16,11 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InputReaderTest {
-    final static CRMManager manager=new CRMManager(false);
+
     final static private HashMap<InputReader,InputScreen> screen = new HashMap<>();
 
     @BeforeAll
     static void setUp() {
+        new CRMManager(false);
         for(InputReader reader: InputReader.values()){
             screen.put(reader,(new InputScreen(null,
                     reader.name()+" Test",

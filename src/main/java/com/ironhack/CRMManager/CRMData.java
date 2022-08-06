@@ -22,17 +22,15 @@ import static com.ironhack.Constants.Constants.MAX_ID;
 
 
 public class CRMData implements Printable{
-    private int leadCounter,opportunityCounter,accountCounter,contactCounter;
+    private int leadCounter;
+    private int opportunityCounter;
+    private int contactCounter;
     private final HashMap<String, Lead> leadMap;
     private final HashMap<String, Opportunity> opportunityMap;
     private final HashMap<String, Account> accountMap;
 
     private final HashMap<String, Contact> contactMap;
     private final HashMap<String, User> userList;
-
-    private int totalClosedLeads;
-    private int totalLostOpps;
-    private int totalSuccesOpps;
 
     public CRMData(){
         leadCounter=0;
@@ -42,9 +40,9 @@ public class CRMData implements Printable{
         contactMap=new HashMap<>();
         accountMap=new HashMap<>();
         userList=new HashMap<>();
-        totalClosedLeads=0;
-        totalLostOpps=0;
-        totalSuccesOpps=0;
+        int totalClosedLeads = 0;
+        int totalLostOpps = 0;
+        int totalSuccesOpps = 0;
     }
 
     //---------------------------------------------------------------------------------------------------GETTERSnSETTERS
@@ -296,19 +294,19 @@ public class CRMData implements Printable{
     }
 
 
-    public double totalLeadRatioGetter(){ return ((getTotalClosedLeads())/(leadMap.size()+0.0))*100;}
+    private double totalLeadRatioGetter(){ return ((getTotalClosedLeads())/(leadMap.size()+0.0))*100;}
 
-    public double totalOppSuccessRatio(){ return ((getTotalSuccesOpps()+0.0)/(opportunityMap.size()+0.0))*100;}
+    private double totalOppSuccessRatio(){ return ((getTotalSuccesOpps()+0.0)/(opportunityMap.size()+0.0))*100;}
 
-    public double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
+    private double totalOverallProductivityGetter(){return ((totalLeadRatioGetter()+totalOppSuccessRatio())/200)*100;}
 
-    public ColorFactory.CColors leadObjectiveChecker(double ratio){
+    private ColorFactory.CColors leadObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
         else return ColorFactory.CColors.BRIGHT_GREEN;
     }
 
-    public ColorFactory.CColors oppObjectiveChecker(double ratio){
+    private ColorFactory.CColors oppObjectiveChecker(double ratio){
         if(ratio < 15 ) return BRIGHT_RED;
         else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.BRIGHT_YELLOW;
         else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.BRIGHT_GREEN;
@@ -316,7 +314,7 @@ public class CRMData implements Printable{
         else  return ColorFactory.CColors.PURPLE;
     }
 
-    public ColorFactory.CColors totalObjectiveChecker(double ratio){
+    private ColorFactory.CColors totalObjectiveChecker(double ratio){
         if (ratio < 50) return BRIGHT_RED;
         else if (ratio >= 50 & ratio < 75) return ColorFactory.CColors.BRIGHT_YELLOW;
         else return ColorFactory.CColors.BRIGHT_GREEN;

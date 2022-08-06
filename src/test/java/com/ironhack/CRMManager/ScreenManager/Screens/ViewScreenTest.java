@@ -12,11 +12,10 @@ import static com.ironhack.CRMManager.CRMManager.crmData;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ViewScreenTest {
-    CRMManager crm;
     ViewScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen=new ViewScreen(crmData.getUser("USER"),"TEST",crmData.getLead("LFFE"));
     }
 

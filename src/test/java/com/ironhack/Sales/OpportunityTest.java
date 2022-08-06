@@ -1,6 +1,5 @@
 package com.ironhack.Sales;
 
-import com.ironhack.CRMManager.CRMData;
 import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.Product;
@@ -12,10 +11,9 @@ import static com.ironhack.CRMManager.CRMManager.printer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OpportunityTest extends TextObject {
-    static CRMData crm;
     @BeforeAll
     static void setUp() {
-        var crm=new CRMManager(false);
+        new CRMManager(false);
     }
 
     @Test

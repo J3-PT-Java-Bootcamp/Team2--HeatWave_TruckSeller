@@ -14,7 +14,7 @@ class AccountBuilderTest {
    @BeforeEach
    @Test
     void constructAccount_test_1() throws NoCompleteObjectException {
-       var crm=new CRMManager(false);
+       new CRMManager(false);
        var accountOne = new AccountBuilder();
        accountOne.setCity("Barcelona");
        accountOne.setContacts(new ArrayList<>());

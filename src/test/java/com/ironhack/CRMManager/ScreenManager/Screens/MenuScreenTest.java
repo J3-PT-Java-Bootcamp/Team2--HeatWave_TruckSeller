@@ -13,11 +13,10 @@ import static com.ironhack.CRMManager.ScreenManager.Screens.Commands.OPP;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MenuScreenTest {
-    CRMManager crm;
     MenuScreen screen;
     @BeforeEach
     void setUp() {
-        crm=new CRMManager(false);
+        new CRMManager(false);
         screen=new MenuScreen(crmData.getUser("USER"),"TEST MENU");
 
     }
