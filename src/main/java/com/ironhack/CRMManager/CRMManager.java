@@ -10,7 +10,7 @@ import com.ironhack.CRMManager.ScreenManager.Screens.InputScreen;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.IndustryType;
 import com.ironhack.Constants.Product;
-import com.ironhack.FakeLead;
+import com.ironhack.FakeLead.FakeLead;
 import com.ironhack.Sales.Account;
 import com.ironhack.Sales.Contact;
 import com.ironhack.Sales.Lead;

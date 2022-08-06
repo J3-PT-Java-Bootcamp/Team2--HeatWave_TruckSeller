@@ -1,4 +1,4 @@
-package com.ironhack;
+package com.ironhack.FakeLead;
 
 public class FakeLeadGenerator {
     public static void main(String[] args) {
