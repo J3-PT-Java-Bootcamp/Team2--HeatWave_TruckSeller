@@ -116,3 +116,6 @@
 >6/8/22 0:20:42 //-> CRMManager.appStart() : Unexpected exception ... class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull
 >6/8/22 8:46:40 //-> CRMManager.appStart() : Unexpected exception ... class com.ironhack.CRMManager.Exceptions.GoToMenuExceptionnull
 >6/8/22 9:26:26 //-> ScreenManager.show_OpportunitiesScreen() : Received a unexpected NullPointerException.. Cannot invoke "com.ironhack.Sales.Printable.shortPrint()" because the return value of "com.ironhack.CRMManager.CRMData.getUnknownObject(String)" is null
+>6/8/22 9:50:19 //-> ERR.ERR() : $&&$
+>6/8/22 9:51:25 //-> ERR.ERR() : $&&$
+>6/8/22 9:56:00 //-> UserOpManager.convertLeadToOpp() : Received a unexpected exception.. class com.ironhack.CRMManager.Exceptions.GoBackExceptionnull

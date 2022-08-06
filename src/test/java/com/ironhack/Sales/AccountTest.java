@@ -1,15 +1,13 @@
 package com.ironhack.Sales;
 
 import com.ironhack.CRMManager.CRMManager;
-import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.IndustryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static com.ironhack.CRMManager.CRMManager.crmData;
-import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountTest {
     Account acc;
@@ -28,7 +26,7 @@ class AccountTest {
 
     @Test
     void test_textObject(){
-        assertEquals(5,acc.toTextObject().getTotalHeight() );
+        assertEquals(6,acc.toTextObject().getTotalHeight() );
     }
 
     @Test
@@ -38,7 +36,7 @@ class AccountTest {
 
     @Test
     void test_printFullObject(){
-        assertEquals(5,acc.printFullObject().getTotalHeight() );
+        assertEquals(6,acc.printFullObject().getTotalHeight() );
     }
 
     @Test

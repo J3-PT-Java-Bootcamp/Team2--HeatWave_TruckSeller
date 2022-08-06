@@ -12,7 +12,7 @@ public class FakeLeadGenerator {
             }
 
             var sb = new StringBuilder();
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 30; i++) {
                 var company = Math.random() * 10 > 5 ? faker.company().name().trim().split(",")[0] : faker.commerce().brand();
                 sb.append(faker.name().fullName()).append(",")
                         .append(faker.phoneNumber().cellPhone().replace(" ", ""))
