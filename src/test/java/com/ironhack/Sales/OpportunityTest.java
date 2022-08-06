@@ -5,22 +5,32 @@ import com.ironhack.CRMManager.CRMManager;
 import com.ironhack.CRMManager.ScreenManager.Text.TextObject;
 import com.ironhack.Constants.Product;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.ironhack.CRMManager.CRMManager.crmData;
 import static com.ironhack.CRMManager.CRMManager.printer;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.PRODUCT_TYPE;
+import static com.ironhack.CRMManager.ScreenManager.InputReader.toCamelCase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OpportunityTest extends TextObject {
-    static CRMData crm;
-    @BeforeAll
-    static void setUp() {
-        var crm=new CRMManager(false);
-    }
+     CRMData crm;
+    Opportunity opp;
 
+    @BeforeEach
+    void setUp() {
+        var crm=new CRMManager(false);
+        var cont= new Contact("SALVA","+23892781","aijdasjn@gmail.com","ACC");
+        crmData.addContact(cont);
+        opp= new Opportunity(Product.FLATBED,10,cont.getId(),"dsgfsf","ACC");
+        crmData.addOpportunity(opp);
+    }
     @Test
     void getId_test() {
         var opp= new Opportunity(Product.FLATBED,45,"Antonio","dsgfsf","me");
-        assertEquals("PFFA",opp.getId());
+        assertEquals("PFF9",opp.getId());
     }
 
     @Test
@@ -29,12 +39,24 @@ class OpportunityTest extends TextObject {
         assertEquals("Suricata",comp.getAccount_companyName());
     }
 
-   @Test
-   void testprintable() {
-     var op = new Opportunity(Product.BOX, 12, "abcd", "abcda", "hello").toTextObject();
+    @Test
+    void test_textObject(){
+        assertEquals(6,opp.toTextObject().getTotalHeight() );
+    }
 
-        printer.sendToQueue(op);
-        printer.startPrint();
+    @Test
+    void test_String(){
+        assertNotNull(opp.shortPrint());
+    }
+
+    @Test
+    void test_printFullObject(){
+        assertEquals(7,opp.printFullObject().getTotalHeight() );
+    }
+
+    @Test
+    void test_getPrintableAttributes(){
+        assertEquals(opp.toTextObject().getTotalHeight(),opp.getPrintableAttributes().length );
     }
 
 }
