@@ -170,7 +170,7 @@ public class User implements Printable {
         if(ratio < 15 ) return BRIGHT_RED;
         else if(ratio >= 15 & ratio < 30 ) return ColorFactory.CColors.BRIGHT_YELLOW;
         else if(ratio >= 30 & ratio < 50 ) return ColorFactory.CColors.BRIGHT_GREEN;
-        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.BRIGHT_BLUE;
+        else if(ratio >= 50 & ratio < 75 ) return ColorFactory.CColors.PURPLE;
         else  return ColorFactory.CColors.BRIGHT_PURPLE;
     }
 
